@@ -1,0 +1,24 @@
+baseURL = 'https://example.org/'
+languageCode = 'zh-CN'
+title = 'avialaStyle'
+
+[menus]
+  [[menus.main]]
+    name = '简介'
+    pageRef = '/'
+    weight = 10
+
+  [[menus.main]]
+    name = '播客'
+    pageRef = '/bolgs'
+    weight = 30
+
+  [[menus.main]]
+    name = '资源'
+    pageRef = '/posts'
+    weight = 20
+
+[module]
+  [module.hugoVersion]
+    extended = false
+    min = '0.146.0'

@@ -1,0 +1,192 @@
+/* Header Styles */
+header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+  height: auto;
+  box-sizing: border-box;
+  z-index: 100;
+  /* 确保header在最上层 */
+
+}
+
+.header-container {
+  display: flex;
+  max-width: 800px;
+  padding: 0px;
+  align-items: center;
+  gap: var(--gap-gap-content-space, 8px);
+  align-self: stretch;
+  box-sizing: border-box;
+  margin-right: auto;
+  margin-left: auto;
+  width: 100%;
+  height: auto;
+  border: 2px solid transparent;
+  box-shadow: none;
+  border-radius: 12px;
+  transform: scale(1);
+  transition: transform 0.8s ease, border-radius 0.8s ease, box-shadow 0.9s ease, padding 0.4s ease, border 0.7s ease;
+}
+
+.header-container:not(.first) {
+  border-radius: var(--border-radius-border-radius-allround, 99px);
+  border: 2px solid var(--primary-1, #FDEBE3);
+  background: var(--box-box-normal-Background-whiteOnly, #FFF);
+  padding: var(--gap-gap-none, 0) var(--padding-padding-large, 16px);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.06);
+}
+
+.header-container:not(.homeScroll) {
+  display: flex;
+  max-width: 800px;
+  padding: 0px;
+  align-items: center;
+  gap: var(--gap-gap-content-space, 8px);
+  align-self: stretch;
+  box-sizing: border-box;
+  margin-right: auto;
+  margin-left: auto;
+  width: 100%;
+  height: auto;
+  border: 2px solid transparent;
+  box-shadow: none;
+  border-radius: 12px;
+  transform: scale(1);
+  transition: transform 0.8s ease, border-radius 0.8s ease, box-shadow 0.9s ease, padding 0.4s ease, border 0.7s ease;
+}
+
+@media screen and (max-width: 870px) {
+  .header-container.first {
+    padding: var(--gap-gap-none, 0) var(--padding-padding-large, 16px);
+  }
+}
+
+.site-title {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c3e50;
+  text-decoration: none;
+}
+
+.site-title:hover {
+  color: #3498db;
+  transition: color 0.3s ease;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-gap-inside-space, 4px);
+}
+
+.header-nav nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+}
+
+.header-nav nav li {
+  display: flex;
+  padding: var(--padding-padding-default, 8px) var(--padding-padding-none, 0);
+  align-items: flex-start;
+}
+
+.header-nav a {
+  transition: 250ms;
+  width: max-content;
+  display: flex;
+  min-width: 46px;
+  padding: var(--padding-padding-tiny, 4px) var(--padding-padding-default, 8px);
+  justify-content: center;
+  align-items: center;
+  gap: var(--gap-gap-inside-space, 4px);
+  border-radius: var(--border-radius-border-radius-small, 6px);
+}
+
+.header-nav a:hover {
+  background: #f0f0f046;
+}
+
+.header-nav a.active {
+  color: var(--text-text-theme-primary-black, #A02310);
+  border-radius: var(--border-radius-border-radius-small, 6px);
+  background: var(--control-normal-lightBackground-white, #F0F0F0);
+}
+
+.header-nav a.ancestor {
+  background-color: #34495e;
+  color: white;
+}
+
+.active-only-nav {
+  display: none;
+}
+
+.active-only-nav .active-tag.active {
+  background: none;
+}
+
+header .headerActionWrapper {
+  display: flex;
+  gap: var(--gap-gap-inside-space, 4px);
+  width: 100%;
+  justify-content: flex-end;
+  transition: width 0.3s ease;
+}
+
+header .logoWrapper {
+  width: 100%;
+  height: auto;
+  display: flex;
+}
+
+@media screen and (max-width: 700px) {
+  .active-only-nav {
+    display: block;
+  }
+
+  .normalNav {
+    display: none;
+  }
+
+  header .headerActionWrapper {
+    width: auto;
+  }
+}
+
+.uui-button.W-Dropdown#languageSelect:hover+.uui-dropdown-triggerWrapper#languageSelectMenu,
+.uui-button.W-Dropdown#languageSelect+.uui-dropdown-triggerWrapper#languageSelectMenu:hover {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.uui-button.NoBackground-Custom.Regular.W-Dropdown#languageSelect {
+  anchor-name: --languageSelectDropdownTigger;
+}
+
+.uui-button.W-Dropdown+.uui-dropdown-triggerWrapper#languageSelectMenu {
+  position-anchor: --languageSelectDropdownTigger;
+}
+
+.uui-button.NoBackground-Custom.Regular.W-Tooltip#globalSearch {
+  anchor-name: --searchTooltipTigger;
+}
+
+.uui-button.W-Tooltip+.uui-tooltip-triggerWrapper#globalSearchTooltip {
+  position-anchor: --searchTooltipTigger;
+}
+
+.uui-button:hover+.uui-tooltip-triggerWrapper,
+.uui-tooltip-triggerWrapper#globalSearchTooltip:hover {
+  display: block;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}

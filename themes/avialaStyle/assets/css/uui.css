@@ -1,0 +1,332 @@
+.uui-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--gap-gap-inside-space, 4px);
+    transition: 250ms;
+}
+
+.uui-button:hover {
+    background: #f0f0f046;
+    ;
+}
+
+.uui-button.NoBackground-Custom {
+    background: none;
+    border: none;
+    color: var(--text-text-normal-text-black, #5A5A5A);
+    font-size: var(--size-size-regular, 14px);
+    font-style: normal;
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-regular, 18px);
+}
+
+.uui-button.NoBackground-Custom:hover {
+    background: #F0F0F0;
+}
+
+.uui-button.Regular {
+    padding: var(--padding-padding-tiny, 4px) var(--padding-padding-small, 6px);
+    border-radius: var(--border-radius-border-radius-small, 6px);
+}
+
+.uui-button.NoBackground {
+    display: flex;
+    min-width: 46px;
+    padding: var(--padding-padding-tiny, 4px) var(--padding-padding-default, 8px);
+    justify-content: center;
+    align-items: center;
+    gap: var(--gap-gap-inside-space, 4px);
+    border: none;
+    background: none;
+    border-radius: var(--border-radius-border-radius-small, 6px);
+    color: var(--text-text-theme-primary-black, #A02310);
+
+    /* Typography-Text */
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-regular, 14px);
+    font-style: normal;
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-regular, 18px);
+    /* 128.571% */
+}
+
+.uui-button.NoBackground:hover {
+    background: var(--control-normal-lightBackground-white, #F0F0F0);
+}
+
+.uui-button.NoBackground.alignWithoutPadding {
+    margin-left: calc(0px - var(--padding-padding-small, 6px));
+}
+
+.uui-icon.text.lineheightFix {
+    height: var(--line-height-line-height-regular, 18px);
+}
+
+.uui-dropdown-wrapper {
+    box-sizing: border-box;
+    display: flex;
+    padding: var(--padding-padding-tiny, 4px) var(--padding-padding-none, 0);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--gap-gap-none, 0);
+    border-radius: var(--border-radius-border-radius-middle, 8px);
+    border: 1px solid var(--border-border-normal-light, #E1E1E1);
+    background: var(--box-box-normal-Background-whiteOnly, #FFF);
+    /* BasicShadow/BasicShadow-Level3 */
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.06);
+}
+
+.uui-dropdown-group {
+    width: 100%;
+    display: flex;
+    padding: var(--padding-padding-none, 0) var(--gap-gap-inside-space, 4px);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--gap-gap-inside, 2px);
+    align-self: stretch;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+.uui-dropdown-item.title {
+    color: var(--text-text-normal-text-caption-black, #787878);
+
+    /* Typography-Caption */
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-small, 12px);
+    font-style: normal;
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-small, 16px);
+    /* 133.333% */
+    font-style: normal;
+    display: flex;
+    padding: var(--padding-padding-tiny, 4px) var(--padding-padding-default, 8px) var(--padding-padding-min, 2px) var(--padding-padding-default, 8px);
+    align-items: flex-start;
+    gap: var(--gap-gap-component-space, 6px);
+    align-self: stretch;
+    border-radius: var(--border-radius-border-radius-extra-small-2, 4px);
+}
+
+.uui-dropdown-item.action {
+    color: var(--text-text-normal-text-black, #5A5A5A);
+
+    /* Typography-Text */
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-regular, 14px);
+    font-style: normal;
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-regular, 18px);
+    /* 128.571% */
+    transition: 250ms ease;
+    list-style: none;
+    display: flex;
+    padding: var(--padding-padding-tiny, 4px) var(--padding-padding-default, 8px);
+    align-items: flex-start;
+    gap: var(--gap-gap-component-space, 6px);
+    align-self: stretch;
+    border-radius: var(--border-radius-border-radius-extra-small-2, 4px);
+    justify-content: space-between;
+    align-items: center;
+}
+
+.uui-dropdown-item.action:hover {
+    background-color: var(--background-background-selected, #F0F0F0);
+}
+
+.uui-dropdown-item.action .uui-icon.checked {
+    display: none;
+}
+
+.uui-dropdown-item.action.checked .uui-icon.checked {
+    display: block;
+}
+
+/* .W-Dropdown {
+    anchor-name: --dropdownTigger;
+} */
+
+.W-Dropdown+.uui-dropdown-triggerWrapper .uui-dropdown-wrapper {
+    /* position: absolute; */
+    margin-top: 8px;
+    display: flex;
+
+    @starting-style {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+}
+
+.uui-dropdown-triggerWrapper {
+    @starting-style {
+        opacity: 0 !important;
+        transform: translateY(-4px) !important;
+    }
+}
+
+.uui-button.W-Dropdown+.uui-dropdown-triggerWrapper {
+    position: fixed;
+    display: none;
+    top: anchor(bottom);
+    right: anchor(right);
+    position-try-fallbacks: flip-block, flip-inline;
+    transition: 0.25s ease allow-discrete;
+    opacity: 0;
+    transform: translateY(-4px);
+}
+
+/* .uui-button.W-Dropdown:hover+.uui-dropdown-triggerWrapper,
+.uui-button.W-Dropdown+.uui-dropdown-triggerWrapper:hover {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+} */
+
+/* Tooltip Styles */
+
+.uui-tooltip-triggerWrapper {
+    display: none;
+}
+
+.W-Tooltip+.uui-tooltip-triggerWrapper .uui-tooltip {
+    /* position: absolute; */
+    margin-top: 8px;
+    display: flex;
+}
+
+/* .uui-button.W-Tooltip+ */
+
+.uui-tooltip-triggerWrapper {
+    position: fixed;
+    display: none;
+    top: anchor(bottom);
+    justify-self: anchor-center;
+    position-try-fallbacks: flip-block, flip-inline;
+    transition: 0.25s ease allow-discrete;
+    opacity: 0;
+    transform: translateY(-4px) scale(0.95);
+    box-sizing: border-box;
+}
+
+.uui-tooltip-triggerWrapper {
+    @starting-style {
+        opacity: 0 !important;
+        transform: translateY(-4px) scale(0.95) !important;
+    }
+}
+
+.uui-tooltip p {
+    margin: 0px;
+}
+
+.uui-tooltip {
+    border-radius: var(--border-radius-border-radius-small, 6px);
+    background: var(--box-box-normal-Background-blackOnly, #000);
+
+    /* BasicShadow/BasicShadow-Level4WithLIne */
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.20), 0 6px 18px 0 rgba(0, 0, 0, 0.08);
+    display: inline-flex;
+    padding: var(--padding-padding-tiny, 4px) var(--padding-padding-default, 8px);
+    justify-content: center;
+    align-items: center;
+    gap: var(--gap-gap-inside-space, 4px);
+    color: var(--text-text-normal-text-white, #FFF);
+
+    /* Typography-Text */
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-regular, 14px);
+    font-style: normal;
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-regular, 18px);
+    /* 128.571% */
+}
+
+.uui-tooltip .arrow {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 3px;
+}
+
+/* .uui-button.W-Tooltip:hover+.uui-tooltip-triggerWrapper,
+.uui-button.W-Tooltip+.uui-tooltip-triggerWrapper:hover {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+} */
+
+
+
+.uui-typeface {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: var(--gap-gap-inside, 2px);
+    align-self: stretch;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.uui-typeface * {
+    margin: 0px;
+    padding: 0px;
+}
+
+.uui-typeface .headline1,
+.uui-typeface h1 {
+    color: var(--text-text-normal-title-black, #3C3C3C);
+    /* Typography-Headline1 */
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-large, 24px);
+    font-style: normal;
+    font-weight: var(--font-weight-medium, 500);
+    line-height: var(--line-height-line-height-large, 30px);
+    /* 125% */
+}
+
+.uui-typeface p {
+    color: var(--text-text-normal-text-black, #5A5A5A);
+
+    /* Typography-Text */
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-regular, 14px);
+    font-style: normal;
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-regular, 18px);
+    /* 128.571% */
+}
+
+.uui-typeface p.caption {
+    color: var(--text-text-normal-text-caption-black, #787878);
+    text-align: center;
+
+    /* Typography-Caption */
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-small, 12px);
+    font-style: normal;
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-small, 16px);
+    /* 133.333% */
+}
+
+.uui-typography.subtitle{
+    color: var(--text-text-theme-primary-black, #A02310);
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-middle, 16px);
+    font-style: normal;
+    font-weight: var(--font-weight-light, 300);
+    line-height: var(--line-height-line-height-middle, 20px); /* 125% */
+}
+
+
+.uui-typography.text{
+    margin: 0px;
+    color: var(--text-text-normal-text-black, #5A5A5A);
+    /* Typography-Text */
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-regular, 14px);
+    font-style: normal;
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-regular, 18px); /* 128.571% */
+}

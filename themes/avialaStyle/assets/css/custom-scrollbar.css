@@ -1,0 +1,72 @@
+/* 自定义滚动条样式 */
+
+/* 仅为 main 元素及其子元素设置自定义滚动条 */
+main::-webkit-scrollbar,
+main *::-webkit-scrollbar {
+    width: 8px;
+    /* 滚动条宽度 */
+    height: 8px;
+    /* 水平滚动条高度 */
+    background-color: transparent;
+    /* 透明背景 */
+}
+
+/* 滚动条轨道 */
+main::-webkit-scrollbar-track,
+main *::-webkit-scrollbar-track {
+    background-color: transparent;
+    /* 透明背景 */
+    border-radius: 10px;
+}
+
+/* 滚动条滑块 */
+main::-webkit-scrollbar-thumb,
+main *::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    /* 半透明黑色 */
+    border-radius: 10px;
+    border: 2px solid transparent;
+    /* 创建内边距效果 */
+    background-clip: content-box;
+    transition: background-color 0.3s ease;
+}
+
+/* 滑块悬停效果 */
+main::-webkit-scrollbar-thumb:hover,
+main *::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+    /* 悬停时加深颜色 */
+}
+
+/* 滚动条交角部分 */
+main::-webkit-scrollbar-corner,
+main *::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+
+/* 为 Firefox 设置自定义滚动条 */
+main,
+main * {
+    scrollbar-width: none;
+}
+
+/* 设置滚动容器使滚动条不占用空间 */
+main {
+    /* 现代浏览器的滚动条设置 */
+    scrollbar-gutter: auto;
+    /* 防止滚动条占用布局空间 */
+}
+
+.sticky-scroll-container {
+    /* 滚动条样式 */
+    scrollbar-width: thin;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE 和 Edge */
+
+    /* 确保滚动行为平滑 */
+    scroll-behavior: smooth;
+    overflow-y: auto;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}

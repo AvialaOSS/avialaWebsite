@@ -1,0 +1,25 @@
+/* blogs 页面专用样式 */
+.blogSection {
+    display: flex;
+    padding: 32px var(--padding-padding-large, 16px);
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-gap-page-space, 24px);
+    align-self: stretch;
+    border-radius: var(--border-radius-border-radius-big, 12px);
+    border: 1px solid var(--border-border-normal-light, #E1E1E1);
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+.titleArea{
+    display: flex;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    align-items: center;
+    gap: var(--gap-gap-content-space, 8px);
+    justify-content: space-between;
+}

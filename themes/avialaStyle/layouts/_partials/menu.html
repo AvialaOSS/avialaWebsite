@@ -1,0 +1,86 @@
+{{- /*
+Renders a menu for the given menu ID.
+
+@context {page} page The current page.
+@context {string} menuID The menu ID.
+
+@example: {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+*/}}
+
+{{- $page := .page }}
+{{- $menuID := .menuID }}
+
+{{- with index site.Menus $menuID }}
+<nav class="normalNav">
+  <ul>
+    {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}
+  </ul>
+</nav>
+{{- end }}
+
+{{- define "_partials/inline/menu/walk.html" }}
+{{- $page := .page }}
+{{- range .menuEntries }}
+{{- $attrs := dict "href" .URL }}
+{{- if $page.IsMenuCurrent .Menu . }}
+{{- $attrs = merge $attrs (dict "class" "active" "aria-current" "page") }}
+{{- else if $page.HasMenuCurrent .Menu .}}
+{{- $attrs = merge $attrs (dict "class" "ancestor" "aria-current" "true") }}
+{{- end }}
+{{- $name := .Name }}
+{{- with .Identifier }}
+{{- with T . }}
+{{- $name = . }}
+{{- end }}
+{{- end }}
+<li>
+  <a {{- range $k, $v :=$attrs }} {{- with $v }} {{- printf " %s=%q" $k $v | safeHTMLAttr }} {{- end }} {{- end -}}>{{
+    $name }}</a>
+  {{- with .Children }}
+  <ul>
+    {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}
+  </ul>
+  {{- end }}
+</li>
+{{- end }}
+{{- end }}
+
+{{- /*
+Renders a navigation showing only the currently active menu item.
+This is a separate nav that displays alongside the main menu.
+*/ -}}
+{{- define "_partials/inline/menu/active-only.html" }}
+{{- $page := .page }}
+{{- range .menuEntries }}
+{{- if $page.IsMenuCurrent .Menu . }}
+{{- $attrs := dict }}
+{{- $attrs = merge $attrs (dict "class" "active-tag active" "aria-current" "page") }}
+{{- $name := .Name }}
+{{- with .Identifier }}
+{{- with T . }}
+{{- $name = . }}
+{{- end }}
+{{- end }}
+<li>
+  <a {{- range $k, $v :=$attrs }} {{- with $v }} {{- printf " %s=%q" $k $v | safeHTMLAttr }} {{- end }} {{- end -}}>{{
+    $name }}<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M0.933319 2.1C0.933319 1.84227 1.14225 1.63334 1.39999 1.63334H12.6C12.8577 1.63334 13.0667 1.84227 13.0667 2.1C13.0667 2.35773 12.8577 2.56667 12.6 2.56667H1.39999C1.14225 2.56667 0.933319 2.35773 0.933319 2.1ZM0.933319 7C0.933319 6.74227 1.14225 6.53334 1.39999 6.53334H12.6C12.8577 6.53334 13.0667 6.74227 13.0667 7C13.0667 7.25773 12.8577 7.46667 12.6 7.46667H1.39999C1.14225 7.46667 0.933319 7.25773 0.933319 7ZM1.39999 11.4333C1.14225 11.4333 0.933319 11.6423 0.933319 11.9C0.933319 12.1577 1.14225 12.3667 1.39999 12.3667H12.6C12.8577 12.3667 13.0667 12.1577 13.0667 11.9C13.0667 11.6423 12.8577 11.4333 12.6 11.4333H1.39999Z"
+        fill="#9A0F16" />
+    </svg></a>
+</li>
+{{- end }}
+{{- with .Children }}
+{{- partial "inline/menu/active-only.html" (dict "page" $page "menuEntries" .) }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- /* Active-only navigation - displays alongside main menu */ -}}
+{{- with index site.Menus $menuID }}
+<nav class="active-only-nav">
+  <ul>
+    {{- partial "inline/menu/active-only.html" (dict "page" $page "menuEntries" .) }}
+  </ul>
+</nav>
+{{- end }}
