@@ -330,3 +330,29 @@
     font-weight: var(--font-weight-regular, 400);
     line-height: var(--line-height-line-height-regular, 18px); /* 128.571% */
 }
+
+.uui-tag{
+    border-radius: 4px;
+    display: flex;
+    padding: 0 var(--padding-padding-min, 2px);
+    align-items: flex-start;
+    gap: var(--padding-padding-min, 2px);
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-small, 12px);
+    font-style: normal;
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-small, 16px);
+    padding: 2px 6px;
+}
+
+.uui-tag.blue{
+    background: var(--box-box-infomation-secondaryBackground, #BDEAFB); 
+    color: var(--text-text-infomation-primary-black, #1156A0);
+}
+
+.tagContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 8px;
+}

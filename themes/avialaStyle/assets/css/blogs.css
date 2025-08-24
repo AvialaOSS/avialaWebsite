@@ -23,3 +23,35 @@
     gap: var(--gap-gap-content-space, 8px);
     justify-content: space-between;
 }
+
+.headlineImg{
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+    border-radius: var(--border-radius-border-radius-big, 12px);
+}
+
+.headlineArea{
+    display: flex;
+    padding: var(--padding-padding-large, 16px) var(--padding-padding-none, 0);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--gap-gap-chapter-space, 16px);
+    align-self: stretch;
+}
+
+.headlineAreaHeadline{
+    max-width: 800px;
+    margin: 0 auto !important;
+    width: 100%;
+}
+
+.headlineContent{
+    max-width: 800px;
+    margin: 0 auto !important;
+    width: 100%;
+}
