@@ -11,10 +11,11 @@
     height: 100%;
     width: 100%;
     box-sizing: border-box;
+    overflow-x: auto;
 }
 
 
-.titleArea{
+.titleArea {
     display: flex;
     max-width: 800px;
     margin: 0 auto;
@@ -24,7 +25,9 @@
     justify-content: space-between;
 }
 
-.headlineImg{
+.headlineImg {
+    margin: 0 auto;
+    max-width: 970px;
     width: 100%;
     height: 200px;
     background-size: cover;
@@ -34,7 +37,7 @@
     border-radius: var(--border-radius-border-radius-big, 12px);
 }
 
-.headlineArea{
+.headlineArea {
     display: flex;
     padding: var(--padding-padding-large, 16px) var(--padding-padding-none, 0);
     flex-direction: column;
@@ -44,14 +47,123 @@
     align-self: stretch;
 }
 
-.headlineAreaHeadline{
+.headlineArea a{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--gap-gap-chapter-space, 16px);
+    align-self: stretch;
+}
+
+.headlineAreaHeadline {
     max-width: 800px;
     margin: 0 auto !important;
     width: 100%;
 }
 
-.headlineContent{
+.headlineContent {
     max-width: 800px;
     margin: 0 auto !important;
     width: 100%;
+}
+
+.blogWrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-gap-page-space, 24px);
+}
+
+.blogCategoryWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-gap-page-space, 24px);
+}
+
+.blogCategoryTitle {
+    display: flex;
+    max-width: 800px;
+    padding-top: var(--gap-gap-page-space, 24px);
+    align-items: center;
+    gap: var(--gap-gap-content-space, 8px);
+    align-self: stretch;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.blogCategoryList {
+    display: flex;
+    max-width: 800px;
+    padding: var(--gap-gap-block-space, 12px) 0;
+    align-items: flex-start;
+    gap: var(--gap-gap-page-space, 24px);
+    align-self: stretch;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.leftRightToggleButtonGroup {
+    display: flex;
+    gap: var(--gap-gap-content-space, 8px);
+}
+
+.leftRightToggleButtonGroup .uui-button svg {
+    transition: 250ms ease;
+}
+
+.leftRightToggleButtonGroup .uui-button.leftToggleButton:hover svg {
+    transform: translateX(-1px);
+}
+
+.leftRightToggleButtonGroup .uui-button.rightToggleButton:hover svg {
+    transform: translateX(1px);
+}
+
+.blogItemPreview {
+    width: 170px;
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+    border-radius: var(--border-radius-border-radius-big, 12px);
+}
+
+.blogCategoryItem,
+.blogCategoryItem a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-gap-chapter-space, 16px);
+    align-self: stretch;
+    width: min-content;
+}
+
+.blogCategoryItem .uui-typeface {
+    width: 100%;
+}
+
+.blogCategoryItem .uui-typeface p.caption {
+    width: 100%;
+    text-align: start;
+}
+
+.blogCategoryItem:first-child {
+    width: 400px;
+
+    .blogItemPreview {
+        width: 400px;
+        height: 250px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .blogCategoryItem:first-child {
+        width: 60vw;
+
+        .blogItemPreview {
+            width: 60vw;
+        }
+    }
 }

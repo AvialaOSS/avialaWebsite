@@ -3,6 +3,10 @@ languageCode = 'zh-CN'
 title = 'Aviala Design'
 theme = 'avialaStyle'
 
+[taxonomies]
+  category = 'categories'
+  tag = 'tags'
+
 [menus]
   [[menus.main]]
     name = '主页'

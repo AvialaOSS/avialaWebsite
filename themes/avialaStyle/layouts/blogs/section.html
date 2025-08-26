@@ -21,66 +21,80 @@
     {{ $headline := index $sortedPosts 0 }}
     <div class="headlineArea">
         <p class="uui-typography text headlineAreaHeadline">头条 Headline</p>
-        {{/* 显示预览图片，如果存在的话 */}}
-        {{ if $headline.Params.preview }}
-        <div class="headlineImg" style="background-image: url('{{ $headline.Params.preview }}');">
-        </div>
-        {{ end }}
-        <div class="uui-typeface headlineContent">
-            <h2 class="headline1">{{ $headline.Title }}</h2>
-            <p>{{ $headline.Params.description | default $headline.Summary | truncate 150 }}</p>
-            {{/* 显示文章标签 */}}
-            {{ if $headline.Params.tags }}
-            <div class="tagContainer">
-                {{ range $headline.Params.tags }}
-                <div class="uui-tag blue">{{ . }}</div>
-                {{ end }}
+        <a href="{{ $headline.RelPermalink }}" class="headlineLink">
+            {{/* 显示预览图片，如果存在的话 */}}
+            {{ if $headline.Params.preview }}
+            <div class="headlineImg" style="background-image: url('{{ $headline.Params.preview }}');">
             </div>
             {{ end }}
-        </div>
+            <div class="uui-typeface headlineContent">
+                <h2 class="headline1">{{ $headline.Title }}</h2>
+                <p>{{ $headline.Params.description | default $headline.Summary | truncate 150 }}</p>
+                {{/* 显示文章标签 */}}
+                {{ if $headline.Params.tags }}
+                <div class="tagContainer">
+                    {{ range $headline.Params.tags }}
+                    <div class="uui-tag blue">{{ . }}</div>
+                    {{ end }}
+                </div>
+                {{ end }}
+            </div>
+        </a>
     </div>
     {{ end }}
     <div class="blogWrapper">
         <div class="blogList">
+            {{ range $categoryName, $taxonomy := .Site.Taxonomies.categories }}
+            {{/* 获取该分类下的所有文章，按日期降序排列，限制6篇 */}}
+            {{ $categoryPosts := sort $taxonomy.Pages "Date" "desc" }}
+            {{ $limitedPosts := first 6 $categoryPosts }}
+            {{ if $limitedPosts }}
             <div class="blogCategoryWrapper">
                 <div class="blogCategoryTitle">
                     <div class="uui-typeface">
-                        <p class="uui-typography title">设计幕后</p>
+                        <p class="uui-typography title">{{ humanize $categoryName }}</p>
                     </div>
                     <div class="leftRightToggleButtonGroup">
-                        <button class="uui-button default leftToggleButton"><svg xmlns="http://www.w3.org/2000/svg"
-                                width="14" height="15" viewBox="0 0 14 15" fill="none">
+                        <button class="uui-button NoBackground-Custom Regular leftToggleButton"><svg
+                                xmlns="http://www.w3.org/2000/svg" width="14" height="15" viewBox="0 0 14 15"
+                                fill="none">
                                 <path
                                     d="M6.27804 2.40615C6.4613 2.22493 6.46295 1.92946 6.28173 1.7462C6.1005 1.56294 5.80503 1.56129 5.62177 1.74251L1.03913 6.27423C0.487179 6.82005 0.48469 7.71075 1.03359 8.25965L5.61992 12.846C5.80217 13.0282 6.09764 13.0282 6.27989 12.846C6.46213 12.6637 6.46213 12.3683 6.27989 12.186L2.05987 7.73267H12.7166C12.9743 7.73267 13.1832 7.52373 13.1832 7.266C13.1832 7.00827 12.9743 6.79933 12.7166 6.79933H2.06883L6.27804 2.40615Z"
                                     fill="#5A5A5A" />
                             </svg></button>
-                        <button class="uui-button default rightToggleButton"><svg xmlns="http://www.w3.org/2000/svg"
-                                width="14" height="12" viewBox="0 0 14 12" fill="none">
+                        <button class="uui-button NoBackground-Custom Regular rightToggleButton"><svg
+                                xmlns="http://www.w3.org/2000/svg" width="14" height="15" viewBox="0 0 14 15"
+                                fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M12.9608 5.27423L8.37812 0.742505C8.29382 0.659138 8.17791 0.607666 8.04998 0.607666C7.79225 0.607666 7.58332 0.8166 7.58332 1.07433C7.58332 1.20085 7.63367 1.31562 7.71542 1.39968L11.9668 5.79933H1.28332C1.02558 5.79933 0.81665 6.00827 0.81665 6.266C0.81665 6.52373 1.02558 6.73267 1.28332 6.73267H11.9753L7.71326 11.1929C7.63278 11.2767 7.58332 11.3906 7.58332 11.516C7.58332 11.7737 7.79225 11.9827 8.04998 11.9827C8.17953 11.9827 8.29674 11.9299 8.3813 11.8446L12.9663 7.25964C13.5152 6.71074 13.5127 5.82005 12.9608 5.27423Z"
+                                    d="M12.9608 6.27423L8.37812 1.7425C8.29382 1.65914 8.17791 1.60767 8.04998 1.60767C7.79225 1.60767 7.58332 1.8166 7.58332 2.07433C7.58332 2.20085 7.63367 2.31562 7.71542 2.39968L11.9668 6.79933H1.28332C1.02558 6.79933 0.81665 7.00827 0.81665 7.266C0.81665 7.52373 1.02558 7.73267 1.28332 7.73267H11.9753L7.71326 12.1929C7.63278 12.2767 7.58332 12.3906 7.58332 12.516C7.58332 12.7737 7.79225 12.9827 8.04998 12.9827C8.17953 12.9827 8.29674 12.9299 8.3813 12.8446L12.9663 8.25964C13.5152 7.71074 13.5127 6.82005 12.9608 6.27423Z"
                                     fill="#5A5A5A" />
                             </svg></button>
                     </div>
                 </div>
                 <div class="blogCategoryList">
-                    <div class="blogCategoryItem">
+                    {{/* 遍历该分类下的文章 */}}
+                    {{ range $limitedPosts }}
+                    <div class="blogCategoryItem"><a href="{{ .RelPermalink }}">
                         <div class="blogCategoryItemView">
-                        <div class="uui-typeface">
-                            <p>会说话的机器人，可以是什么形象？</p>
-                            <p class="uui-typography caption">Aviala Design V6
-                                即将发布，我们在全新的「设计系统」中，融入了更多创新理念与用户体验的思考。今天，我们想与您分享这一设计背后的灵感来源与理念构建。</p>
+                            {{/* 显示文章预览图 */}}
+                            {{ if .Params.preview }}
+                                <div class="blogItemPreview" style="background-image: url('{{ .Params.preview }}');"></div>
+                            {{ else }}
+                                {{/* 如果没有预览图，显示默认占位符 */}}
+                                <div class="blogItemPreview blogItemPreviewDefault"></div>
+                            {{ end }}
                         </div>
-                    </div>
-                    <div class="blogCategoryItem">
-                        <div class="blogCategoryItemView">
                         <div class="uui-typeface">
-                            <p>会说话的机器人，可以是什么形象？</p>
-                            <p class="uui-typography caption">Aviala Design V6
-                                即将发布，我们在全新的「设计系统」中，融入了更多创新理念与用户体验的思考。今天，我们想与您分享这一设计背后的灵感来源与理念构建。</p>
+                            <p class="title">{{ .Title }}</p>
+                            <p class="uui-typography caption">{{ .Params.description | default .Summary | truncate
+                                150 }}</p>
                         </div>
-                    </div>
+                    </a></div>
+                    {{ end }}
                 </div>
             </div>
+            {{ end }}
+            {{ end }}
         </div>
     </div>
 </div>

@@ -66,7 +66,20 @@
     <nav class="header-nav">
         {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
     </nav>
-
+    <div class="headerMobileMenuWrapper" id="headerMobileMenu">
+        <div class="headerMobileMenu">
+            <div class="uui-typeface menuTitle">
+                <p class="title">菜单</p>
+                <button class="uui-button NoBackground-Custom Regular" id="closeMobileMenuBtn"><svg xmlns="http://www.w3.org/2000/svg"
+                        width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M2.0815 1.42155C1.99694 1.3362 1.87964 1.28333 1.74999 1.28333C1.49226 1.28333 1.28333 1.49227 1.28333 1.75C1.28333 1.87887 1.33556 1.99554 1.42001 2.07999L1.42001 2.07999L6.34002 7.00001L1.42146 11.9186C1.33616 12.0031 1.28333 12.1204 1.28333 12.25C1.28333 12.5077 1.49226 12.7167 1.74999 12.7167C1.87886 12.7167 1.99553 12.6644 2.07997 12.58L6.99999 7.65997L11.92 12.58C12.0045 12.6644 12.1211 12.7167 12.25 12.7167C12.5077 12.7167 12.7167 12.5077 12.7167 12.25C12.7167 12.1204 12.6638 12.0031 12.5785 11.9186L7.65996 7.00001L12.58 2.07999C12.6644 1.99554 12.7167 1.87887 12.7167 1.75C12.7167 1.49227 12.5077 1.28333 12.25 1.28333C12.1204 1.28333 12.0031 1.33617 11.9186 1.42147L6.99999 6.34004L2.0815 1.42155Z"
+                            fill="#5A5A5A" />
+                    </svg></button>
+            </div>
+            {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+        </div>
+    </div>
     <div class="headerActionWrapper">
         <button class="uui-button NoBackground-Custom Regular W-Tooltip" id="globalSearch"><svg
                 class="uui-icon text lineheightFix" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
@@ -78,10 +91,12 @@
         </button>
         <div class="uui-tooltip-triggerWrapper" id="globalSearchTooltip">
             <div class="uui-tooltip">
-                <svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="5" viewBox="0 0 14 5" fill="none">
-                    <path d="M14 5H0C4.97025 4 3.98967 -4.76837e-07 7 0C10.0103 4.76837e-07 9.02975 4 14 5Z" fill="black"/>
+                <svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="5" viewBox="0 0 14 5"
+                    fill="none">
+                    <path d="M14 5H0C4.97025 4 3.98967 -4.76837e-07 7 0C10.0103 4.76837e-07 9.02975 4 14 5Z"
+                        fill="black" />
                 </svg>
-                    <p>搜索</p>
+                <p>搜索</p>
             </div>
         </div>
         <button class="uui-button NoBackground-Custom Regular W-Dropdown" id="languageSelect">
@@ -113,7 +128,7 @@
                                 fill="#A02310" />
                         </svg>
                     </li>
-                    <li class="uui-dropdown-item action">
+                    <li class="uui-dropdown-item action disabled">
                         English
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none"
                             class="uui-icon checked">
@@ -121,6 +136,11 @@
                                 d="M13.4518 2.48026C13.5033 2.40526 13.5333 2.31448 13.5333 2.21667C13.5333 1.95893 13.3244 1.75 13.0667 1.75C12.9044 1.75 12.7615 1.83283 12.6779 1.95852L6.26604 11.3091C6.13825 11.4954 5.86999 11.5137 5.71816 11.3463L1.28063 6.45494C1.1952 6.35983 1.07126 6.3 0.933342 6.3C0.675609 6.3 0.466675 6.50893 0.466675 6.76667C0.466675 6.88557 0.511147 6.9941 0.584366 7.0765L4.97075 12.0543C5.57933 12.745 6.67738 12.6704 7.18701 11.9038L13.4518 2.48026Z"
                                 fill="#A02310" />
                         </svg>
+                    </li>
+                    <li class="uui-dropdown-item text">
+                        <div class="uui-typeface">
+                            <p class="caption" style="text-align: start;">我们暂时仅支持以简体中文显示网页内容，如有不便，敬请谅解。</p>
+                        </div>
                     </li>
                 </ul>
             </div>

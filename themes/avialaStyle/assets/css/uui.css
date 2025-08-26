@@ -128,10 +128,39 @@
     border-radius: var(--border-radius-border-radius-extra-small-2, 4px);
     justify-content: space-between;
     align-items: center;
+    user-select: none;
+}
+
+.uui-dropdown-item.action.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+    user-select: none;
 }
 
 .uui-dropdown-item.action:hover {
     background-color: var(--background-background-selected, #F0F0F0);
+}
+
+.uui-dropdown-item.text {
+    color: var(--text-text-normal-text-black, #5A5A5A);
+
+    /* Typography-Text */
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-regular, 14px);
+    font-style: normal;
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-regular, 18px);
+    /* 128.571% */
+    transition: 250ms ease;
+    list-style: none;
+    display: flex;
+    padding: var(--padding-padding-tiny, 4px) var(--padding-padding-default, 8px);
+    align-items: flex-start;
+    gap: var(--gap-gap-component-space, 6px);
+    align-self: stretch;
+    border-radius: var(--border-radius-border-radius-extra-small-2, 4px);
+    justify-content: space-between;
+    align-items: center;
 }
 
 .uui-dropdown-item.action .uui-icon.checked {
@@ -310,17 +339,30 @@
     /* 133.333% */
 }
 
-.uui-typography.subtitle{
+.uui-typeface p.title {
+    color: var(--text-text-normal-title-black, #3C3C3C);
+
+    /* Typography-Title */
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-big, 18px);
+    font-style: normal;
+    font-weight: var(--font-weight-semibold, 600);
+    line-height: var(--line-height-line-height-big, 22px);
+    /* 122.222% */
+}
+
+.uui-typography.subtitle {
     color: var(--text-text-theme-primary-black, #A02310);
     font-family: "OPPO Sans 4.0";
     font-size: var(--size-size-middle, 16px);
     font-style: normal;
     font-weight: var(--font-weight-light, 300);
-    line-height: var(--line-height-line-height-middle, 20px); /* 125% */
+    line-height: var(--line-height-line-height-middle, 20px);
+    /* 125% */
 }
 
 
-.uui-typography.text{
+.uui-typography.text {
     margin: 0px;
     color: var(--text-text-normal-text-black, #5A5A5A);
     /* Typography-Text */
@@ -328,10 +370,11 @@
     font-size: var(--size-size-regular, 14px);
     font-style: normal;
     font-weight: var(--font-weight-regular, 400);
-    line-height: var(--line-height-line-height-regular, 18px); /* 128.571% */
+    line-height: var(--line-height-line-height-regular, 18px);
+    /* 128.571% */
 }
 
-.uui-tag{
+.uui-tag {
     border-radius: 4px;
     display: flex;
     padding: 0 var(--padding-padding-min, 2px);
@@ -345,8 +388,8 @@
     padding: 2px 6px;
 }
 
-.uui-tag.blue{
-    background: var(--box-box-infomation-secondaryBackground, #BDEAFB); 
+.uui-tag.blue {
+    background: var(--box-box-infomation-secondaryBackground, #BDEAFB);
     color: var(--text-text-infomation-primary-black, #1156A0);
 }
 

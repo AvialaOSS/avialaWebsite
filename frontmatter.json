@@ -58,6 +58,10 @@
     {
       "title": "content",
       "path": "[[workspace]]/content"
+    },
+    {
+      "title": "blogs",
+      "path": "[[workspace]]/content/blogs"
     }
   ]
 }

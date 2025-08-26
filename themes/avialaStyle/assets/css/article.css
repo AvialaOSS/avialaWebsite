@@ -1,0 +1,182 @@
+/* 文章内容页面样式 */
+
+/* 主要内容区域 */
+main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--padding-padding-large, 16px);
+    box-sizing: border-box;
+}
+
+/* 文章标题 */
+main h1 {
+    color: var(--text-text-normal-title-black, #3C3C3C);
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-huge, 28px);
+    font-weight: var(--font-weight-medium, 500);
+    line-height: var(--line-height-line-height-max, 44px);
+    margin: 0 0 var(--gap-gap-chapter-space, 16px) 0;
+}
+
+/* 文章时间 */
+main time {
+    color: var(--text-text-normal-text-caption-black, #787878);
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-small, 12px);
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-small, 16px);
+    display: block;
+    margin-bottom: var(--gap-gap-page-space, 24px);
+}
+
+/* 文章内容 */
+main h2 {
+    color: var(--text-text-normal-title-black, #3C3C3C);
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-large, 24px);
+    font-weight: var(--font-weight-medium, 500);
+    line-height: var(--line-height-line-height-large, 30px);
+    margin: var(--gap-gap-page-space, 24px) 0 var(--gap-gap-chapter-space, 16px) 0;
+}
+
+main h3 {
+    color: var(--text-text-normal-title-black, #3C3C3C);
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-big, 18px);
+    font-weight: var(--font-weight-semibold, 600);
+    line-height: var(--line-height-line-height-big, 22px);
+    margin: var(--gap-gap-chapter-space, 16px) 0 var(--gap-gap-block-space, 12px) 0;
+}
+
+main p {
+    color: var(--text-text-normal-text-black, #5A5A5A);
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-regular, 14px);
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-regular, 18px);
+    margin: 0 0 var(--gap-gap-chapter-space, 16px) 0;
+}
+
+/* 代码块样式 */
+main pre {
+    background: var(--background-background-selected, #F0F0F0);
+    border-radius: var(--border-radius-border-radius-middle, 8px);
+    padding: var(--padding-padding-large, 16px);
+    margin: var(--gap-gap-chapter-space, 16px) 0;
+    overflow-x: auto;
+}
+
+main code {
+    background: var(--background-background-selected, #F0F0F0);
+    border-radius: var(--border-radius-border-radius-extra-small-2, 4px);
+    padding: var(--padding-padding-min, 2px) var(--padding-padding-tiny, 4px);
+    font-family: "SF Mono", "Monaco", "Cascadia Code", "Roboto Mono", monospace;
+    font-size: var(--size-size-small, 12px);
+}
+
+main pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* 引用样式 */
+main blockquote {
+    border-left: 4px solid var(--text-text-theme-primary-black, #A02310);
+    padding-left: var(--padding-padding-large, 16px);
+    margin: var(--gap-gap-chapter-space, 16px) 0;
+    color: var(--text-text-normal-text-caption-black, #787878);
+    font-style: italic;
+}
+
+/* 列表样式 */
+main ul, main ol {
+    margin: var(--gap-gap-chapter-space, 16px) 0;
+    padding-left: var(--padding-padding-large, 16px);
+}
+
+main li {
+    color: var(--text-text-normal-text-black, #5A5A5A);
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-regular, 14px);
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-regular, 18px);
+    margin-bottom: var(--gap-gap-content-space, 8px);
+}
+
+/* 链接样式 */
+main a {
+    color: var(--text-text-theme-primary-black, #A02310);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom-color 0.2s ease;
+}
+
+main a:hover {
+    border-bottom-color: var(--text-text-theme-primary-black, #A02310);
+}
+
+/* 图片样式 */
+main img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-border-radius-middle, 8px);
+    margin: var(--gap-gap-chapter-space, 16px) 0;
+}
+
+/* 标签区域 */
+main .tags-section {
+    margin-top: var(--gap-gap-page-space, 24px);
+    margin-bottom: var(--gap-gap-page-space, 24px);
+    padding-top: var(--gap-gap-page-space, 24px);
+    border-top: 1px solid var(--border-border-normal-light, #E1E1E1);
+}
+
+main .tags-section div:first-child {
+    color: var(--text-text-normal-text-caption-black, #787878);
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-small, 12px);
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-small, 16px);
+    margin-bottom: var(--gap-gap-content-space, 8px);
+}
+
+main .tags-section ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-gap-content-space, 8px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+main .tags-section li {
+    margin: 0;
+}
+
+main .tags-section a {
+    display: inline-block;
+    padding: var(--padding-padding-min, 2px) var(--padding-padding-small, 6px);
+    background: var(--box-box-infomation-secondaryBackground, #BDEAFB);
+    color: var(--text-text-infomation-primary-black, #1156A0);
+    border-radius: var(--border-radius-border-radius-extra-small-2, 4px);
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-small, 12px);
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-small, 16px);
+    border-bottom: none;
+    transition: background-color 0.2s ease;
+}
+
+main .tags-section a:hover {
+    background: var(--text-text-infomation-primary-black, #1156A0);
+    color: white;
+}
+
+.previewImg{
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+    border-radius: var(--border-radius-border-radius-middle, 8px);
+    margin-bottom: var(--gap-gap-page-space);
+}

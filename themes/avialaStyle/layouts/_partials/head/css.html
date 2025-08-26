@@ -79,4 +79,17 @@
       {{- end }}
     {{- end }}
   {{- end }}
+  
+  {{/* 仅在单篇博客文章页面时加载 article.css */}}
+  {{- if .IsPage }}
+    {{- with resources.Get "css/article.css" }}
+      {{- if hugo.IsDevelopment }}
+        <link rel="stylesheet" href="{{ .RelPermalink }}">
+      {{- else }}
+        {{- with . | minify | fingerprint }}
+          <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+        {{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
 {{- end }}
