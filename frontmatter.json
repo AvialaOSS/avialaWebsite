@@ -63,5 +63,7 @@
       "title": "blogs",
       "path": "[[workspace]]/content/blogs"
     }
-  ]
+  ],
+  "frontMatter.dashboard.openOnStart": true,
+  "frontMatter.panel.openOnSupportedFile": false
 }
