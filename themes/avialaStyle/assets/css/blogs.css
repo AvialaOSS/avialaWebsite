@@ -101,6 +101,17 @@
     align-self: stretch;
     width: 100%;
     margin: 0 auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scroll-behavior: smooth;
+    /* 隐藏滚动条 */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.blogCategoryList::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
 }
 
 .leftRightToggleButtonGroup {

@@ -55,14 +55,16 @@
                         <p class="uui-typography title">{{ humanize $categoryName }}</p>
                     </div>
                     <div class="leftRightToggleButtonGroup">
-                        <button class="uui-button NoBackground-Custom Regular leftToggleButton"><svg
+                        <button class="uui-button NoBackground-Custom Regular leftToggleButton" 
+                                onclick="scrollCategoryList('{{ $categoryName }}', 'left')"><svg
                                 xmlns="http://www.w3.org/2000/svg" width="14" height="15" viewBox="0 0 14 15"
                                 fill="none">
                                 <path
                                     d="M6.27804 2.40615C6.4613 2.22493 6.46295 1.92946 6.28173 1.7462C6.1005 1.56294 5.80503 1.56129 5.62177 1.74251L1.03913 6.27423C0.487179 6.82005 0.48469 7.71075 1.03359 8.25965L5.61992 12.846C5.80217 13.0282 6.09764 13.0282 6.27989 12.846C6.46213 12.6637 6.46213 12.3683 6.27989 12.186L2.05987 7.73267H12.7166C12.9743 7.73267 13.1832 7.52373 13.1832 7.266C13.1832 7.00827 12.9743 6.79933 12.7166 6.79933H2.06883L6.27804 2.40615Z"
                                     fill="#5A5A5A" />
                             </svg></button>
-                        <button class="uui-button NoBackground-Custom Regular rightToggleButton"><svg
+                        <button class="uui-button NoBackground-Custom Regular rightToggleButton" 
+                                onclick="scrollCategoryList('{{ $categoryName }}', 'right')"><svg
                                 xmlns="http://www.w3.org/2000/svg" width="14" height="15" viewBox="0 0 14 15"
                                 fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -71,7 +73,7 @@
                             </svg></button>
                     </div>
                 </div>
-                <div class="blogCategoryList">
+                <div class="blogCategoryList" id="blogCategoryList-{{ $categoryName }}">
                     {{/* 遍历该分类下的文章 */}}
                     {{ range $limitedPosts }}
                     <div class="blogCategoryItem"><a href="{{ .RelPermalink }}">
@@ -98,4 +100,26 @@
         </div>
     </div>
 </div>
+
+<script>
+function scrollCategoryList(categoryName, direction) {
+    const container = document.getElementById('blogCategoryList-' + categoryName);
+    if (!container) return;
+    
+    const scrollAmount = 200; // 每次滚动的像素数
+    const currentScroll = container.scrollLeft;
+    
+    if (direction === 'left') {
+        container.scrollTo({
+            left: currentScroll - scrollAmount,
+            behavior: 'smooth'
+        });
+    } else if (direction === 'right') {
+        container.scrollTo({
+            left: currentScroll + scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+}
+</script>
 {{ end }}
