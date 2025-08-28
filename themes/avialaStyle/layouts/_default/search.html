@@ -1,0 +1,46 @@
+{{ define "main" }}
+<div class="search-page">
+  <h1>{{ .Title }}</h1>
+  <div class="searchInputContainer">
+    <form action="/search">
+      <div id="search-box">
+        <input id="search-query" name="s" placeholder="输入搜索内容..." />
+        <button type="submit" id="search-submit">搜索</button>
+      </div>
+    </form>
+    <div id="search-results">
+      <!-- 搜索结果将在这里显示 -->
+    </div>
+    <div id="search-stats" class="search-stats">
+      <!-- 搜索统计信息 -->
+    </div>
+  </div>
+</div>
+
+<!-- 搜索结果模板 -->
+<script id="search-result-template" type="text/x-js-template">
+    <div id="summary-${key}" class="search-result-item">
+      <h3><a href="${link}">${title}</a></h3>
+      <p class="search-snippet">${snippet}</p>
+      ${ isset tags }<p class="search-tags">标签: ${tags}</p>${ end }
+      ${ isset categories }<p class="search-categories">分类: ${categories}</p>${ end }
+    </div>
+</script>
+
+
+</style>
+
+<!-- 引入必要的 JavaScript 库和搜索脚本 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.6.2/fuse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js"></script>
+<script src="/js/search.js"></script>
+
+<script>
+// 页面加载后聚焦搜索框并执行搜索
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('search-query').focus();
+});
+</script>
+
+{{ end }}

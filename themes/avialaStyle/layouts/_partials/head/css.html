@@ -68,6 +68,16 @@
   {{- end }}
 {{- end }}
 
+{{- with resources.Get "css/search.css" }}
+  {{- if hugo.IsDevelopment }}
+    <link rel="stylesheet" href="{{ .RelPermalink }}">
+  {{- else }}
+    {{- with . | minify | fingerprint }}
+      <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+    {{- end }}
+  {{- end }}
+{{- end }}
+
 {{/* 仅在 blogs section 时加载 blogs.css */}}
 {{- if eq .Section "blogs" }}
   {{- with resources.Get "css/blogs.css" }}

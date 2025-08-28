@@ -26,7 +26,6 @@ main time {
     font-weight: var(--font-weight-regular, 400);
     line-height: var(--line-height-line-height-small, 16px);
     display: block;
-    margin-bottom: var(--gap-gap-page-space, 24px);
 }
 
 /* 文章内容 */
@@ -126,10 +125,9 @@ main img {
 
 /* 标签区域 */
 main .tags-section {
-    margin-top: var(--gap-gap-page-space, 24px);
+    /* margin-top: var(--gap-gap-page-space, 24px);
     margin-bottom: var(--gap-gap-page-space, 24px);
-    padding-top: var(--gap-gap-page-space, 24px);
-    border-top: 1px solid var(--border-border-normal-light, #E1E1E1);
+    padding-top: var(--gap-gap-page-space, 24px); */
 }
 
 main .tags-section div:first-child {
@@ -179,4 +177,13 @@ main .tags-section a:hover {
     height: 200px;
     border-radius: var(--border-radius-border-radius-middle, 8px);
     margin-bottom: var(--gap-gap-page-space);
+}
+
+.docInfo{
+    display: flex;
+    border-bottom: 1px solid var(--border-border-normal-light, #E1E1E1);
+    padding-bottom: var(--gap-gap-page-space);
+    margin-bottom: var(--gap-gap-page-space);
+    gap: var(--gap-gap-content-space);
+    align-items: center;
 }
