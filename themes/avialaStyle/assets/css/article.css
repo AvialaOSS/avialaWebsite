@@ -181,9 +181,34 @@ main .tags-section a:hover {
 
 .docInfo{
     display: flex;
-    border-bottom: 1px solid var(--border-border-normal-light, #E1E1E1);
     padding-bottom: var(--gap-gap-page-space);
-    margin-bottom: var(--gap-gap-page-space);
     gap: var(--gap-gap-content-space);
     align-items: center;
+    flex-wrap: wrap
+}
+
+.docInfo .author {
+    color: var(--text-text-normal-text-caption-black, #787878);
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-small, 12px);
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-small, 16px);
+}
+
+.articleShare{
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    padding: var(--padding-padding-default) var(--padding-padding-middle, 10px);
+    align-items: center;
+    gap: var(--gap-gap-content-space, 8px);
+    margin-bottom: var(--gap-gap-page-space);
+    border-radius: var(--border-radius-border-radius-middle, 8px);
+    border: 1px solid var(--border-border-normal-light, #E1E1E1);
+    background: var(--box-box-normal-Background-whiteOnly, #FFF);
+    .shareButton{
+        word-break: keep-all;
+    }
 }

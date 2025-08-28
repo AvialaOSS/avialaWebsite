@@ -138,6 +138,7 @@
     background-position: center;
     background-repeat: no-repeat;
     box-sizing: border-box;
+    
     border-radius: var(--border-radius-border-radius-big, 12px);
 }
 

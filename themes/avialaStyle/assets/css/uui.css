@@ -58,6 +58,24 @@
     margin-left: calc(0px - var(--padding-padding-small, 6px));
 }
 
+.uui-button.Second{
+    border-radius: var(--border-radius-border-radius-small, 6px);
+    background: var(--box-box-theme-secondaryBackground, #FBCEBC);
+    color: var(--text-text-theme-primary-black, #A02310);
+    /* Typography-Text */
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-regular, 14px);
+    font-style: normal;
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-regular, 18px);
+    /* 128.571% */
+    border: none;
+}
+
+.uui-button.Second:hover{
+        background-color: var(--box-box-theme-lightbackground);
+}
+
 .uui-icon.text.lineheightFix {
     height: var(--line-height-line-height-regular, 18px);
 }
@@ -397,4 +415,18 @@
     flex-wrap: wrap;
     gap: 4px;
     margin-top: 8px;
+}
+
+.uui-iconplace{
+    display: flex;
+    padding: var(--padding-padding-small);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    border-radius: var(--border-radius-border-radius-allround, 99px);
+}
+
+.uui-iconplace.theme{
+    background: var(--box-box-theme-primaryBackground, #F2502C);
 }

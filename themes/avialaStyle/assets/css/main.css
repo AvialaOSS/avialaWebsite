@@ -5,6 +5,10 @@ html {
   overflow: hidden;
 }
 
+@view-transition {
+  navigation: auto;
+}
+
 body {
   color: #222;
   font-family: sans-serif;

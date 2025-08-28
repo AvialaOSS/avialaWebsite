@@ -12,6 +12,7 @@ tags:
 categories:
   - Aviala Design
 featured: true
+author: 凯伦
 ---
 
 Aviala Design V6 公布在即，在刚刚搬好家的「新设计系统」，我们想和你聊聊背后的理念和所思。

@@ -47,6 +47,11 @@
           "title": "featured",
           "name": "featured",
           "type": "boolean"
+        },
+        {
+          "title": "Author",
+          "name": "author",
+          "type": "string"
         }
       ]
     }
