@@ -30,13 +30,16 @@ function executeSearch(searchQuery){
     var result = fuse.search(searchQuery);
     console.log({"matches":result});
     
+    // 清空之前的搜索结果
+    $('#search-results').empty();
+    
     // 显示搜索统计
     if(result.length > 0) {
-      $('#search-stats').html(`找到 <strong>${result.length}</strong> 个搜索结果，关键词："<strong>${searchQuery}</strong>"`);
+      $('#search-stats').html(`找到 <strong>${result.length}</strong> 个搜索结果，关键词："<strong>${searchQuery}</strong>"`).show();
       populateResults(result);
     } else {
-      $('#search-stats').html(`没有找到包含"<strong>${searchQuery}</strong>"的内容`);
-      $('#search-results').append("<p>没有找到匹配的内容</p>");
+      $('#search-stats').hide();
+      showNoResults(searchQuery);
     }
   });
 }
@@ -105,4 +108,17 @@ function render(templateString, data) {
     templateString = templateString.replace(re, data[key]);
   }
   return templateString;
+}
+
+function showNoResults(searchQuery) {
+  // 获取无结果模板
+  var noResultsTemplate = $('#no-results-template').html();
+  if (noResultsTemplate) {
+    // 使用模板渲染无结果页面
+    var output = render(noResultsTemplate, {query: searchQuery});
+    $('#search-results').append(output);
+  } else {
+    // 降级处理：如果模板不存在，使用简单的HTML
+    $('#search-results').append("<p>没有找到匹配的内容</p>");
+  }
 }

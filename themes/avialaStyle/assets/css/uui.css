@@ -28,7 +28,9 @@
     padding: var(--padding-padding-tiny, 4px) var(--padding-padding-small, 6px);
     border-radius: var(--border-radius-border-radius-small, 6px);
 }
-
+.uui-button.Big {
+    padding: var(--padding-padding-default, 8px) var(--padding-padding-big, 12px);
+}
 .uui-button.NoBackground {
     display: flex;
     min-width: 46px;
@@ -320,7 +322,8 @@
 }
 
 .uui-typeface .headline1,
-.uui-typeface h1 {
+.uui-typeface h1,
+h1.uui-typography {
     color: var(--text-text-normal-title-black, #3C3C3C);
     /* Typography-Headline1 */
     font-family: "OPPO Sans 4.0";
@@ -329,6 +332,9 @@
     font-weight: var(--font-weight-medium, 500);
     line-height: var(--line-height-line-height-large, 30px);
     /* 125% */
+}
+h1.uui-typography {
+    margin: 0px;
 }
 
 .uui-typeface p {
@@ -345,7 +351,6 @@
 
 .uui-typeface p.caption {
     color: var(--text-text-normal-text-caption-black, #787878);
-    text-align: center;
 
     /* Typography-Caption */
     font-family: "OPPO Sans 4.0";
@@ -354,6 +359,7 @@
     font-weight: var(--font-weight-regular, 400);
     line-height: var(--line-height-line-height-small, 16px);
     /* 133.333% */
+    margin: 0px;
 }
 
 .uui-typeface p.title {
@@ -429,4 +435,42 @@
 
 .uui-iconplace.theme{
     background: var(--box-box-theme-primaryBackground, #F2502C);
+}
+
+.uui-input.Big{
+    display: flex;
+    padding: var(--padding-padding-none, 0) var(--padding-padding-middle, 10px);
+    align-items: center;
+    gap: var(--gap-gap-component-space, 6px);
+    border-radius: var(--border-radius-border-radius-small, 6px);
+    border: 1px solid var(--border-border-normal-light, #E1E1E1);
+    background: var(--control-normal-lightBackground-whiteOnly, #FFF);
+    transition: 250ms;
+    margin: -1px;
+    input{
+        display: flex;
+        padding: var(--padding-padding-default, 8px) 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        flex: 1 0 0;
+        border: none;
+        color: var(--text-text-normal-text-black, #5A5A5A);
+
+        /* Typography-Text */
+        font-family: "OPPO Sans 4.0";
+        font-size: var(--size-size-regular, 14px);
+        font-style: normal;
+        font-weight: var(--font-weight-regular, 400);
+        line-height: var(--line-height-line-height-regular, 18px); /* 128.571% */
+    }
+
+    input:focus{
+        outline: none;
+    }
+
+}
+
+.uui-input.Big:has(input:focus){
+    border: var(--border-thickness-border-thickness-default, 1px) solid var(--border-border-theme-primary, #F2502C);
 }
