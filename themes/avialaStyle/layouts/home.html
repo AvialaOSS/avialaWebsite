@@ -3,7 +3,7 @@
   <section class="sticky-scroll-section" id="section1">
     <div class="section-content">
       <div class="firstSectionContent drawplace">
-        <img src="draw.svg" alt="Aviala Logo" class="logo" />
+        {{ readFile "static/draw-animated.svg" | safeHTML }}
         <!-- 底部悬浮标题区域 -->
         <div class="firstSectionContent overlay">
           <div class="firstSectionContent title">
