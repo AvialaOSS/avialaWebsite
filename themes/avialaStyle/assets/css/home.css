@@ -62,7 +62,7 @@
     animation: slideInFromBottomRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-/* 使用 CSS 变量进行延迟计算，基于 data-index 属性 */
+/* 为每个元素设置递增的动画延迟，基于 data-index 属性实现逐个入场效果 */
 .svg-animated-element[data-index="1"] { animation-delay: 0.1s; }
 .svg-animated-element[data-index="2"] { animation-delay: 0.15s; }
 .svg-animated-element[data-index="3"] { animation-delay: 0.2s; }
@@ -80,7 +80,7 @@
 .svg-animated-element[data-index="15"] { animation-delay: 0.8s; }
 .svg-animated-element[data-index="16"] { animation-delay: 0.85s; }
 
-/* 优化：减少移动端动画效果以提升性能 */
+/* 无障碍支持：尊重用户的减少动画偏好设置 */
 @media (prefers-reduced-motion: reduce) {
     .svg-animated-element {
         animation: none;
