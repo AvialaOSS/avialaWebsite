@@ -62,23 +62,34 @@
     animation: slideInFromBottomRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-/* 为每个元素设置递增的动画延迟，基于 data-index 属性实现逐个入场效果 */
-.svg-animated-element[data-index="1"] { animation-delay: 0.1s; }
-.svg-animated-element[data-index="2"] { animation-delay: 0.15s; }
-.svg-animated-element[data-index="3"] { animation-delay: 0.2s; }
-.svg-animated-element[data-index="4"] { animation-delay: 0.25s; }
-.svg-animated-element[data-index="5"] { animation-delay: 0.3s; }
-.svg-animated-element[data-index="6"] { animation-delay: 0.35s; }
-.svg-animated-element[data-index="7"] { animation-delay: 0.4s; }
-.svg-animated-element[data-index="8"] { animation-delay: 0.45s; }
-.svg-animated-element[data-index="9"] { animation-delay: 0.5s; }
-.svg-animated-element[data-index="10"] { animation-delay: 0.55s; }
-.svg-animated-element[data-index="11"] { animation-delay: 0.6s; }
-.svg-animated-element[data-index="12"] { animation-delay: 0.65s; }
-.svg-animated-element[data-index="13"] { animation-delay: 0.7s; }
-.svg-animated-element[data-index="14"] { animation-delay: 0.75s; }
-.svg-animated-element[data-index="15"] { animation-delay: 0.8s; }
-.svg-animated-element[data-index="16"] { animation-delay: 0.85s; }
+/* 为元素设置分组动画延迟，基于 data-index 属性实现分组入场效果 */
+/* 第一组：data-index 1-5 同时入场 */
+.svg-animated-element[data-index="1"],
+.svg-animated-element[data-index="2"],
+.svg-animated-element[data-index="3"],
+.svg-animated-element[data-index="4"],
+.svg-animated-element[data-index="5"] {
+    animation-delay: 0.1s;
+}
+
+/* 第二组：data-index 6-15 同时入场 */
+.svg-animated-element[data-index="6"],
+.svg-animated-element[data-index="7"],
+.svg-animated-element[data-index="8"],
+.svg-animated-element[data-index="9"],
+.svg-animated-element[data-index="10"],
+.svg-animated-element[data-index="11"],
+.svg-animated-element[data-index="12"],
+.svg-animated-element[data-index="13"],
+.svg-animated-element[data-index="14"],
+.svg-animated-element[data-index="15"] {
+    animation-delay: 0.5s;
+}
+
+/* 第三组：data-index 16 */
+.svg-animated-element[data-index="16"] {
+    animation-delay: 0.9s;
+}
 
 /* 无障碍支持：尊重用户的减少动画偏好设置 */
 @media (prefers-reduced-motion: reduce) {
