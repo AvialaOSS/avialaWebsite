@@ -62,6 +62,17 @@
     animation: slideInFromBottomRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
+/* foreignObject 需要特殊处理 - 动画其子元素 */
+foreignObject.svg-animated-element {
+    /* 保持 foreignObject 本身可见，只动画内容 */
+    opacity: 1;
+}
+
+foreignObject.svg-animated-element > * {
+    opacity: 0;
+    animation: slideInFromBottomRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
 /* 为元素设置分组动画延迟，基于 data-index 属性实现分组入场效果 */
 /* 第一组：data-index 1-5 同时入场 */
 .svg-animated-element[data-index="1"],
@@ -83,6 +94,20 @@
 .svg-animated-element[data-index="13"],
 .svg-animated-element[data-index="14"],
 .svg-animated-element[data-index="15"] {
+    animation-delay: 0.5s;
+}
+
+/* foreignObject 的子元素也需要相同的延迟 */
+foreignObject.svg-animated-element[data-index="6"] > *,
+foreignObject.svg-animated-element[data-index="7"] > *,
+foreignObject.svg-animated-element[data-index="8"] > *,
+foreignObject.svg-animated-element[data-index="9"] > *,
+foreignObject.svg-animated-element[data-index="10"] > *,
+foreignObject.svg-animated-element[data-index="11"] > *,
+foreignObject.svg-animated-element[data-index="12"] > *,
+foreignObject.svg-animated-element[data-index="13"] > *,
+foreignObject.svg-animated-element[data-index="14"] > *,
+foreignObject.svg-animated-element[data-index="15"] > * {
     animation-delay: 0.5s;
 }
 
