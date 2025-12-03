@@ -83,7 +83,7 @@ foreignObject.svg-animated-element > * {
     animation-delay: 0.1s;
 }
 
-/* 第二组：data-index 6-15 同时入场 */
+/* 第二组：data-index 6-28 同时入场（包括所有后续元素和 foreignObject）*/
 .svg-animated-element[data-index="6"],
 .svg-animated-element[data-index="7"],
 .svg-animated-element[data-index="8"],
@@ -93,27 +93,31 @@ foreignObject.svg-animated-element > * {
 .svg-animated-element[data-index="12"],
 .svg-animated-element[data-index="13"],
 .svg-animated-element[data-index="14"],
-.svg-animated-element[data-index="15"] {
+.svg-animated-element[data-index="15"],
+.svg-animated-element[data-index="16"],
+.svg-animated-element[data-index="17"],
+.svg-animated-element[data-index="18"],
+.svg-animated-element[data-index="19"],
+.svg-animated-element[data-index="20"],
+.svg-animated-element[data-index="21"],
+.svg-animated-element[data-index="22"],
+.svg-animated-element[data-index="23"],
+.svg-animated-element[data-index="24"],
+.svg-animated-element[data-index="25"],
+.svg-animated-element[data-index="26"],
+.svg-animated-element[data-index="27"],
+.svg-animated-element[data-index="28"] {
     animation-delay: 0.5s;
 }
 
 /* foreignObject 的子元素也需要相同的延迟 */
-foreignObject.svg-animated-element[data-index="6"] > *,
-foreignObject.svg-animated-element[data-index="7"] > *,
-foreignObject.svg-animated-element[data-index="8"] > *,
-foreignObject.svg-animated-element[data-index="9"] > *,
-foreignObject.svg-animated-element[data-index="10"] > *,
-foreignObject.svg-animated-element[data-index="11"] > *,
-foreignObject.svg-animated-element[data-index="12"] > *,
-foreignObject.svg-animated-element[data-index="13"] > *,
-foreignObject.svg-animated-element[data-index="14"] > *,
-foreignObject.svg-animated-element[data-index="15"] > * {
+foreignObject.svg-animated-element[data-index="17"] > *,
+foreignObject.svg-animated-element[data-index="19"] > *,
+foreignObject.svg-animated-element[data-index="21"] > *,
+foreignObject.svg-animated-element[data-index="23"] > *,
+foreignObject.svg-animated-element[data-index="25"] > *,
+foreignObject.svg-animated-element[data-index="27"] > * {
     animation-delay: 0.5s;
-}
-
-/* 第三组：data-index 16 */
-.svg-animated-element[data-index="16"] {
-    animation-delay: 0.9s;
 }
 
 /* 无障碍支持：尊重用户的减少动画偏好设置 */
