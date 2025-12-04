@@ -93,26 +93,26 @@ foreignObject.svg-animated-element > * {
 }
 
 .svg-animated-element[data-index="17"],
-.svg-animated-element[data-index="18"]{
+.svg-animated-element[data-index="18"] {
     animation-delay: 0.20s;
 }
 
 .svg-animated-element[data-index="19"],
-.svg-animated-element[data-index="20"]{
+.svg-animated-element[data-index="20"] {
     animation-delay: 0.28s;
 }
 
 .svg-animated-element[data-index="21"],
-.svg-animated-element[data-index="22"]{
+.svg-animated-element[data-index="22"] {
     animation-delay: 0.36s;
 }
 
 .svg-animated-element[data-index="23"],
-.svg-animated-element[data-index="24"]{
+.svg-animated-element[data-index="24"] {
     animation-delay: 0.44s;
 }
 .svg-animated-element[data-index="25"],
-.svg-animated-element[data-index="26"]{
+.svg-animated-element[data-index="26"] {
     animation-delay: 0.52s;
 }
 
