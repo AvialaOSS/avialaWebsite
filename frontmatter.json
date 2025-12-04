@@ -70,5 +70,6 @@
     }
   ],
   "frontMatter.dashboard.openOnStart": true,
-  "frontMatter.panel.openOnSupportedFile": false
+  "frontMatter.panel.openOnSupportedFile": false,
+  "frontMatter.framework.startCommand": "hugo server -D --disableFastRender"
 }

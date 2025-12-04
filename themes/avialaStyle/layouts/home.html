@@ -3,12 +3,12 @@
   <section class="sticky-scroll-section" id="section1">
     <div class="section-content">
       <div class="firstSectionContent drawplace">
-        <img src="draw.svg" alt="Aviala Logo" class="logo" />
-      </div>
-      <div class="firstSectionContent wrapper">
-        <div class="firstSectionContent title">
-          <h1>优秀体验提升效率、激发潜力。</h1>
-          <svg xmlns="http://www.w3.org/2000/svg" width="171" height="26" viewBox="0 0 171 26" fill="none">
+        {{ readFile "static/draw.svg" | safeHTML }}
+        <!-- 底部悬浮标题区域 -->
+        <div class="firstSectionContent overlay">
+          <div class="firstSectionContent title">
+            <h1>全方面的美好体验</h1>
+            <svg xmlns="http://www.w3.org/2000/svg" width="171" height="26" viewBox="0 0 171 26" fill="none">
             <g clip-path="url(#clip0_1_446)">
               <path
                 d="M13.1897 20.3278L10.737 12.7574L6.30404 12.7601C4.11209 12.7627 2.16023 14.1619 1.43475 16.2529L0.0225067 20.3278H13.1897Z"
@@ -71,13 +71,6 @@
                 <rect width="171" height="26" fill="white" />
               </clipPath>
             </defs>
-          </svg>
-        </div>
-        <div class="firstSectionContent iconplace">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path fill-rule="evenodd" clip-rule="evenodd"
-              d="M3.61793 13.0457C3.45673 12.8934 3.23926 12.8 2.99998 12.8C2.50292 12.8 2.09998 13.2029 2.09998 13.7C2.09998 13.9516 2.20322 14.1791 2.36966 14.3424L10.2358 22.1211C11.2137 23.0882 12.789 23.0838 13.7614 22.1113L21.5353 14.3375L21.5375 14.3353L21.6364 14.2364L21.6285 14.2285C21.7364 14.0801 21.8 13.8975 21.8 13.7C21.8 13.2029 21.397 12.8 20.9 12.8C20.7098 12.8 20.5334 12.859 20.3881 12.9596L20.3782 12.9493L12.9 20.0951V1.99998C12.9 1.50292 12.497 1.09998 12 1.09998C11.5029 1.09998 11.1 1.50292 11.1 1.99998V20.112L3.61794 13.0457L3.61793 13.0457Z"
-              fill="#A02310" />
           </svg>
         </div>
       </div>
