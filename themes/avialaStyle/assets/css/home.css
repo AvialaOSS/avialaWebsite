@@ -268,11 +268,6 @@ foreignObject.svg-animated-element > * {
     align-items: center
 }
 
-.homeCardContent .uui-typeface {
-    width: auto;
-    text-align: center;
-    align-items: center
-}
 
 .homeCardContent .uui-typeface:not(.scrollBox .homeCard .uui-typeface) {
     gap: 24px;
