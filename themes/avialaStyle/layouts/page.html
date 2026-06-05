@@ -1,34 +1,57 @@
 {{ define "main" }}
 <div class="page">
-  <div class="previewImg" style="background-image: url('{{ .Params.preview }}');"></div>
-
-  <h1>{{ .Title }}</h1>
-  <div class="docInfo">
-  {{ $dateHuman := .Date | time.Format "2006年1月2日" }}
-  {{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
-  {{ partial "terms-no-title.html" (dict "taxonomy" "tags" "page" .) }}
-  <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
-  {{ if .Params.author }}
-    <span class="author">作者：{{ .Params.author }}</span>
-  {{ else if .Site.Params.author }}
-    <span class="author">作者：{{ .Site.Params.author }}</span>
+  {{ $backUrl := "/" }}
+  {{ with .CurrentSection }}
+    {{ $backUrl = .RelPermalink }}
   {{ end }}
-  </div>
-
-  <div class="articleShare">
-    <div class="uui-iconplace theme">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-        <path d="M7.46672 2.85952C7.46672 1.37839 9.3058 0.692325 10.2758 1.8116L14.7258 6.94625C15.2503 7.55146 15.2466 8.4513 14.7171 9.05211L10.2671 14.1011C9.29215 15.2072 7.4668 14.5177 7.46672 13.0433V11.158C7.46672 11.068 7.42547 11.002 7.37792 10.9668C7.33509 10.9352 7.28713 10.9258 7.22896 10.9494C5.76945 11.5412 4.21786 12.6434 2.84198 13.7274C2.38584 14.0867 1.81119 14.0981 1.38026 13.8516C0.939512 13.5994 0.66381 13.0821 0.808127 12.4899C1.56847 9.37008 3.44959 6.55258 7.26893 5.03622C7.39583 4.98582 7.46667 4.87224 7.46672 4.76434V2.85952Z" fill="white"/>
+  <div class="articleTopBar">
+    <a class="uui-button NoBackground-Custom Regular" href="{{ $backUrl }}" data-back-link>
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="15" viewBox="0 0 14 15" fill="none">
+        <path
+          d="M6.27804 2.40615C6.4613 2.22493 6.46295 1.92946 6.28173 1.7462C6.1005 1.56294 5.80503 1.56129 5.62177 1.74251L1.03913 6.27423C0.487179 6.82005 0.48469 7.71075 1.03359 8.25965L5.61992 12.846C5.80217 13.0282 6.09764 13.0282 6.27989 12.846C6.46213 12.6637 6.46213 12.3683 6.27989 12.186L2.05987 7.73267H12.7166C12.9743 7.73267 13.1832 7.52373 13.1832 7.266C13.1832 7.00827 12.9743 6.79933 12.7166 6.79933H2.06883L6.27804 2.40615Z"
+          fill="#5A5A5A" />
       </svg>
-    </div>
-    <div class="uui-typeface">
-      <p>如果你想支持我们，请考虑分享这篇文章</p>
-      <p class="caption">让更多人看到这篇文章</p>
-    </div>
-    <button class="uui-button Regular Second shareButton" onclick="copyShareLink()">复制分享链接</button>
+      <span>返回</span>
+    </a>
   </div>
+  {{ if and (eq .Section "blogs") (.Params.preview) }}
+    {{ $postVtName := printf "blog-preview-%s" (md5 .RelPermalink) }}
+    <div class="previewImg" data-vt-name="{{ $postVtName }}" style="background-image: url('{{ .Params.preview }}'); view-transition-name: {{ $postVtName }};"></div>
+  {{ else }}
+    <div class="previewImg" style="background-image: url('{{ .Params.preview }}');"></div>
+  {{ end }}
 
-  {{ .Content }}
+  <div class="articleContent">
+    <h1>{{ .Title }}</h1>
+    <div class="docInfo">
+    {{ $dateHuman := .Date | time.Format "2006年1月2日" }}
+    {{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
+    {{ partial "terms-no-title.html" (dict "taxonomy" "tags" "page" .) }}
+    <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
+    {{ if .Params.author }}
+      <span class="author">作者：{{ .Params.author }}</span>
+    {{ else if .Site.Params.author }}
+      <span class="author">作者：{{ .Site.Params.author }}</span>
+    {{ end }}
+    </div>
+
+    <div class="articleShare">
+      <div class="uui-iconplace theme">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M7.46672 2.85952C7.46672 1.37839 9.3058 0.692325 10.2758 1.8116L14.7258 6.94625C15.2503 7.55146 15.2466 8.4513 14.7171 9.05211L10.2671 14.1011C9.29215 15.2072 7.4668 14.5177 7.46672 13.0433V11.158C7.46672 11.068 7.42547 11.002 7.37792 10.9668C7.33509 10.9352 7.28713 10.9258 7.22896 10.9494C5.76945 11.5412 4.21786 12.6434 2.84198 13.7274C2.38584 14.0867 1.81119 14.0981 1.38026 13.8516C0.939512 13.5994 0.66381 13.0821 0.808127 12.4899C1.56847 9.37008 3.44959 6.55258 7.26893 5.03622C7.39583 4.98582 7.46667 4.87224 7.46672 4.76434V2.85952Z" fill="white"/>
+        </svg>
+      </div>
+      <div class="uui-typeface">
+        <p>如果你想支持我们，请考虑分享这篇文章</p>
+        <p class="caption">让更多人看到这篇文章</p>
+      </div>
+      <button class="uui-button Regular Second shareButton" onclick="copyShareLink()">复制分享链接</button>
+    </div>
+
+    <div class="pageContent">
+      {{ .Content }}
+    </div>
+  </div>
   
   </div>
 

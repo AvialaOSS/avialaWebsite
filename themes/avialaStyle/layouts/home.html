@@ -3,12 +3,38 @@
   <section class="sticky-scroll-section" id="section1">
     <div class="section-content">
       <div class="firstSectionContent drawplace">
-        {{ readFile "static/draw.svg" | safeHTML }}
-        <!-- 底部悬浮标题区域 -->
-        <div class="firstSectionContent overlay">
-          <div class="firstSectionContent title">
-            <h1>全方面的美好体验</h1>
-            <svg xmlns="http://www.w3.org/2000/svg" width="171" height="26" viewBox="0 0 171 26" fill="none">
+        <div class="homeHero" data-home-hero>
+          {{ readFile "static/draw.svg" | safeHTML }}
+          <div class="firstSectionContent overlay">
+            <div class="firstSectionContent title">
+              <h1>全方面的美好体验</h1>
+            </div>
+          </div>
+        </div>
+        <div class="homeMarketing" data-home-marketing aria-hidden="true">
+          <div class="homeMarketingInner">
+            <div class="homeMarketingBg" aria-hidden="true">
+              <img src="newLifeForme.png" alt="" />
+            </div>
+            <div class="homeMarketingContent">
+              <div class="homeMarketingTitle">
+                <p class="homeMarketingEyebrow">更新预告</p>
+                <h2 class="homeMarketingHeadline">万花新生，体验进化</h2>
+                <p class="homeMarketingSubhead">Aviala Design V7.0，即将发布。</p>
+              </div>
+              <div class="homeMarketingCta">
+                <p class="homeMarketingNote">关注我们以预约直播</p>
+                <div class="homeMarketingButtons">
+                  <a class="uui-button Primary" href="https://www.youtube.com/@TNDS-Aviala" target="_blank" rel="noopener noreferrer">预约前瞻视频</a>
+                  <!-- <a class="uui-button homeMarketingButtonSecondary" href="#">查看规则</a> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="homeBrandBadge">
+          <svg xmlns="http://www.w3.org/2000/svg" width="171" height="26" viewBox="0 0 171 26" fill="none" role="img"
+            aria-label="Aviala Design">
             <g clip-path="url(#clip0_1_446)">
               <path
                 d="M13.1897 20.3278L10.737 12.7574L6.30404 12.7601C4.11209 12.7627 2.16023 14.1619 1.43475 16.2529L0.0225067 20.3278H13.1897Z"

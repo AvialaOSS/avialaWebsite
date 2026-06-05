@@ -8,6 +8,7 @@ header {
   align-self: stretch;
   height: auto;
   box-sizing: border-box;
+  position: relative;
   z-index: 100;
   /* 确保header在最上层 */
 
@@ -260,7 +261,7 @@ header .logoWrapper {
   flex-direction: column;
   align-items: flex-start;
   margin: 12px;
-  background-color: var(--box-box-normal-background-whiteonly);
+  background-color: var(--box-box-normal-Background-whiteOnly);
 }
 
 .headerMobileMenu ul {
@@ -338,7 +339,18 @@ header .logoWrapper {
   }
 }
 
+.header-search-container .uui-button.NoBackground-Custom.Regular.W-Tooltip#globalSearch{
+  outline: none;
+}
+
 .header-search-container.header-search-expanded .header-search-input-container {
+  display: flex;
+  opacity: 1;
+  width: 100%;
+}
+
+.header-search-container:has(#globalSearch:focus) .header-search-input-container,
+.header-search-container:has(#globalSearch:focus-visible) .header-search-input-container {
   display: flex;
   opacity: 1;
   width: 100%;
@@ -358,6 +370,16 @@ header .logoWrapper {
   min-width: 8rem;
   max-width: 8rem;
   background: var(--control-normal-lightBackground-white, #F0F0F0);
+  box-shadow: var(--controlEffect-Light);
+}
+
+.header-search-container:has(#globalSearch:focus),
+.header-search-container:has(#globalSearch:focus-visible) {
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 8rem;
+  max-width: 8rem;
+  background: var(--control-normal-lightBackground-white, #F0F0F0);
 }
 
 @media screen and (max-width: 768px) {
@@ -370,10 +392,22 @@ header .logoWrapper {
     display: none;
   }
 
+  .header-search-container:has(#globalSearch:focus),
+  .header-search-container:has(#globalSearch:focus-visible) {
+    min-width: 5rem;
+    max-width: 5rem;
+  }
+
+  .header-search-container:has(#globalSearch:focus)+.uui-button#languageSelect,
+  .header-search-container:has(#globalSearch:focus-visible)+.uui-button#languageSelect {
+    display: none;
+  }
 }
 
 .header-search-container:has(input:focus),
 .header-search-container:has(input:focus-visible),
+.header-search-container:has(#globalSearch:focus),
+.header-search-container:has(#globalSearch:focus-visible),
 .header-search-container.header-search-expanded {
   padding: var(--padding-padding-none, 0) var(--padding-padding-default, 8px);
 
@@ -401,7 +435,8 @@ header .logoWrapper {
   outline: none;
 }
 
-.header-search-container:has(input:focus) {
+.header-search-container:has(input:focus),
+.header-search-container:has(button:focus-visible) {
   outline-offset: 2px;
   outline: var(--border-border-theme-primary) 2px solid;
 }

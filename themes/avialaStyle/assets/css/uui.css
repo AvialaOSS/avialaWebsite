@@ -1,9 +1,28 @@
+@property --uui-primary-grad-top{
+    syntax: "<color>";
+    inherits: true;
+    initial-value: rgba(255, 242, 239, 0.2);
+}
+
+@property --uui-primary-grad-bottom{
+    syntax: "<color>";
+    inherits: true;
+    initial-value: rgba(255, 255, 255, 0);
+}
+
+@property --uui-primary-bg{
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #FF5C36;
+}
+
 .uui-button {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: var(--gap-gap-inside-space, 4px);
     transition: 250ms;
+    outline: 6px solid transparent;
 }
 
 .uui-button:hover {
@@ -80,6 +99,42 @@
 
 .uui-icon.text.lineheightFix {
     height: var(--line-height-line-height-regular, 18px);
+}
+
+.uui-button.Primary{
+    display: inline-flex;
+    min-width: 46px;
+    padding: var(--padding-padding-default, 8px) var(--padding-padding-middle, 10px);
+    justify-content: center;
+    align-items: center;
+    gap: var(--gap-gap-inside-space, 6px);
+    border-radius: var(--border-radius-border-radius-small, 8px);
+    --uui-primary-grad-top: var(--light-effort-top, rgba(255, 242, 239, 0.20));
+    --uui-primary-grad-bottom: var(--light-effort-bottom, rgba(255, 255, 255, 0.00));
+    --uui-primary-bg: var(--box-box-theme-primaryBackground, #FF5C36);
+    background: linear-gradient(180deg, var(--uui-primary-grad-top) 0%, var(--uui-primary-grad-bottom) 36%), var(--uui-primary-bg);
+    border: none;
+    /* ControlEffect/Basic */
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.12), 0 -1px 0 0 rgba(0, 0, 0, 0.08) inset;
+    color: var(--text-text-theme-primary-white, #FFF);
+    /* Typography-Text */
+    font-family: "OPPO Sans 4.0";
+    font-size: var(--size-size-regular, 14px);
+    font-style: normal;
+    font-weight: var(--font-weight-regular, 400);
+    line-height: var(--line-height-line-height-regular, 18px);
+    transition: background 250ms, outline 250ms, --uui-primary-grad-top 250ms, --uui-primary-grad-bottom 250ms, --uui-primary-bg 250ms;
+    /* 128.571% */
+}
+
+.uui-button.Primary:active {
+    --uui-primary-bg: var(--primary-primary-9);
+    --uui-primary-grad-top: rgba(255, 255, 255, 0);
+    --uui-primary-grad-bottom: rgba(255, 255, 255, 0);
+}
+
+.uui-button:focus-visible {
+    outline: 2px solid var(--primary-primary-6);
 }
 
 .uui-dropdown-wrapper {
@@ -397,6 +452,13 @@ h1.uui-typography {
     /* 128.571% */
 }
 
+.uui-typeface.center {
+    justify-content: center;
+    align-items: center;
+}
+
+
+
 .uui-tag {
     border-radius: 4px;
     display: flex;
@@ -443,10 +505,13 @@ h1.uui-typography {
     align-items: center;
     gap: var(--gap-gap-component-space, 6px);
     border-radius: var(--border-radius-border-radius-small, 6px);
-    border: 1px solid var(--border-border-normal-light, #E1E1E1);
+    /* border: 1px solid var(--border-border-normal-light, #E1E1E1); */
+    box-shadow: var(--controlEffect-Light);
     background: var(--control-normal-lightBackground-whiteOnly, #FFF);
     transition: 250ms;
     margin: -1px;
+    outline: 3px solid transparent;
+    transition: 250ms;
     input{
         display: flex;
         padding: var(--padding-padding-default, 8px) 0;
@@ -456,7 +521,7 @@ h1.uui-typography {
         flex: 1 0 0;
         border: none;
         color: var(--text-text-normal-text-black, #5A5A5A);
-
+        background: transparent;
         /* Typography-Text */
         font-family: "OPPO Sans 4.0";
         font-size: var(--size-size-regular, 14px);
@@ -472,5 +537,16 @@ h1.uui-typography {
 }
 
 .uui-input.Big:has(input:focus){
-    border: var(--border-thickness-border-thickness-default, 1px) solid var(--border-border-theme-primary, #F2502C);
+    outline: var(--border-thickness-border-thickness-default, 1px) solid var(--border-border-theme-primary, #F2502C);
+}
+
+.uui-emptyInfomation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.uui-emptyInfomation.full-box {
+    height: 100%;
 }

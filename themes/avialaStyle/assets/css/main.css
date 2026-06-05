@@ -9,6 +9,76 @@ html {
   navigation: auto;
 }
 
+::view-transition {
+  background: var(--box-box-normal-background-whiteonly, #fff);
+}
+
+html,
+body {
+  background: var(--box-box-normal-background-whiteonly, #fff);
+}
+
+html::view-transition-group(root) {
+  animation-duration: 0ms;
+}
+
+@keyframes rootFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes rootFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+html::view-transition-old(root) {
+  animation: 120ms cubic-bezier(0.2, 0.8, 0.2, 1) both rootFadeOut;
+}
+
+html::view-transition-new(root) {
+  animation: 160ms cubic-bezier(0.2, 0.8, 0.2, 1) 20ms both rootFadeIn;
+}
+
+html::view-transition-group(.blog-preview) {
+  animation-duration: 520ms;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes blogPreviewFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes blogPreviewFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+html::view-transition-old(.blog-preview) {
+  animation: 180ms cubic-bezier(0.2, 0.8, 0.2, 1) both blogPreviewFadeOut;
+}
+
+html::view-transition-new(.blog-preview) {
+  animation: 200ms cubic-bezier(0.2, 0.8, 0.2, 1) 40ms both blogPreviewFadeIn;
+}
+
 body {
   color: #222;
   font-family: sans-serif;

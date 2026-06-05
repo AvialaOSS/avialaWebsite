@@ -7,7 +7,8 @@ class HeaderSearch {
         this.searchInput = document.getElementById('searchInput');
         this.searchClose = document.getElementById('searchClose');
         this.searchResults = document.getElementById('searchResults');
-        this.searchIcon = this.searchButton?.querySelector('.search-icon');
+        this.searchIcon = this.searchButton ? this.searchButton.querySelector('.search-icon') : null;
+        this.lastInteractionWasKeyboard = false;
 
         // 调试信息
         console.log('HeaderSearch 初始化:', {
@@ -34,20 +35,51 @@ class HeaderSearch {
 
     init() {
         // 绑定事件
+        if (this.searchButton) {
+            this.searchButton.addEventListener('click', (e) => this.handleContainerClick(e));
+            this.searchButton.addEventListener('focus', (e) => this.handleSearchButtonFocus(e));
+        }
         this.searchContainer.addEventListener('click', (e) => this.handleContainerClick(e));
-        this.searchClose?.addEventListener('click', (e) => this.handleClearClick(e));
+        if (this.searchClose) {
+            this.searchClose.addEventListener('click', (e) => this.handleClearClick(e));
+        }
         this.searchInput.addEventListener('input', (e) => this.handleInput(e.target.value));
         this.searchInput.addEventListener('keydown', (e) => this.handleKeydown(e));
         this.searchInput.addEventListener('click', (e) => e.stopPropagation());
 
         // 点击外部关闭搜索
         document.addEventListener('click', (e) => this.handleOutsideClick(e));
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                this.lastInteractionWasKeyboard = true;
+            }
+        });
+        document.addEventListener('pointerdown', () => {
+            this.lastInteractionWasKeyboard = false;
+        }, { passive: true });
 
         // 加载搜索数据
         this.loadSearchData();
 
         // 初始化清空按钮状态
         this.updateClearButtonVisibility();
+    }
+
+    handleSearchButtonFocus(e) {
+        if (!this.searchContainer || !this.searchInput || !this.searchButton) return;
+        if (e.relatedTarget && this.searchContainer.contains(e.relatedTarget)) return;
+
+        const isKeyboardFocus = (typeof this.searchButton.matches === 'function' && this.searchButton.matches(':focus-visible')) || this.lastInteractionWasKeyboard;
+        if (!isKeyboardFocus) return;
+
+        if (!this.isOpen) {
+            this.openSearch();
+            return;
+        }
+
+        if (document.activeElement !== this.searchInput) {
+            this.searchInput.focus();
+        }
     }
 
     handleContainerClick(e) {

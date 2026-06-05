@@ -1,6 +1,6 @@
 {{ define "main" }}
 <div class="blogSection">
-    <div class="titleArea">
+    <div class="titleArea" data-blog-reveal>
         <h1 class="uui-typography subtitle">新体验开始的地方。</h1>
         <svg xmlns="http://www.w3.org/2000/svg" width="114" height="35" viewBox="0 0 114 35" fill="none">
             <g style="mix-blend-mode:hard-light">
@@ -19,12 +19,13 @@
     {{/* 确保选择最新的头条文章（按日期排序，取第一个） */}}
     {{ $sortedPosts := sort $featuredPosts "Date" "desc" }}
     {{ $headline := index $sortedPosts 0 }}
-    <div class="headlineArea">
+    <div class="headlineArea" data-blog-reveal>
         <p class="uui-typography text headlineAreaHeadline">头条 Headline</p>
         <a href="{{ $headline.RelPermalink }}" class="headlineLink">
             {{/* 显示预览图片，如果存在的话 */}}
             {{ if $headline.Params.preview }}
-            <div class="headlineImg" style="background-image: url('{{ $headline.Params.preview }}');">
+            {{ $headlineVtName := printf "blog-preview-%s" (md5 $headline.RelPermalink) }}
+            <div class="headlineImg" data-vt-name="{{ $headlineVtName }}" style="--vt-name: {{ $headlineVtName }}; background-image: url('{{ $headline.Params.preview }}');">
             </div>
             {{ end }}
             <div class="uui-typeface headlineContent">
@@ -50,7 +51,7 @@
             {{ $limitedPosts := first 6 $categoryPosts }}
             {{ if $limitedPosts }}
             <div class="blogCategoryWrapper">
-                <div class="blogCategoryTitle">
+                <div class="blogCategoryTitle" data-blog-reveal>
                     <div class="uui-typeface">
                         <p class="uui-typography title">{{ humanize $categoryName }}</p>
                     </div>
@@ -76,11 +77,12 @@
                 <div class="blogCategoryList" id="blogCategoryList-{{ $categoryName }}">
                     {{/* 遍历该分类下的文章 */}}
                     {{ range $limitedPosts }}
-                    <div class="blogCategoryItem"><a href="{{ .RelPermalink }}">
+                    <div class="blogCategoryItem" data-blog-reveal><a href="{{ .RelPermalink }}">
                         <div class="blogCategoryItemView">
                             {{/* 显示文章预览图 */}}
                             {{ if .Params.preview }}
-                                <div class="blogItemPreview" style="background-image: url('{{ .Params.preview }}');"></div>
+                                {{ $postVtName := printf "blog-preview-%s" (md5 .RelPermalink) }}
+                                <div class="blogItemPreview" data-vt-name="{{ $postVtName }}" style="--vt-name: {{ $postVtName }}; background-image: url('{{ .Params.preview }}');"></div>
                             {{ else }}
                                 {{/* 如果没有预览图，显示默认占位符 */}}
                                 <div class="blogItemPreview blogItemPreviewDefault"></div>
@@ -105,20 +107,33 @@
 function scrollCategoryList(categoryName, direction) {
     const container = document.getElementById('blogCategoryList-' + categoryName);
     if (!container) return;
-    
-    const scrollAmount = 200; // 每次滚动的像素数
-    const currentScroll = container.scrollLeft;
-    
+
+    const items = Array.from(container.querySelectorAll('.blogCategoryItem'));
+    if (!items.length) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const epsilon = 1;
+
+    if (direction === 'right') {
+        const next = items.find((item) => item.getBoundingClientRect().right > containerRect.right + epsilon);
+        if (next) {
+            next.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'end' });
+            return;
+        }
+        items[items.length - 1].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'end' });
+        return;
+    }
+
     if (direction === 'left') {
-        container.scrollTo({
-            left: currentScroll - scrollAmount,
-            behavior: 'smooth'
-        });
-    } else if (direction === 'right') {
-        container.scrollTo({
-            left: currentScroll + scrollAmount,
-            behavior: 'smooth'
-        });
+        const prev = items
+            .slice()
+            .reverse()
+            .find((item) => item.getBoundingClientRect().left < containerRect.left - epsilon);
+        if (prev) {
+            prev.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+            return;
+        }
+        items[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
     }
 }
 </script>

@@ -123,13 +123,30 @@ main img {
     margin: var(--gap-gap-chapter-space, 16px) 0;
 }
 
-/* 标签区域 */
-main .tags-section {
-    /* margin-top: var(--gap-gap-page-space, 24px);
-    margin-bottom: var(--gap-gap-page-space, 24px);
-    padding-top: var(--gap-gap-page-space, 24px); */
+.js .page .articleContent {
+    opacity: 0;
+    transform: translateY(10px);
+    transition-property: opacity, transform;
+    transition-duration: 520ms;
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition-delay: 250ms;
+    will-change: opacity, transform;
 }
 
+.js .page.blogArticleEnterActive .articleContent {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .js .page .articleContent {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
+/* 标签区域 */
 main .tags-section div:first-child {
     color: var(--text-text-normal-text-caption-black, #787878);
     font-family: "OPPO Sans 4.0";
@@ -175,8 +192,21 @@ main .tags-section a:hover {
     background-size: cover;
     background-position: center;
     height: 200px;
-    border-radius: var(--border-radius-border-radius-middle, 8px);
+    border-radius: var(--border-radius-border-radius-big, 12px);
     margin-bottom: var(--gap-gap-page-space);
+    view-transition-class: blog-preview;
+}
+
+.articleTopBar {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--gap-gap-block-space, 12px);
+}
+
+.articleTopBar a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-gap-content-space, 8px);
 }
 
 .docInfo{

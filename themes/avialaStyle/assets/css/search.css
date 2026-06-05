@@ -183,11 +183,10 @@ mark {
 #search-box {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
     gap: var(--gap-gap-content-space);
     align-self: stretch;
     width: 100%;
-
+    align-items: center;
     .uui-input {
         flex: 1;
     }
