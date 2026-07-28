@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+/* Spiral tokens + theme variables */
+@import "@aviala-design/spiral/styles.css";
+
+/* Frozen Figma ALD theme — required when ThemeProvider defaultPresetId="ald" */
+@import "@aviala-design/tokens/ald-theme.css";
+
+/* Component effect sheets (required — not bundled into styles.css) */
+@import "@aviala-design/tokens/button-effects.css";
+@import "@aviala-design/tokens/icon-effects.css";
+@import "@aviala-design/tokens/typeface-effects.css";
+@import "@aviala-design/tokens/input-effects.css";
+@import "@aviala-design/tokens/basic-input-effects.css";
+@import "@aviala-design/tokens/color-picker-effects.css";
+@import "@aviala-design/tokens/popover-effects.css";
+@import "@aviala-design/tokens/modal-effects.css";
+@import "@aviala-design/tokens/tooltip-effects.css";
+@import "@aviala-design/tokens/focus-effects.css";
+@import "@aviala-design/tokens/loading-effects.css";
+
+/* Scan Spiral for Tailwind utility classes used in CVA variants */
+@source "../../../node_modules/@aviala-design/spiral/dist";
+
+@import "./app.css";

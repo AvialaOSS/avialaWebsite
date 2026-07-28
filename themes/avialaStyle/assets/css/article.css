@@ -144,6 +144,15 @@ main img {
         transform: none;
         transition: none;
     }
+
+    .previewMedia::before {
+        animation: none;
+    }
+
+    .previewMedia img {
+        transform: none;
+        transition: opacity 160ms ease;
+    }
 }
 
 /* 标签区域 */
@@ -189,12 +198,59 @@ main .tags-section a:hover {
 }
 
 .previewImg{
-    background-size: cover;
-    background-position: center;
     height: 200px;
     border-radius: var(--border-radius-border-radius-big, 12px);
     margin-bottom: var(--gap-gap-page-space);
     view-transition-class: blog-preview;
+}
+
+.previewMedia {
+    position: relative;
+    overflow: hidden;
+    background: #f4f4f4;
+}
+
+.previewMedia::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(244, 244, 244, 1) 20%, rgba(232, 232, 232, 1) 50%, rgba(244, 244, 244, 1) 80%);
+    background-size: 200% 100%;
+    animation: previewShimmer 1.6s linear infinite;
+    transition: opacity 220ms ease;
+}
+
+.previewMedia.is-loaded::before,
+.previewMedia.is-error::before {
+    opacity: 0;
+}
+
+.previewMedia img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    margin: 0;
+    border-radius: inherit;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.02);
+    transition: opacity 260ms ease, transform 360ms ease;
+}
+
+.previewMedia.is-loaded img {
+    opacity: 1;
+    transform: scale(1);
+}
+
+@keyframes previewShimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
 }
 
 .articleTopBar {

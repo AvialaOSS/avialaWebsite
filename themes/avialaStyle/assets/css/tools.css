@@ -1,0 +1,120 @@
+/* tools 页面专用样式 */
+.tools-page {
+  display: flex;
+  padding: 32px var(--padding-padding-large, 16px);
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-gap-page-space, 24px);
+  align-self: stretch;
+  border-radius: var(--border-radius-border-radius-big, 12px);
+  border: 1px solid var(--border-border-normal-light, #E1E1E1);
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.tools-header {
+  display: flex;
+  max-width: 800px;
+  width: 100%;
+  flex-direction: column;
+  gap: var(--gap-gap-content-space, 8px);
+}
+
+.tools-intro {
+  color: var(--text-text-normal-text-black, #343333);
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--gap-gap-page-space, 24px);
+  max-width: 800px;
+  width: 100%;
+}
+
+.tools-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-gap-chapter-space, 16px);
+  text-decoration: none;
+  color: inherit;
+  border-radius: var(--border-radius-border-radius-big, 12px);
+  border: 1px solid var(--border-border-normal-light, #E1E1E1);
+  padding: var(--padding-padding-large, 16px);
+  background: var(--box-box-normal-background, #fff);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.tools-card:hover {
+  border-color: var(--border-border-theme-primary, #ff5532);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.tools-card-preview {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--border-radius-border-radius-small, 8px);
+  overflow: hidden;
+  background: var(--control-normal-lightbackground-light, #f5f3f3);
+}
+
+.tools-card-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tools-card-preview--empty {
+  background:
+    linear-gradient(135deg, rgba(255, 85, 50, 0.12), transparent 55%),
+    var(--control-normal-lightbackground-light, #f5f3f3);
+}
+
+.tools-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tools-card-body .caption {
+  color: var(--text-text-normal-caption-black, #5a5a5a);
+  margin: 0;
+}
+
+/* ColorCat 嵌入页：占满 main，贴近工具面板 */
+.tools-app-page {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border-radius: var(--border-radius-border-radius-big, 12px);
+  border: 1px solid var(--border-border-normal-light, #E1E1E1);
+  overflow: hidden;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+.tools-app-page #colorcat-root {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body.tools-app-active footer {
+  display: none;
+}
+
+/* RemoveScroll zeros body padding on lock; keep Hugo shell padding to avoid layout jump */
+body.tools-app-active[data-scroll-locked] {
+  padding-top: var(--gap-gap-component-space, 6px) !important;
+  padding-right: var(--gap-gap-component-space, 6px) !important;
+  padding-bottom: var(--gap-gap-component-space, 6px) !important;
+  padding-left: var(--gap-gap-component-space, 6px) !important;
+}

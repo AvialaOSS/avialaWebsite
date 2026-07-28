@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="300" viewBox="0 0 480 300" fill="none">
+  <rect width="480" height="300" rx="12" fill="#F5F3F3"/>
+  <rect x="32" y="40" width="416" height="56" rx="10" fill="#fff" stroke="#E1E1E1"/>
+  <rect x="48" y="54" width="28" height="28" rx="6" fill="#68C75D"/>
+  <rect x="76" y="54" width="72" height="28" rx="6" fill="#E8F8E6"/>
+  <rect x="168" y="58" width="120" height="10" rx="3" fill="#1A1A1A"/>
+  <rect x="168" y="74" width="80" height="8" rx="3" fill="#8A8A8A"/>
+  <rect x="32" y="112" width="416" height="148" rx="10" fill="#fff" stroke="#E1E1E1"/>
+  <rect x="48" y="128" width="28" height="28" rx="6" fill="#FF5532"/>
+  <rect x="76" y="128" width="72" height="28" rx="6" fill="#FFDAD2"/>
+  <rect x="168" y="132" width="100" height="10" rx="3" fill="#1A1A1A"/>
+  <rect x="168" y="148" width="64" height="8" rx="3" fill="#8A8A8A"/>
+  <g transform="translate(48 188)">
+    <rect width="28" height="28" rx="4" fill="#FFF5F3"/>
+    <rect x="32" width="28" height="28" rx="4" fill="#FFE8E3"/>
+    <rect x="64" width="28" height="28" rx="4" fill="#FFD0C6"/>
+    <rect x="96" width="28" height="28" rx="4" fill="#FFB09F"/>
+    <rect x="128" width="28" height="28" rx="4" fill="#FF8A70"/>
+    <rect x="160" width="28" height="28" rx="4" fill="#FF5532"/>
+    <rect x="192" width="28" height="28" rx="4" fill="#E64528"/>
+    <rect x="224" width="28" height="28" rx="4" fill="#C43820"/>
+    <rect x="256" width="28" height="28" rx="4" fill="#9E2C18"/>
+    <rect x="288" width="28" height="28" rx="4" fill="#7A2212"/>
+    <rect x="320" width="28" height="28" rx="4" fill="#57180C"/>
+    <rect x="352" width="28" height="28" rx="4" fill="#3A1008"/>
+  </g>
+  <g transform="translate(48 228)">
+    <rect width="28" height="28" rx="4" fill="#2A1210"/>
+    <rect x="32" width="28" height="28" rx="4" fill="#3D1814"/>
+    <rect x="64" width="28" height="28" rx="4" fill="#5C241C"/>
+    <rect x="96" width="28" height="28" rx="4" fill="#8A3428"/>
+    <rect x="128" width="28" height="28" rx="4" fill="#C44834"/>
+    <rect x="160" width="28" height="28" rx="4" fill="#FF5532"/>
+    <rect x="192" width="28" height="28" rx="4" fill="#FF7A5C"/>
+    <rect x="224" width="28" height="28" rx="4" fill="#FF9A82"/>
+    <rect x="256" width="28" height="28" rx="4" fill="#FFB8A6"/>
+    <rect x="288" width="28" height="28" rx="4" fill="#FFD0C4"/>
+    <rect x="320" width="28" height="28" rx="4" fill="#FFE4DC"/>
+    <rect x="352" width="28" height="28" rx="4" fill="#FFF2EE"/>
+  </g>
+</svg>

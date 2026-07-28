@@ -25,3 +25,13 @@ theme = 'avialaStyle'
     name = '资源'
     pageRef = '/posts'
     weight = 20
+
+  [[menus.main]]
+    name = '工具'
+    pageRef = '/tools/'
+    weight = 25
+
+  [[menus.main]]
+    name = '文档'
+    pageRef = '/docs/'
+    weight = 26

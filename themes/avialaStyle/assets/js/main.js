@@ -41,6 +41,65 @@ document.addEventListener('readystatechange', () => {
 
 // 移动菜单交互功能
 document.addEventListener('DOMContentLoaded', function() {
+    const previewMediaSelector = '.headlineImg.previewMedia, .blogItemPreview.previewMedia, .previewImg.previewMedia';
+
+    const getPreviewImageUrl = (previewEl) => {
+        const img = previewEl ? previewEl.querySelector('img') : null;
+        const src = img ? (img.currentSrc || img.getAttribute('src') || img.src) : '';
+        if (src) return `url("${src}")`;
+        const backgroundImage = previewEl ? getComputedStyle(previewEl).backgroundImage : '';
+        return backgroundImage && backgroundImage !== 'none' ? backgroundImage : '';
+    };
+
+    const initPreviewMedia = () => {
+        document.querySelectorAll(previewMediaSelector).forEach((shell) => {
+            if (shell.dataset.previewMediaReady === '1') return;
+            shell.dataset.previewMediaReady = '1';
+
+            const img = shell.querySelector('img');
+            if (!img) {
+                shell.classList.add('is-loaded');
+                return;
+            }
+
+            const markLoaded = () => {
+                shell.classList.remove('is-error');
+                shell.classList.add('is-loaded');
+            };
+
+            const markError = () => {
+                shell.classList.add('is-error');
+                shell.classList.add('is-loaded');
+            };
+
+            if (img.complete) {
+                if (img.naturalWidth > 0) {
+                    markLoaded();
+                } else {
+                    markError();
+                }
+                return;
+            }
+
+            img.addEventListener(
+                'load',
+                () => {
+                    if (typeof img.decode === 'function') {
+                        img.decode().catch(() => {}).finally(markLoaded);
+                    } else {
+                        markLoaded();
+                    }
+                },
+                { once: true }
+            );
+            img.addEventListener('error', markError, { once: true });
+        });
+    };
+
+    initPreviewMedia();
+    requestAnimationFrame(initPreviewMedia);
+    window.addEventListener('pageshow', initPreviewMedia);
+
     // 使用更通用的选择器来找到所有可能的触发按钮
     const openMenuBtns = document.querySelectorAll('#openMobileMenuBtn, .mobile-menu-trigger a');
     const closeMenuBtn = document.getElementById('closeMobileMenuBtn');
@@ -276,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!previewEl || !linkEl) return;
             const rect = previewEl.getBoundingClientRect();
             if (!rect.width || !rect.height) return;
-            const backgroundImage = getComputedStyle(previewEl).backgroundImage;
+            const backgroundImage = getPreviewImageUrl(previewEl);
             if (!backgroundImage || backgroundImage === 'none') return;
             const borderRadius = getComputedStyle(previewEl).borderRadius;
             const toPath = new URL(linkEl.href, location.href).pathname;

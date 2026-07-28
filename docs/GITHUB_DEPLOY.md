@@ -1,0 +1,143 @@
+# GitHub Pages 部署指南
+
+本站通过 **GitHub Actions** 构建 Hugo，并发布到 **GitHub Pages**（正式域名：`https://www.aviala.top/`）。
+
+站内两个前端应用都是本仓库的 npm workspace，由 CI 在 Hugo 之前构建：
+
+| 应用 | 源码 | 路由 | 产物 |
+|------|------|------|------|
+| ColorCat | `apps/colorcat` | `/tools/colorcat/` | `static/tools/colorcat/assets/` |
+| Spiral 文档 | `apps/spiral-docs` | `/docs/spiral/` | `static/docs/spiral/assets/` |
+
+```text
+push main → Actions（npm ci → 构建两个 app → hugo --minify）→ GitHub Pages
+```
+
+Spiral 文档通过 npm 上**已发布**的 `@aviala-design/spiral`、`@aviala-design/tokens`、`@aviala-design/icons` 消费组件库。因此文档展示的始终是用户能实际安装到的版本，本仓库不需要 clone [spiral-2](https://github.com/AvialaOSS/spiral-2)。
+
+---
+
+## 0. 一次性准备
+
+### 本机工具
+
+| 工具 | 用途 |
+|------|------|
+| Node.js 22+、npm | 构建 `apps/*` |
+| Hugo Extended ≥ 0.148 | 本地预览（线上由 Actions 安装） |
+| Git + GitHub 写权限 | push 本仓库 `main` |
+
+### GitHub Pages 设置（确认一次即可）
+
+[Settings → Pages](https://github.com/AvialaOSS/avialaWebsite/settings/pages)：**Source** 选 `GitHub Actions`（不要选 “Deploy from a branch”）。
+
+工作流：`.github/workflows/hugo.yml`，由 push `main` 或 Actions 里手动 **Run workflow** 触发。
+
+---
+
+## 1. 日常发布（只改网站内容）
+
+```bash
+git checkout main && git pull origin main
+# 编辑 content/ 或 themes/
+git add … && git commit -m "…" && git push origin main
+```
+
+CI 会自行构建两个前端应用，无需本地构建。
+
+---
+
+## 2. 更新 Spiral 组件文档
+
+文档内容（页面、Demo、MDX）改动，与上面的日常发布相同——直接改 `apps/spiral-docs/` 后 push 即可。
+
+若要让文档反映**新的组件行为**，必须先在 Spiral2 发版：
+
+1. Spiral2：`pnpm changeset` 记录变更，合并到 `main`
+2. `release.yml` 通过 Changesets + npm Trusted Publishing（OIDC，无需 `NPM_TOKEN`）发布
+3. 本仓库：`npm update @aviala-design/spiral @aviala-design/tokens @aviala-design/icons`
+4. 提交更新后的 `package-lock.json` 并 push
+
+> 组件 API 表格数据来自 `@aviala-design/spiral` 包内的 `props.json`。构建脚本 `apps/spiral-docs/scripts/sync-props.mjs` 会把它复制到 `src/generated/props.json`；若安装的版本尚未附带该文件，则回退到仓库里已提交的副本，并打印一条 warning。
+
+---
+
+## 3. 本地预览
+
+```bash
+npm ci
+
+# 只调文档 app（Vite HMR，最快）
+npm run dev:spiral-docs        # http://localhost:5175/docs/spiral/
+
+# 完整站点
+npm run build:colorcat
+npm run build:spiral-docs
+hugo server -D --bind 127.0.0.1 --port 1313
+```
+
+`static/docs/spiral/`、`static/tools/colorcat/` 与 `data/spiraldocs.json` 都是构建产物，已在 `.gitignore` 中；**首次或清理后必须先构建，Hugo 才能正常渲染这两个页面。**
+
+核对：
+
+| URL | 预期 |
+|-----|------|
+| http://127.0.0.1:1313/docs/ | 文档 hub |
+| http://127.0.0.1:1313/docs/spiral/ | 嵌入 Spiral 文档，保留站点顶栏 |
+| http://127.0.0.1:1313/docs/spiral/start/introduction | 返回 404 状态，但页面会经 SPA 回跳恢复到该路径 |
+| http://127.0.0.1:1313/tools/ | ColorCat 等工具页正常 |
+
+深链走的是 `themes/avialaStyle/layouts/404.html`：把原路径写入 `sessionStorage`，跳转到 `/docs/spiral/` 后由 `main.tsx` 还原。
+
+---
+
+## 4. 确认线上部署
+
+1. 打开 [Actions](https://github.com/AvialaOSS/avialaWebsite/actions) → 最新的 **Deploy Hugo site to Pages**
+2. 等 **build** 与 **deploy** 均为绿色
+3. 验证 `https://www.aviala.top/docs/`、`/docs/spiral/`、`/docs/spiral/start/introduction`、`/tools/`
+
+资源文件名是固定的 `spiral-docs.js` / `spiral-docs.css`，缓存刷新靠 `data/spiraldocs.json` 里的 `assetVersion`（构建产物内容哈希）作为查询参数。
+
+---
+
+## 5. 故障排查
+
+| 现象 | 可能原因 | 处理 |
+|------|----------|------|
+| `Missing "./xxx-effects.css" specifier in "@aviala-design/tokens"` | 已发布的 tokens 版本还没有该导出 | 在 Spiral2 发版后 `npm update @aviala-design/tokens` |
+| 构建报 `Failed to resolve entry for package @aviala-design/spiral` | 命中了包里指向未发布 `src/` 的 `development` 导出条件 | 确认 `apps/spiral-docs/vite.config.ts` 的 `resolve.conditions` 未被改动 |
+| 本地 `/docs/spiral/` 空白 | 没跑过 `npm run build:spiral-docs` | 先构建再启动 Hugo |
+| API 表格缺列或过时 | 安装的 Spiral 版本无 `props.json`，回退到旧副本 | 发版后 `npm update`，构建日志会显示实际来源版本 |
+| Actions 在 **Install Node.js dependencies** 失败 | `package-lock.json` 与 `package.json` 不同步 | 本地 `npm install` 后提交 lockfile |
+| 线上仍是旧文档 | 浏览器缓存 | 硬刷新；`assetVersion` 变化时会自动失效 |
+
+手动重跑部署：Actions → 选中工作流 → **Run workflow**（选 `main`）。
+
+---
+
+## 6. CI 实际步骤
+
+`.github/workflows/hugo.yml`：
+
+1. 安装 Hugo Extended `0.148.2` 与 Dart Sass
+2. `actions/checkout`（含 submodule）
+3. Node 22 + `npm ci`
+4. `npm run build:colorcat`
+5. `npm run build:spiral-docs`
+6. `hugo --minify --baseURL <Pages base URL>/`
+7. 上传 `public/` → `actions/deploy-pages`
+
+---
+
+## 相关路径速查
+
+| 路径 | 作用 |
+|------|------|
+| `apps/spiral-docs/` | Spiral 文档 SPA 源码 |
+| `apps/spiral-docs/scripts/sync-props.mjs` | 从已安装的 Spiral 包同步 API 元数据 |
+| `apps/spiral-docs/scripts/finalize.mjs` | 删除 Vite `index.html`，写 `data/spiraldocs.json` |
+| `content/docs/` | `/docs/`、`/docs/spiral/` 的 Hugo 内容 |
+| `themes/avialaStyle/layouts/docs/` | 文档 hub 与嵌入布局 |
+| `themes/avialaStyle/layouts/404.html` | Spiral 深链回跳 |
+| `.github/workflows/hugo.yml` | Pages 部署流水线 |

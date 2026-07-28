@@ -1,0 +1,21 @@
+{{ define "main" }}
+<div class="tools-app-page" data-tool="{{ .File.ContentBaseName }}">
+  {{ if eq .File.ContentBaseName "colorcat" }}
+  <div id="colorcat-root"></div>
+  {{ else }}
+  <div class="uui-emptyInfomation full-box">
+    <div class="uui-typeface center">
+      <h1>{{ .Title }}</h1>
+      <p>该工具尚未接入。</p>
+    </div>
+  </div>
+  {{ end }}
+</div>
+<script>
+  document.body.classList.add('tools-app-active');
+</script>
+{{ if eq .File.ContentBaseName "colorcat" }}
+<link rel="stylesheet" crossorigin href="/tools/colorcat/assets/colorcat.css?v=20260711n">
+<script type="module" crossorigin src="/tools/colorcat/assets/colorcat.js?v=20260711n"></script>
+{{ end }}
+{{ end }}

@@ -4,7 +4,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const container = document.querySelector('.sticky-scroll-container');
   const headerContainer = document.querySelector('.header-container');
   const footer = document.querySelector('footer');
-  
+
+  // Home sticky-scroll only; skip on docs/tools and other pages
+  if (!container) return;
   // 检测当前可见区块并激活它
   function checkVisibleSections() {
     const scrollPosition = container.scrollTop;

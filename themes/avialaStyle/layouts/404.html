@@ -1,0 +1,29 @@
+{{ define "main" }}
+<script>
+(function () {
+  var path = location.pathname || "";
+  if (path.indexOf("/docs/spiral/") === 0) {
+    try {
+      sessionStorage.setItem(
+        "aviala-spiral-docs-redirect",
+        path + location.search + location.hash
+      );
+    } catch (e) {}
+    location.replace("/docs/spiral/");
+  }
+})();
+</script>
+<div class="docs-page">
+  <div class="uui-emptyInfomation full-box">
+    <img src="/empty.svg" alt="empty" />
+    <div class="uui-typeface center">
+      <h1>页面不存在</h1>
+      <p>你访问的地址无法找到，请从导航返回首页或文档。</p>
+      <p>
+        <a class="uui-button Regular Second" href="/">返回首页</a>
+        <a class="uui-button Regular" href="/docs/">前往文档</a>
+      </p>
+    </div>
+  </div>
+</div>
+{{ end }}

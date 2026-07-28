@@ -1,0 +1,37 @@
+{{ define "main" }}
+<div class="docs-page">
+  <div class="docs-header">
+    <h1 class="uui-typography subtitle">{{ .Title }}</h1>
+    {{ with .Content }}
+    <div class="docs-intro">{{ . }}</div>
+    {{ end }}
+  </div>
+  <div class="docs-grid">
+    {{ range .Pages.ByWeight }}
+    <a class="docs-card" href="{{ .RelPermalink }}">
+      {{ if .Params.preview }}
+      <div class="docs-card-preview">
+        <img src="{{ .Params.preview }}" alt="{{ .Title }}" loading="lazy" decoding="async">
+      </div>
+      {{ else }}
+      <div class="docs-card-preview docs-card-preview--spiral" aria-hidden="true"></div>
+      {{ end }}
+      <div class="docs-card-body uui-typeface">
+        <p class="uui-typography title">{{ .Title }}</p>
+        {{ with .Params.description }}
+        <p class="caption">{{ . }}</p>
+        {{ end }}
+      </div>
+    </a>
+    {{ else }}
+    <div class="uui-emptyInfomation full-box">
+      <img src="/empty.svg" alt="empty" />
+      <div class="uui-typeface center">
+        <h1>敬请期待</h1>
+        <p>我们还在尽力准备这些内容</p>
+      </div>
+    </div>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

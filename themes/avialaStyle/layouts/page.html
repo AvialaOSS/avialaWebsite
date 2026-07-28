@@ -16,9 +16,15 @@
   </div>
   {{ if and (eq .Section "blogs") (.Params.preview) }}
     {{ $postVtName := printf "blog-preview-%s" (md5 .RelPermalink) }}
-    <div class="previewImg" data-vt-name="{{ $postVtName }}" style="background-image: url('{{ .Params.preview }}'); view-transition-name: {{ $postVtName }};"></div>
+    <div class="previewImg previewMedia is-priority" data-vt-name="{{ $postVtName }}" style="view-transition-name: {{ $postVtName }};">
+      <img src="{{ .Params.preview }}" alt="{{ .Title }}" loading="eager" fetchpriority="high" decoding="async">
+    </div>
   {{ else }}
-    <div class="previewImg" style="background-image: url('{{ .Params.preview }}');"></div>
+    <div class="previewImg previewMedia">
+      {{ if .Params.preview }}
+      <img src="{{ .Params.preview }}" alt="{{ .Title }}" loading="eager" fetchpriority="high" decoding="async">
+      {{ end }}
+    </div>
   {{ end }}
 
   <div class="articleContent">

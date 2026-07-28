@@ -1,0 +1,23 @@
+{{ define "main" }}
+{{ if eq .File.ContentBaseName "spiral" }}
+<div class="docs-app-page" data-docs="spiral">
+  <div id="spiral-docs-root"></div>
+</div>
+<script>
+  document.body.classList.add('docs-app-active');
+</script>
+{{ $v := "0" }}
+{{ with site.Data.spiraldocs }}{{ with .assetVersion }}{{ $v = . }}{{ end }}{{ end }}
+<link rel="stylesheet" crossorigin href="/docs/spiral/assets/spiral-docs.css?v={{ $v }}">
+<script type="module" crossorigin src="/docs/spiral/assets/spiral-docs.js?v={{ $v }}"></script>
+{{ else }}
+<div class="docs-page">
+  <div class="uui-emptyInfomation full-box">
+    <div class="uui-typeface center">
+      <h1>{{ .Title }}</h1>
+      <p>该文档尚未接入。</p>
+    </div>
+  </div>
+</div>
+{{ end }}
+{{ end }}

@@ -1,0 +1,145 @@
+/* docs hub 页面专用样式 */
+.docs-page {
+  display: flex;
+  padding: 32px var(--padding-padding-large, 16px);
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-gap-page-space, 24px);
+  align-self: stretch;
+  border-radius: var(--border-radius-border-radius-big, 12px);
+  border: 1px solid var(--border-border-normal-light, #E1E1E1);
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.docs-header {
+  display: flex;
+  max-width: 800px;
+  width: 100%;
+  flex-direction: column;
+  gap: var(--gap-gap-content-space, 8px);
+}
+
+.docs-intro {
+  color: var(--text-text-normal-text-black, #343333);
+}
+
+.docs-intro p {
+  margin: 0 0 var(--gap-gap-content-space, 8px);
+}
+
+.docs-intro p:last-child {
+  margin-bottom: 0;
+}
+
+.docs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--gap-gap-page-space, 24px);
+  max-width: 800px;
+  width: 100%;
+}
+
+.docs-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-gap-chapter-space, 16px);
+  text-decoration: none;
+  color: inherit;
+  border-radius: var(--border-radius-border-radius-big, 12px);
+  border: 1px solid var(--border-border-normal-light, #E1E1E1);
+  padding: var(--padding-padding-large, 16px);
+  background: var(--box-box-normal-background, #fff);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.docs-card:hover {
+  border-color: var(--border-border-theme-primary, #ff5532);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.docs-card-preview {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--border-radius-border-radius-small, 8px);
+  overflow: hidden;
+  background: var(--control-normal-lightbackground-light, #f5f3f3);
+}
+
+.docs-card-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.docs-card-preview--spiral {
+  background:
+    linear-gradient(135deg, rgba(255, 85, 50, 0.16), transparent 52%),
+    linear-gradient(315deg, rgba(52, 51, 51, 0.06), transparent 48%),
+    var(--control-normal-lightbackground-light, #f5f3f3);
+}
+
+.docs-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.docs-card-body .caption {
+  color: var(--text-text-normal-caption-black, #5a5a5a);
+  margin: 0;
+}
+
+/* Spiral docs 嵌入页：占满 main，贴近 ColorCat 工具面板 */
+.docs-app-page {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border-radius: var(--border-radius-border-radius-big, 12px);
+  border: 1px solid var(--border-border-normal-light, #E1E1E1);
+  overflow: hidden;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+.docs-app-page #spiral-docs-root {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Lock Hugo chrome scroll; docs content scrolls inside .docs-main */
+body.docs-app-active {
+  overflow: hidden;
+}
+
+body.docs-app-active > header {
+  flex-shrink: 0;
+}
+
+body.docs-app-active > main {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+  overflow: hidden;
+}
+
+body.docs-app-active footer {
+  display: none;
+}
+
+body.docs-app-active[data-scroll-locked] {
+  padding-top: var(--gap-gap-component-space, 6px) !important;
+  padding-right: var(--gap-gap-component-space, 6px) !important;
+  padding-bottom: var(--gap-gap-component-space, 6px) !important;
+  padding-left: var(--gap-gap-component-space, 6px) !important;
+}

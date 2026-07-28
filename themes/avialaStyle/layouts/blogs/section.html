@@ -25,7 +25,8 @@
             {{/* 显示预览图片，如果存在的话 */}}
             {{ if $headline.Params.preview }}
             {{ $headlineVtName := printf "blog-preview-%s" (md5 $headline.RelPermalink) }}
-            <div class="headlineImg" data-vt-name="{{ $headlineVtName }}" style="--vt-name: {{ $headlineVtName }}; background-image: url('{{ $headline.Params.preview }}');">
+            <div class="headlineImg previewMedia" data-vt-name="{{ $headlineVtName }}" style="--vt-name: {{ $headlineVtName }};">
+                <img src="{{ $headline.Params.preview }}" alt="{{ $headline.Title }}" loading="eager" fetchpriority="high" decoding="async">
             </div>
             {{ end }}
             <div class="uui-typeface headlineContent">
@@ -82,7 +83,9 @@
                             {{/* 显示文章预览图 */}}
                             {{ if .Params.preview }}
                                 {{ $postVtName := printf "blog-preview-%s" (md5 .RelPermalink) }}
-                                <div class="blogItemPreview" data-vt-name="{{ $postVtName }}" style="--vt-name: {{ $postVtName }}; background-image: url('{{ .Params.preview }}');"></div>
+                                <div class="blogItemPreview previewMedia" data-vt-name="{{ $postVtName }}" style="--vt-name: {{ $postVtName }};">
+                                    <img src="{{ .Params.preview }}" alt="{{ .Title }}" loading="lazy" decoding="async">
+                                </div>
                             {{ else }}
                                 {{/* 如果没有预览图，显示默认占位符 */}}
                                 <div class="blogItemPreview blogItemPreviewDefault"></div>

@@ -1,0 +1,27 @@
+{
+  "name": "@aviala/colorcat",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build && node ./scripts/clean-html.mjs",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@aviala-design/color": "^0.5.15",
+    "@aviala-design/icons": "^2.0.1",
+    "@aviala-design/spiral": "^0.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.2",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.7.0",
+    "tailwindcss": "^4.3.2",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.4"
+  }
+}

@@ -3,3 +3,14 @@
 .huto_build.lock
 .DS_Store
 .vscode
+node_modules/
+apps/*/node_modules/
+dist/
+*.local
+
+# Built by `npm run build:colorcat`
+/static/tools/colorcat/
+
+# Built by `npm run build:spiral-docs`
+/static/docs/spiral/
+/data/spiraldocs.json

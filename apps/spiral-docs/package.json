@@ -1,0 +1,37 @@
+{
+  "name": "@aviala/spiral-docs",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node ./scripts/sync-props.mjs && vite",
+    "build": "node ./scripts/sync-props.mjs && vite build && node ./scripts/finalize.mjs",
+    "preview": "vite preview",
+    "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "@aviala-design/icons": "^2.0.1",
+    "@aviala-design/spiral": "^0.1.0",
+    "@aviala-design/tokens": "^0.0.3",
+    "@babel/standalone": "^8.0.3",
+    "@mdx-js/react": "^3.1.0",
+    "@monaco-editor/react": "^4.7.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.3"
+  },
+  "devDependencies": {
+    "@mdx-js/rollup": "^3.1.0",
+    "@tailwindcss/vite": "^4.3.2",
+    "@types/babel__standalone": "^7.1.9",
+    "@types/mdx": "^2.0.13",
+    "@types/node": "^22.15.32",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.7.0",
+    "remark-gfm": "^4.0.1",
+    "tailwindcss": "^4.3.2",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.4"
+  }
+}
