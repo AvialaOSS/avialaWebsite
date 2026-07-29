@@ -49,7 +49,8 @@ export function applySpiralMonacoThemes(monaco: Monaco) {
     inherit: true,
     rules: [],
     colors: {
-      "editor.background": readCssVar("--background", "#ffffff"),
+      "editor.background": "#ffffff",
+      "editorGutter.background": "#ffffff",
       "editor.foreground": readCssVar("--foreground", "#343333"),
       "editorLineNumber.foreground": readCssVar("--muted-foreground", "#858484"),
       "editorLineNumber.activeForeground": readCssVar("--foreground", "#343333"),
@@ -66,7 +67,8 @@ export function applySpiralMonacoThemes(monaco: Monaco) {
     inherit: true,
     rules: [],
     colors: {
-      "editor.background": readCssVar("--background", "#1e1e1e"),
+      "editor.background": "#000000",
+      "editorGutter.background": "#000000",
       "editor.foreground": readCssVar("--foreground", "#f5f5f5"),
       "editorLineNumber.foreground": readCssVar("--muted-foreground", "#a0a0a0"),
       "editorLineNumber.activeForeground": readCssVar("--foreground", "#f5f5f5"),

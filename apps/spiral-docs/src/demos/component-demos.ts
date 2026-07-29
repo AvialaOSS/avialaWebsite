@@ -156,6 +156,7 @@ export const segmentatorKnobs: KnobDef[] = [
     defaultValue: "nested",
   },
   { kind: "boolean", name: "allRound", label: "allRound", defaultValue: false },
+  { kind: "boolean", name: "equalWidth", label: "equalWidth", defaultValue: false },
   { kind: "boolean", name: "disabled", label: "disabled", defaultValue: false },
 ];
 
@@ -175,7 +176,9 @@ render(<Demo />);`;
 export function buildSegmentatorCode(values: KnobValues): string {
   const mode = String(values.mode ?? "nested");
   const allRound = Boolean(values.allRound);
+  const equalWidth = Boolean(values.equalWidth);
   const disabled = Boolean(values.disabled);
+  const widthClass = equalWidth ? `\n      className="w-full max-w-md"` : "";
 
   return `function Demo() {
   const [value, setValue] = useState("a");
@@ -183,7 +186,7 @@ export function buildSegmentatorCode(values: KnobValues): string {
     <SegmentatorGroup
       value={value}
       onValueChange={setValue}
-      mode=${JSON.stringify(mode)}${jsxBool(allRound, "allRound")}${jsxBool(disabled, "disabled")}
+      mode=${JSON.stringify(mode)}${jsxBool(allRound, "allRound")}${jsxBool(equalWidth, "equalWidth")}${jsxBool(disabled, "disabled")}${widthClass}
     >
       <SegmentatorItem value="a">选项 A</SegmentatorItem>
       <SegmentatorItem value="b">选项 B</SegmentatorItem>
@@ -558,6 +561,97 @@ export function buildTextareaCode(values: KnobValues): string {
 
 export const textareaLiveCode = buildTextareaCode(
   Object.fromEntries(textareaKnobs.map((k) => [k.name, k.defaultValue]))
+);
+
+export const numberInputKnobs: KnobDef[] = [
+  {
+    kind: "select",
+    name: "size",
+    label: "size",
+    options: ["regular", "big"],
+    defaultValue: "regular",
+  },
+  {
+    kind: "select",
+    name: "inputStyle",
+    label: "inputStyle",
+    options: ["default", "monospaced"],
+    defaultValue: "default",
+  },
+  { kind: "boolean", name: "allRound", label: "allRound", defaultValue: false },
+  { kind: "boolean", name: "showControls", label: "showControls", defaultValue: true },
+  { kind: "boolean", name: "disabled", label: "disabled", defaultValue: false },
+  { kind: "boolean", name: "error", label: "error", defaultValue: false },
+  {
+    kind: "string",
+    name: "defaultValue",
+    label: "defaultValue",
+    defaultValue: "12",
+    placeholder: "默认值",
+  },
+  {
+    kind: "string",
+    name: "step",
+    label: "step",
+    defaultValue: "1",
+    placeholder: "步长",
+  },
+  {
+    kind: "string",
+    name: "min",
+    label: "min",
+    defaultValue: "0",
+    placeholder: "最小值（可空）",
+  },
+  {
+    kind: "string",
+    name: "max",
+    label: "max",
+    defaultValue: "100",
+    placeholder: "最大值（可空）",
+  },
+  {
+    kind: "string",
+    name: "placeholder",
+    label: "placeholder",
+    defaultValue: "0",
+    placeholder: "占位符",
+  },
+];
+
+export function buildNumberInputCode(values: KnobValues): string {
+  const size = String(values.size ?? "regular");
+  const inputStyle = String(values.inputStyle ?? "default");
+  const placeholder = String(values.placeholder ?? "0");
+  const defaultValue = String(values.defaultValue ?? "12");
+  const stepRaw = String(values.step ?? "1").trim();
+  const minRaw = String(values.min ?? "").trim();
+  const maxRaw = String(values.max ?? "").trim();
+  const allRound = Boolean(values.allRound);
+  const showControls = Boolean(values.showControls);
+  const disabled = Boolean(values.disabled);
+  const error = Boolean(values.error);
+
+  const stepAttr = stepRaw ? `\n    step={${Number(stepRaw) || 1}}` : "";
+  const minAttr = minRaw !== "" && Number.isFinite(Number(minRaw)) ? `\n    min={${Number(minRaw)}}` : "";
+  const maxAttr = maxRaw !== "" && Number.isFinite(Number(maxRaw)) ? `\n    max={${Number(maxRaw)}}` : "";
+  const defaultValueAttr =
+    defaultValue !== ""
+      ? `\n    defaultValue={${Number.isFinite(Number(defaultValue)) ? Number(defaultValue) : JSON.stringify(defaultValue)}}`
+      : "";
+
+  return `render(
+  <NumberInput
+    size=${JSON.stringify(size)}
+    inputStyle=${JSON.stringify(inputStyle)}
+    placeholder=${JSON.stringify(placeholder)}${defaultValueAttr}${stepAttr}${minAttr}${maxAttr}${jsxBool(allRound, "allRound")}${jsxBool(showControls, "showControls")}${jsxBool(disabled, "disabled")}${jsxBool(error, "error")}
+    className="max-w-sm"
+  />
+);`;
+}
+
+export const numberInputLiveCode = buildNumberInputCode(
+  Object.fromEntries(numberInputKnobs.map((k) => [k.name, k.defaultValue]))
 );
 
 export const checkboxKnobs: KnobDef[] = [

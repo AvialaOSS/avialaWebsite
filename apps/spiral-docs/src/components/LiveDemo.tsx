@@ -1,5 +1,5 @@
 import { GeneralCollapseSidebar, GeneralExpandSidebar, SymbolInformationCircle } from "@aviala-design/icons";
-import Editor, { type Monaco } from "@monaco-editor/react";
+import Editor, { type Monaco, type OnMount } from "@monaco-editor/react";
 import {
   Button,
   Tooltip,
@@ -17,6 +17,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type KeyboardEvent as ReactKeyboardEvent,
   type ReactNode,
 } from "react";
 import { applySpiralMonacoThemes, spiralMonacoThemeId } from "../lib/monaco-spiral-theme";
@@ -28,6 +29,8 @@ import {
   type KnobDef,
   type KnobValues,
 } from "./DemoKnobs";
+
+type MonacoStandaloneEditor = Parameters<OnMount>[0];
 
 function collectIconKnobNames(knobs: KnobDef[], values: KnobValues): string[] {
   const names: string[] = [];
@@ -101,6 +104,9 @@ class LivePreviewErrorBoundary extends Component<
 export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }: LiveDemoProps) {
   const { mode } = useTheme();
   const monacoRef = useRef<Monaco | null>(null);
+  const editorRef = useRef<MonacoStandaloneEditor | null>(null);
+  const gateRef = useRef<HTMLButtonElement>(null);
+  const isEditingRef = useRef(false);
   const monacoTheme = spiralMonacoThemeId(mode);
   const hasKnobs = knobs.length > 0;
   const usesIconKnobs = hasIconKnobs(knobs);
@@ -111,6 +117,7 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
   const [code, setCode] = useState(initialCode);
   const [editorCode, setEditorCode] = useState(initialCode);
   const [knobsSynced, setKnobsSynced] = useState(Boolean(buildCode && hasKnobs));
+  const [isEditing, setIsEditing] = useState(false);
   const debounceRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -119,6 +126,8 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
     setKnobValues(defaultKnobValues(knobs));
     setKnobsSynced(Boolean(buildCode && knobs.length > 0));
     setKnobsPanelOpen(true);
+    setIsEditing(false);
+    isEditingRef.current = false;
   }, [initialCode, knobs, buildCode]);
 
   useEffect(() => {
@@ -171,10 +180,87 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
     setKnobsSynced(Boolean(buildCode && hasKnobs));
   };
 
+  const setEditorTabbable = useCallback((tabbable: boolean) => {
+    const root = editorRef.current?.getDomNode();
+    if (!root) return;
+    root.querySelectorAll<HTMLElement>("textarea, [tabindex]").forEach((node) => {
+      node.tabIndex = tabbable ? 0 : -1;
+    });
+  }, []);
+
+  const enterEdit = useCallback(() => {
+    isEditingRef.current = true;
+    setIsEditing(true);
+    requestAnimationFrame(() => {
+      setEditorTabbable(true);
+      editorRef.current?.focus();
+    });
+  }, [setEditorTabbable]);
+
+  const exitEdit = useCallback(() => {
+    isEditingRef.current = false;
+    setIsEditing(false);
+    setEditorTabbable(false);
+    requestAnimationFrame(() => {
+      gateRef.current?.focus();
+    });
+  }, [setEditorTabbable]);
+
   const handleMonacoBeforeMount = useCallback((monaco: Monaco) => {
     monacoRef.current = monaco;
     applySpiralMonacoThemes(monaco);
   }, []);
+
+  const handleMonacoMount = useCallback<OnMount>(
+    (editor, monaco) => {
+      editorRef.current = editor;
+      monacoRef.current = monaco;
+      setEditorTabbable(false);
+
+      // Monaco may steal focus before the gate is ready — bounce back while gated.
+      editor.onDidFocusEditorText(() => {
+        if (isEditingRef.current) return;
+        setEditorTabbable(false);
+        editor.blur();
+        gateRef.current?.focus();
+      });
+
+      editor.onKeyDown((event) => {
+        if (event.keyCode !== monaco.KeyCode.Escape) return;
+        const root = editor.getDomNode();
+        const widgetOpen = Boolean(
+          root?.querySelector(".suggest-widget.visible") ||
+            root?.querySelector(".monaco-hover") ||
+            root?.querySelector(".find-widget") ||
+            document.querySelector(".context-view.monaco-menu-container")
+        );
+        if (widgetOpen) return;
+        event.preventDefault();
+        event.stopPropagation();
+        exitEdit();
+      });
+
+      editor.onDidBlurEditorWidget(() => {
+        window.setTimeout(() => {
+          if (!isEditingRef.current) return;
+          const active = document.activeElement;
+          const root = editor.getDomNode();
+          if (root && active && root.contains(active)) return;
+          isEditingRef.current = false;
+          setIsEditing(false);
+          setEditorTabbable(false);
+        }, 0);
+      });
+    },
+    [exitEdit, setEditorTabbable]
+  );
+
+  const handleGateKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      enterEdit();
+    }
+  };
 
   useLayoutEffect(() => {
     if (!monacoRef.current) return;
@@ -267,27 +353,53 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
               重置
             </Button>
           </div>
-          <Editor
-            className="docs-monaco-editor"
-            height="220px"
-            language="javascript"
-            theme={monacoTheme}
-            value={editorCode}
-            onChange={handleEditorChange}
-            beforeMount={handleMonacoBeforeMount}
-            options={{
-              minimap: { enabled: false },
-              fontSize: 13,
-              lineNumbers: "on",
-              scrollBeyondLastLine: false,
-              wordWrap: "on",
-              tabSize: 2,
-              automaticLayout: true,
-              padding: { top: 8, bottom: 8 },
-            }}
-          />
+          <div className="docs-monaco-shell">
+            <div
+              className="docs-monaco-editor-host"
+              // Keep Monaco out of Tab order until Enter / click activates editing.
+              {...(!isEditing ? { inert: true } : {})}
+            >
+              <Editor
+                className="docs-monaco-editor"
+                height="220px"
+                language="javascript"
+                theme={monacoTheme}
+                value={editorCode}
+                onChange={handleEditorChange}
+                beforeMount={handleMonacoBeforeMount}
+                onMount={handleMonacoMount}
+                options={{
+                  minimap: { enabled: false },
+                  fontSize: 13,
+                  lineNumbers: "on",
+                  scrollBeyondLastLine: false,
+                  wordWrap: "on",
+                  tabSize: 2,
+                  automaticLayout: true,
+                  padding: { top: 8, bottom: 8 },
+                  tabFocusMode: true,
+                }}
+              />
+            </div>
+            {!isEditing ? (
+              <button
+                ref={gateRef}
+                type="button"
+                className="docs-monaco-focus-gate"
+                aria-label="代码编辑器，按下 Enter 开始编辑"
+                onKeyDown={handleGateKeyDown}
+                onClick={enterEdit}
+              >
+                <span className="docs-monaco-focus-gate__hint">
+                  <SymbolInformationCircle mode="fill" width={18} height={18} aria-hidden />
+                  按下 Enter 编辑
+                </span>
+              </button>
+            ) : null}
+          </div>
         </div>
       </div>
     </TooltipProvider>
   );
 }
+

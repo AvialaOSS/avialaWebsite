@@ -62,6 +62,11 @@ export const nav: NavSection[] = [
         component: "Textarea",
       },
       {
+        label: "NumberInput 数字输入",
+        path: "/components/information-collect/number-input",
+        component: "NumberInput",
+      },
+      {
         label: "Checkbox 复选框",
         path: "/components/information-collect/checkbox",
         component: "Checkbox",

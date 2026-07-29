@@ -2,6 +2,7 @@ import {
   DirectionArrowLeftLight,
   DirectionArrowRightLight,
   GeneralExpandSidebar,
+  GeneralMenu,
 } from "@aviala-design/icons";
 import { Button } from "@aviala-design/spiral";
 import { useRef, useState } from "react";
@@ -22,6 +23,7 @@ export function DocLayout() {
     flattenNavItems().find((item) => item.path === location.pathname)?.path ??
     "/start/introduction";
   const { prev, next } = getAdjacentPages(docPath);
+  const hideToc = location.pathname === "/reference/icons/playground";
 
   return (
     <div className={`docs-shell${sidebarCollapsed ? " docs-shell--sidebar-collapsed" : ""}`}>
@@ -42,33 +44,37 @@ export function DocLayout() {
       ) : null}
 
       <div className="docs-main">
-        <div className="docs-topbar">
-          {sidebarCollapsed ? (
+        <div className="docs-floating-controls">
+          <div className="docs-floating-controls__left">
+            {sidebarCollapsed ? (
+              <Button
+                type="button"
+                mode="noBackgroundCustom"
+                size="regular"
+                iconOnly
+                className="docs-float-btn docs-sidebar-expand-btn"
+                aria-label="展开侧边栏"
+                leftIcon={<GeneralExpandSidebar aria-hidden />}
+                onClick={() => setSidebarCollapsed(false)}
+              />
+            ) : null}
             <Button
               type="button"
               mode="noBackgroundCustom"
               size="regular"
               iconOnly
-              className="docs-sidebar-expand-btn"
-              aria-label="展开侧边栏"
-              leftIcon={<GeneralExpandSidebar aria-hidden />}
-              onClick={() => setSidebarCollapsed(false)}
+              className="docs-float-btn docs-mobile-menu-btn"
+              aria-label="打开导航"
+              leftIcon={<GeneralMenu aria-hidden />}
+              onClick={() => setMobileOpen(true)}
             />
-          ) : null}
-          <Button
-            type="button"
-            mode="noBackground"
-            size="small"
-            className="docs-mobile-menu-btn"
-            aria-label="打开导航"
-            onClick={() => setMobileOpen(true)}
-          >
-            菜单
-          </Button>
-          <ThemeToolbar />
+          </div>
+          <div className="docs-floating-controls__right">
+            <ThemeToolbar />
+          </div>
         </div>
 
-        <div className="docs-body">
+        <div className={`docs-body${hideToc ? " docs-body--no-toc" : ""}`}>
           <article ref={contentRef} className="docs-content">
             <Outlet key={location.pathname} context={{ contentRef }} />
             <footer className="docs-pager" aria-label="相邻文档">
@@ -100,7 +106,7 @@ export function DocLayout() {
               )}
             </footer>
           </article>
-          <TableOfContents containerRef={contentRef} />
+          {hideToc ? null : <TableOfContents containerRef={contentRef} />}
         </div>
       </div>
     </div>

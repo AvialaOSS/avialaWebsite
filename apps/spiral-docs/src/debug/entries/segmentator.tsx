@@ -17,6 +17,7 @@ export type SegmentatorDebugState = {
   value: string;
   mode: SegmentatorMode;
   allRound: boolean;
+  equalWidth: boolean;
   disabled: boolean;
   showLeftIcon: boolean;
   leftIconName: string;
@@ -36,6 +37,7 @@ const initialState: SegmentatorDebugState = {
   value: "a",
   mode: "nested",
   allRound: false,
+  equalWidth: false,
   disabled: false,
   showLeftIcon: true,
   leftIconName: "GeneralSetting",
@@ -76,6 +78,7 @@ export const segmentatorEntry: DebugComponentEntry<SegmentatorDebugState> = {
           defaultValue: "nested",
         },
         { kind: "boolean", name: "allRound", label: "allRound", defaultValue: false },
+        { kind: "boolean", name: "equalWidth", label: "equalWidth", defaultValue: false },
         { kind: "boolean", name: "disabled", label: "disabled", defaultValue: false },
       ],
       applyOverride: (state, value: KnobValues) => ({
@@ -83,6 +86,7 @@ export const segmentatorEntry: DebugComponentEntry<SegmentatorDebugState> = {
         value: String(value.value ?? "a"),
         mode: String(value.mode ?? "nested") as SegmentatorMode,
         allRound: Boolean(value.allRound),
+        equalWidth: Boolean(value.equalWidth),
         disabled: Boolean(value.disabled),
       }),
     },
@@ -127,8 +131,10 @@ export const segmentatorEntry: DebugComponentEntry<SegmentatorDebugState> = {
           value={state.value}
           mode={state.mode}
           allRound={state.allRound}
+          equalWidth={state.equalWidth}
           disabled={state.disabled}
           onValueChange={() => undefined}
+          className={state.equalWidth ? "w-full max-w-md" : undefined}
         >
           <SegmentatorItem value="a" {...itemIconProps}>
             Option A

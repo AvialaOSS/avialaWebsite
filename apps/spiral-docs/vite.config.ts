@@ -1,4 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
+import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import mdx from "@mdx-js/rollup";
@@ -9,6 +10,14 @@ import { defineConfig, type Plugin } from "vite";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const docsBasePath = "/docs/spiral";
+// Prefer nested apps/spiral-docs install (1.0.0) over a hoisted root 0.2.0.
+const spiralPackageCandidates = [
+  path.resolve(dirname, "node_modules/@aviala-design/spiral"),
+  path.resolve(dirname, "../../node_modules/@aviala-design/spiral"),
+];
+const spiralPackageDir = spiralPackageCandidates.find((dir) =>
+  existsSync(path.join(dir, "package.json"))
+);
 
 function docsBaseRedirectPlugin(): Plugin {
   const redirectTarget = `${docsBasePath}/`;
@@ -54,11 +63,19 @@ export default defineConfig({
     tailwindcss(),
   ],
   resolve: {
+    // Prefer apps/spiral-docs nested 1.0.0 over a hoisted root 0.2.0 (e.g. colorcat).
+    alias: spiralPackageDir
+      ? {
+          "@aviala-design/spiral": path.resolve(spiralPackageDir, "dist/index.js"),
+          "@aviala-design/spiral/styles.css": path.resolve(spiralPackageDir, "dist/styles.css"),
+        }
+      : undefined,
     // @aviala-design/spiral maps the `development` condition to ./src, which is not
     // published; always resolve the built entry points instead.
     conditions: ["module", "browser", "import", "default"],
   },
-  server: { port: 5175 },
+  server: { host: true, port: 5175 },
+  preview: { host: true, port: 5175 },
   build: {
     outDir: path.resolve(dirname, "../../static/docs/spiral"),
     emptyOutDir: true,

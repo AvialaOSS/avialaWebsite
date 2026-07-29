@@ -1,0 +1,127 @@
+{
+  "displayName": "NumberInput",
+  "description": "Numeric input with optional steppers. Shares the Input shell (size, allRound, icons, error).",
+  "props": [
+    {
+      "name": "size",
+      "type": "enum",
+      "defaultValue": "regular",
+      "required": false,
+      "description": "Figma `Size` — regular / big"
+    },
+    {
+      "name": "allRound",
+      "type": "boolean",
+      "defaultValue": "false",
+      "required": false,
+      "description": "Figma `All-Round`"
+    },
+    {
+      "name": "inputStyle",
+      "type": "enum",
+      "defaultValue": "default",
+      "required": false,
+      "description": "Figma `Style` — Default vs Monospaced (tabular / light numeric)"
+    },
+    {
+      "name": "showControls",
+      "type": "boolean",
+      "defaultValue": "true",
+      "required": false,
+      "description": "Figma `showNumberControlButton` — vertical stepper buttons"
+    },
+    {
+      "name": "fullWidth",
+      "type": "boolean",
+      "defaultValue": "true",
+      "required": false,
+      "description": "When false, input sizes to content"
+    },
+    {
+      "name": "leftIcon",
+      "type": "ReactNode",
+      "required": false,
+      "description": ""
+    },
+    {
+      "name": "rightIcon",
+      "type": "ReactNode",
+      "required": false,
+      "description": ""
+    },
+    {
+      "name": "leftBadge",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Badge area — left slot inside BaseInput"
+    },
+    {
+      "name": "rightBadge",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Badge area — right slot inside BaseInput"
+    },
+    {
+      "name": "error",
+      "type": "boolean",
+      "defaultValue": "false",
+      "required": false,
+      "description": ""
+    },
+    {
+      "name": "value",
+      "type": "number | string | \"\"",
+      "required": false,
+      "description": "Controlled value"
+    },
+    {
+      "name": "defaultValue",
+      "type": "number | string",
+      "required": false,
+      "description": "Uncontrolled initial value"
+    },
+    {
+      "name": "step",
+      "type": "number",
+      "defaultValue": "1",
+      "required": false,
+      "description": "Increment / decrement step for steppers and keyboard"
+    },
+    {
+      "name": "min",
+      "type": "number",
+      "required": false,
+      "description": "Minimum allowed value"
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "required": false,
+      "description": "Maximum allowed value"
+    },
+    {
+      "name": "onChange",
+      "type": "(event: ChangeEvent<HTMLInputElement>) => void",
+      "required": false,
+      "description": "Native change handler"
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: number | null) => void",
+      "required": false,
+      "description": "Fires with the parsed number (or `null` when empty / invalid)"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "description": ""
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "required": false,
+      "description": ""
+    }
+  ]
+}

@@ -11,7 +11,7 @@
   "dependencies": {
     "@aviala-design/color": "^0.5.15",
     "@aviala-design/icons": "^2.0.1",
-    "@aviala-design/spiral": "^0.1.0",
+    "@aviala-design/spiral": "^0.2.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

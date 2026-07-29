@@ -187,6 +187,13 @@
         "description": ""
       },
       {
+        "name": "equalWidth",
+        "type": "boolean",
+        "defaultValue": "false",
+        "required": false,
+        "description": "When true, the group fills its container and items split the width equally."
+      },
+      {
         "name": "disabled",
         "type": "boolean",
         "required": false,
@@ -457,13 +464,6 @@
         "description": ""
       },
       {
-        "name": "placeholder",
-        "type": "string",
-        "defaultValue": "YYYY/MM/DD",
-        "required": false,
-        "description": ""
-      },
-      {
         "name": "rangePlaceholder",
         "type": "string",
         "defaultValue": "Start date - End date",
@@ -483,6 +483,13 @@
         "defaultValue": "-",
         "required": false,
         "description": ""
+      },
+      {
+        "name": "editable",
+        "type": "boolean",
+        "defaultValue": "true",
+        "required": false,
+        "description": "When false, shows a read-only value instead of an editable input. Default true."
       },
       {
         "name": "contentClassName",
@@ -757,7 +764,7 @@
         "name": "showController",
         "type": "boolean",
         "required": false,
-        "description": "Figma `Controller` — character counter + resize affordance"
+        "description": "Figma `Controller` — character counter + SymbolResize drag handle"
       },
       {
         "name": "error",
@@ -1174,7 +1181,7 @@
     "props": [
       {
         "name": "label",
-        "type": "string",
+        "type": "ReactNode",
         "required": false,
         "description": ""
       },
@@ -1192,15 +1199,34 @@
       },
       {
         "name": "error",
-        "type": "string",
+        "type": "ReactNode",
         "required": false,
         "description": ""
+      },
+      {
+        "name": "info",
+        "type": "ReactNode",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "alert",
+        "type": "ReactNode",
+        "required": false,
+        "description": "Optional Alert / Feedback under the control"
       },
       {
         "name": "required",
         "type": "boolean",
         "required": false,
         "description": ""
+      },
+      {
+        "name": "direction",
+        "type": "enum",
+        "defaultValue": "vertical",
+        "required": false,
+        "description": "Figma `Direction` — vertical stacks label above control; horizontal places label beside"
       }
     ]
   },
@@ -1750,5 +1776,132 @@
     "displayName": "Table",
     "description": "",
     "props": []
+  },
+  "NumberInput": {
+    "displayName": "NumberInput",
+    "description": "Numeric input with optional steppers. Shares the Input shell (size, allRound, icons, error).",
+    "props": [
+      {
+        "name": "size",
+        "type": "enum",
+        "defaultValue": "regular",
+        "required": false,
+        "description": "Figma `Size` — regular / big"
+      },
+      {
+        "name": "allRound",
+        "type": "boolean",
+        "defaultValue": "false",
+        "required": false,
+        "description": "Figma `All-Round`"
+      },
+      {
+        "name": "inputStyle",
+        "type": "enum",
+        "defaultValue": "default",
+        "required": false,
+        "description": "Figma `Style` — Default vs Monospaced (tabular / light numeric)"
+      },
+      {
+        "name": "showControls",
+        "type": "boolean",
+        "defaultValue": "true",
+        "required": false,
+        "description": "Figma `showNumberControlButton` — vertical stepper buttons"
+      },
+      {
+        "name": "fullWidth",
+        "type": "boolean",
+        "defaultValue": "true",
+        "required": false,
+        "description": "When false, input sizes to content"
+      },
+      {
+        "name": "leftIcon",
+        "type": "ReactNode",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "rightIcon",
+        "type": "ReactNode",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "leftBadge",
+        "type": "ReactNode",
+        "required": false,
+        "description": "Badge area — left slot inside BaseInput"
+      },
+      {
+        "name": "rightBadge",
+        "type": "ReactNode",
+        "required": false,
+        "description": "Badge area — right slot inside BaseInput"
+      },
+      {
+        "name": "error",
+        "type": "boolean",
+        "defaultValue": "false",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "value",
+        "type": "number | string | \"\"",
+        "required": false,
+        "description": "Controlled value"
+      },
+      {
+        "name": "defaultValue",
+        "type": "number | string",
+        "required": false,
+        "description": "Uncontrolled initial value"
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "defaultValue": "1",
+        "required": false,
+        "description": "Increment / decrement step for steppers and keyboard"
+      },
+      {
+        "name": "min",
+        "type": "number",
+        "required": false,
+        "description": "Minimum allowed value"
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "required": false,
+        "description": "Maximum allowed value"
+      },
+      {
+        "name": "onChange",
+        "type": "(event: ChangeEvent<HTMLInputElement>) => void",
+        "required": false,
+        "description": "Native change handler"
+      },
+      {
+        "name": "onValueChange",
+        "type": "(value: number | null) => void",
+        "required": false,
+        "description": "Fires with the parsed number (or `null` when empty / invalid)"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "description": ""
+      }
+    ]
   }
 }

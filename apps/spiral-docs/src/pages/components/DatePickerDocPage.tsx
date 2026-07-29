@@ -30,7 +30,7 @@ export function DatePickerDocPage() {
         <Typography level="text" as="p">
           提供 DatePickerField 便捷封装，也可使用 DatePicker + Trigger + Content 组合式 API。默认启用时间（
           <code>enableTime</code>
-          ），触发器显示 YYYY-MM-DD HH:mm；设为 false 时仅选择日期。时间面板采用 iOS 风格的滚轮选择器，支持拖拽、滚轮与触摸滚动，选中项居中高亮。
+          ），触发器显示 YYYY-MM-DD HH:mm；设为 false 时仅选择日期。时间与月份滚轮支持拖拽、鼠标滚轮与触摸滚动；松手或滚轮停止后会吸附到最近选项并居中高亮。
         </Typography>
       </div>
       <DemoBlock

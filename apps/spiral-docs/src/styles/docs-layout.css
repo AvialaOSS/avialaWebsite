@@ -10,6 +10,26 @@
   color: var(--foreground);
 }
 
+/* 主背景与侧边栏背景 — 浅色纯白 / 深色纯黑 */
+[data-mode="light"] .docs-shell {
+  --docs-surface: #fff;
+}
+
+[data-mode="dark"] .docs-shell {
+  --docs-surface: #000;
+}
+
+.docs-shell,
+.docs-main {
+  background: var(--docs-surface, var(--background));
+}
+
+.docs-shell .docs-sidebar-nav,
+.docs-mobile-drawer .docs-sidebar-nav {
+  --navigation-bg: var(--docs-surface, var(--background));
+  background-color: var(--docs-surface, var(--background));
+}
+
 .docs-shell--sidebar-collapsed {
   grid-template-columns: minmax(0, 1fr);
 }
@@ -28,10 +48,6 @@
 
 .docs-sidebar-nav {
   min-height: 100%;
-}
-
-.docs-sidebar-tagline {
-  color: var(--navigation-section-fg, inherit);
 }
 
 .docs-sidebar-expand-btn {
@@ -65,30 +81,49 @@
   flex-direction: column;
 }
 
-.docs-topbar {
+/* 悬浮控件层 — 替代原顶部工具栏 */
+.docs-floating-controls {
   position: sticky;
   top: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: var(--gap-block-space, 14px);
-  min-height: calc(var(--size-regular, 14px) + var(--gap-component-space, 8px) * 2 + 32px);
-  padding: var(--gap-component-space, 8px) var(--gap-page-space, 24px);
-  border-bottom: 1px solid var(--border);
-  background: color-mix(in srgb, var(--background) 92%, transparent);
-  backdrop-filter: blur(8px);
+  z-index: 20;
+  height: 0;
 }
 
-.docs-theme-toolbar {
+.docs-floating-controls__left,
+.docs-floating-controls__right {
+  position: absolute;
+  top: var(--gap-block-space, 14px);
   display: flex;
   align-items: center;
-  gap: var(--gap-block-space, 14px);
-  flex-wrap: wrap;
-  flex: 1 1 auto;
-  justify-content: flex-end;
-  min-width: 0;
+  gap: var(--gap-component-space, 8px);
+}
+
+.docs-floating-controls__left {
+  left: var(--gap-page-space, 24px);
+}
+
+.docs-floating-controls__right {
+  right: var(--gap-page-space, 24px);
+}
+
+/* 双 class 提高特异性 — button-effects.css 中 noBackgroundCustom 的
+   background-color: transparent 加载顺序在本文件之后 */
+.aviala-button.docs-float-btn {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background-color: var(--docs-surface, var(--background));
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.aviala-button.docs-float-btn:hover:not(:disabled):not([aria-busy="true"]) {
+  background-color: color-mix(in srgb, var(--muted) 40%, var(--docs-surface, var(--background)));
+}
+
+.docs-theme-panel-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-component-space, 8px);
 }
 
 .docs-theme-toolbar-label {
@@ -202,10 +237,27 @@
   padding-bottom: 64px;
 }
 
+.docs-body--no-toc {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .docs-content {
   max-width: var(--docs-content-max, 960px);
   width: 100%;
   margin: 0 auto;
+}
+
+/* 覆盖 Hugo 主题 header { align-items: center } 对文档页头的误伤 */
+header.docs-page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  width: 100%;
+  height: auto;
+  position: static;
+  z-index: auto;
 }
 
 .docs-page-header {
@@ -227,6 +279,10 @@
 .docs-prose h3,
 .docs-prose h4 {
   scroll-margin-top: 80px;
+}
+
+.docs-content h2 {
+  margin-bottom: var(--gap-component-space, 8px);
 }
 
 .docs-prose p,
@@ -585,7 +641,83 @@
   border: 1px solid var(--border);
   border-radius: var(--border-radius-small, 8px);
   overflow: hidden;
-  background: var(--background);
+  background: var(--docs-surface, #fff);
+}
+
+[data-mode="dark"] .docs-live-editor-wrap {
+  background: #000;
+}
+
+.docs-monaco-shell {
+  position: relative;
+}
+
+.docs-monaco-editor-host {
+  min-height: 220px;
+}
+
+.docs-monaco-focus-gate {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  cursor: text;
+  color: #fff;
+  font: inherit;
+  outline: none;
+  box-shadow: none;
+}
+
+.docs-monaco-focus-gate:focus,
+.docs-monaco-focus-gate:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* 仅键盘聚焦（focus-visible）显示遮罩；鼠标点击直接进入编辑不闪遮罩 */
+.docs-monaco-focus-gate:focus-visible {
+  background: rgba(0, 0, 0, 0.48);
+}
+
+.docs-monaco-focus-gate__hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-component-space, 8px);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-size: var(--size-regular, 14px);
+  line-height: var(--line-height-regular, 18px);
+  font-weight: 500;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.docs-monaco-focus-gate:focus-visible .docs-monaco-focus-gate__hint {
+  opacity: 1;
+}
+
+.docs-monaco-editor .monaco-editor,
+.docs-monaco-editor .monaco-editor-background,
+.docs-monaco-editor .margin,
+.docs-monaco-editor .margin-view-overlays {
+  background-color: var(--docs-surface, #fff) !important;
+}
+
+[data-mode="dark"] .docs-monaco-editor .monaco-editor,
+[data-mode="dark"] .docs-monaco-editor .monaco-editor-background,
+[data-mode="dark"] .docs-monaco-editor .margin,
+[data-mode="dark"] .docs-monaco-editor .margin-view-overlays {
+  background-color: #000 !important;
 }
 
 .docs-live-editor-toolbar {
@@ -689,7 +821,7 @@
 
 .docs-toc {
   position: sticky;
-  top: 72px;
+  top: 64px;
   align-self: start;
   max-height: calc(100vh - 96px);
   overflow: auto;

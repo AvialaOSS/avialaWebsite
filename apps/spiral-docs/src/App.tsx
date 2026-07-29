@@ -22,6 +22,7 @@ import { SegmentatorDocPage } from "./pages/components/SegmentatorDocPage";
 import { SelectDocPage } from "./pages/components/SelectDocPage";
 import { SwitchDocPage } from "./pages/components/SwitchDocPage";
 import { TextareaDocPage } from "./pages/components/TextareaDocPage";
+import { NumberInputDocPage } from "./pages/components/NumberInputDocPage";
 import { TooltipDocPage } from "./pages/components/TooltipDocPage";
 import { TypefaceDocPage } from "./pages/components/TypefaceDocPage";
 import { TypographyDocPage } from "./pages/components/TypographyDocPage";
@@ -70,6 +71,7 @@ export function AppRoutes() {
         <Route path="components/information-collect/date-picker" element={<DatePickerDocPage />} />
         <Route path="components/information-collect/time-picker" element={<TimePickerDocPage />} />
         <Route path="components/information-collect/textarea" element={<TextareaDocPage />} />
+        <Route path="components/information-collect/number-input" element={<NumberInputDocPage />} />
         <Route path="components/information-collect/checkbox" element={<CheckboxDocPage />} />
         <Route path="components/information-collect/radio" element={<RadioDocPage />} />
         <Route path="components/information-collect/cascader" element={<CascaderDocPage />} />

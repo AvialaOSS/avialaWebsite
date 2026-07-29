@@ -3,7 +3,6 @@ import {
   GeneralCollapseSidebar,
   GeneralFilter,
   GeneralHome,
-  GeneralJumpOut,
   GeneralSetting,
   SymbolApps,
   SymbolMindmap,
@@ -14,9 +13,6 @@ import {
   Button,
   Navigation,
   NavigationActions,
-  NavigationActionsSlot,
-  NavigationBrand,
-  NavigationBrandTitle,
   NavigationGroup,
   NavigationItem,
   NavigationItemGroup,
@@ -136,20 +132,10 @@ export function Sidebar({ onNavigate, onCollapse }: SidebarProps) {
       <Navigation
         direction="vertical"
         background="default"
+        dividingLine
         className="docs-sidebar-nav"
         aria-label="文档导航"
       >
-        <NavigationBrand>
-          <NavigationBrandTitle asChild>
-            <NavLink to="/start/introduction" onClick={onNavigate}>
-              Spiral 2
-            </NavLink>
-          </NavigationBrandTitle>
-          <Typography level="caption" as="p" className="docs-sidebar-tagline">
-            Aviala Design React 组件库
-          </Typography>
-        </NavigationBrand>
-
         <NavigationGroup>
           {nav.map((section) => (
             <DocsNavSection
@@ -163,38 +149,20 @@ export function Sidebar({ onNavigate, onCollapse }: SidebarProps) {
           ))}
         </NavigationGroup>
 
-        <NavigationActions>
-          {onCollapse ? (
+        {onCollapse ? (
+          <NavigationActions>
             <Button
               type="button"
               mode="noBackgroundCustom"
               size="regular"
               leftIcon={<GeneralCollapseSidebar aria-hidden />}
+              aria-label="折叠侧边栏"
               onClick={onCollapse}
             >
-              Collapse Sidebar
+              折叠侧边栏
             </Button>
-          ) : null}
-          <NavigationActionsSlot>
-            <Button
-              type="button"
-              mode="noBackgroundCustom"
-              size="regular"
-              iconOnly
-              aria-label="打开 Storybook"
-              leftIcon={<GeneralJumpOut aria-hidden />}
-              onClick={() => window.open("http://localhost:6006", "_blank", "noopener,noreferrer")}
-            />
-            <Button
-              type="button"
-              mode="noBackgroundCustom"
-              size="regular"
-              iconOnly
-              aria-label="设置"
-              leftIcon={<GeneralSetting aria-hidden />}
-            />
-          </NavigationActionsSlot>
-        </NavigationActions>
+          </NavigationActions>
+        ) : null}
       </Navigation>
     </aside>
   );

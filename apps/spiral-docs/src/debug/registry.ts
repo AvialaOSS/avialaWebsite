@@ -39,6 +39,7 @@ import { datePickerEntry } from "./entries/date-picker";
 import { inputEntry } from "./entries/input";
 import { linkEntry } from "./entries/link";
 import { navigationEntry } from "./entries/navigation";
+import { numberInputEntry } from "./entries/number-input";
 import { segmentatorEntry } from "./entries/segmentator";
 import { selectEntry } from "./entries/select";
 import { textareaEntry } from "./entries/textarea";
@@ -50,6 +51,7 @@ export const componentDebugRegistry: DebugComponentEntry[] = [
   buttonEntry,
   selectEntry,
   inputEntry,
+  numberInputEntry,
   linkEntry,
   cascaderEntry,
   segmentatorEntry,

@@ -230,7 +230,7 @@ export function ScrollPickerDocPage() {
     <DocShell
       title="ScrollPicker 滚轮选择"
       description="Figma Information Collect → ScrollPicker。"
-      prose="多列滚轮选择器，可开关循环滚动。"
+      prose="多列滚轮选择器，可开关 loop 循环滚动。拖拽或鼠标滚轮停止后会吸附到最近选项；开启 loop 时可无缝绕回首尾。"
       componentKey="ScrollPicker"
       scope={{ ScrollPicker, ScrollPickerColumn, useState }}
       knobs={scrollPickerKnobs}

@@ -36,7 +36,7 @@ export function TimePickerDocPage() {
       <div className="docs-prose">
         <Typography level="text" as="p">
           提供 TimePickerField 便捷封装，也可使用 TimePicker + Trigger + Content 组合式 API。分钟步长为
-          5 分钟，滚轮支持拖拽、滚轮与触摸滚动，选中项居中高亮。
+          5 分钟。时/分滚轮支持拖拽、鼠标滚轮与触摸滚动；松手或滚轮停止后会吸附到最近选项并居中高亮。
         </Typography>
       </div>
       <DemoBlock
