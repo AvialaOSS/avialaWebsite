@@ -11,6 +11,7 @@ import {
 } from "@aviala-design/spiral";
 import {
   Component,
+  startTransition,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -118,6 +119,8 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
   const [editorCode, setEditorCode] = useState(initialCode);
   const [knobsSynced, setKnobsSynced] = useState(Boolean(buildCode && hasKnobs));
   const [isEditing, setIsEditing] = useState(false);
+  /** Defer Monaco until after first paint — init is a major route-change cost. */
+  const [monacoReady, setMonacoReady] = useState(false);
   const debounceRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -129,6 +132,30 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
     setIsEditing(false);
     isEditingRef.current = false;
   }, [initialCode, knobs, buildCode]);
+
+  useEffect(() => {
+    if (monacoReady) return;
+
+    let cancelled = false;
+    const enable = () => {
+      if (cancelled) return;
+      startTransition(() => setMonacoReady(true));
+    };
+
+    if (typeof window.requestIdleCallback === "function") {
+      const idleId = window.requestIdleCallback(enable, { timeout: 400 });
+      return () => {
+        cancelled = true;
+        window.cancelIdleCallback(idleId);
+      };
+    }
+
+    const timeoutId = window.setTimeout(enable, 0);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeoutId);
+    };
+  }, [initialCode, monacoReady]);
 
   useEffect(() => {
     if (!usesIconKnobs || catalogReady) return;
@@ -189,13 +216,23 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
   }, []);
 
   const enterEdit = useCallback(() => {
+    if (!monacoReady) setMonacoReady(true);
     isEditingRef.current = true;
     setIsEditing(true);
+    if (!monacoReady) return;
     requestAnimationFrame(() => {
       setEditorTabbable(true);
       editorRef.current?.focus();
     });
-  }, [setEditorTabbable]);
+  }, [monacoReady, setEditorTabbable]);
+
+  useEffect(() => {
+    if (!monacoReady || !isEditing) return;
+    requestAnimationFrame(() => {
+      setEditorTabbable(true);
+      editorRef.current?.focus();
+    });
+  }, [monacoReady, isEditing, setEditorTabbable]);
 
   const exitEdit = useCallback(() => {
     isEditingRef.current = false;
@@ -221,7 +258,7 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
       editor.onDidFocusEditorText(() => {
         if (isEditingRef.current) return;
         setEditorTabbable(false);
-        editor.blur();
+        editor.getDomNode()?.blur();
         gateRef.current?.focus();
       });
 
@@ -359,27 +396,31 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
               // Keep Monaco out of Tab order until Enter / click activates editing.
               {...(!isEditing ? { inert: true } : {})}
             >
-              <Editor
-                className="docs-monaco-editor"
-                height="220px"
-                language="javascript"
-                theme={monacoTheme}
-                value={editorCode}
-                onChange={handleEditorChange}
-                beforeMount={handleMonacoBeforeMount}
-                onMount={handleMonacoMount}
-                options={{
-                  minimap: { enabled: false },
-                  fontSize: 13,
-                  lineNumbers: "on",
-                  scrollBeyondLastLine: false,
-                  wordWrap: "on",
-                  tabSize: 2,
-                  automaticLayout: true,
-                  padding: { top: 8, bottom: 8 },
-                  tabFocusMode: true,
-                }}
-              />
+              {monacoReady ? (
+                <Editor
+                  className="docs-monaco-editor"
+                  height="220px"
+                  language="javascript"
+                  theme={monacoTheme}
+                  value={editorCode}
+                  onChange={handleEditorChange}
+                  beforeMount={handleMonacoBeforeMount}
+                  onMount={handleMonacoMount}
+                  options={{
+                    minimap: { enabled: false },
+                    fontSize: 13,
+                    lineNumbers: "on",
+                    scrollBeyondLastLine: false,
+                    wordWrap: "on",
+                    tabSize: 2,
+                    automaticLayout: true,
+                    padding: { top: 8, bottom: 8 },
+                    tabFocusMode: true,
+                  }}
+                />
+              ) : (
+                <pre className="docs-monaco-placeholder">{editorCode}</pre>
+              )}
             </div>
             {!isEditing ? (
               <button

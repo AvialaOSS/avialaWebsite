@@ -1,4 +1,62 @@
 {{ define "main" }}
+{{ $v := "0" }}
+{{ with site.Data.spiraldocs }}{{ with .assetVersion }}{{ $v = . }}{{ end }}{{ end }}
+<script>
+(function () {
+  var path = location.pathname || "";
+  if (path.indexOf("/docs/spiral/") !== 0) return;
+  document.body.classList.add("docs-app-active");
+})();
+</script>
+{{ if hugo.IsServer }}
+{{/* Deep links 404 in Hugo — mount the SPA here (Vite with static fallback). */}}
+<div class="docs-app-page" data-docs="spiral">
+  <div id="spiral-docs-root"></div>
+</div>
+<meta http-equiv="Cache-Control" content="no-store" />
+<script type="module">
+  const viteBase = "http://localhost:5175/docs/spiral";
+  const assetVersion = {{ printf "%q" $v }};
+  const path = location.pathname || "";
+
+  if (!path.startsWith("/docs/spiral/")) {
+    // Non-spiral 404 content below is unused when this script only runs on spiral shell pages.
+  }
+
+  async function bootVite() {
+    const probe = await fetch(`${viteBase}/@vite/client`, { method: "HEAD", cache: "no-store" });
+    if (!probe.ok) throw new Error(`vite ${probe.status}`);
+
+    const RefreshRuntime = (await import(`${viteBase}/@react-refresh`)).default;
+    RefreshRuntime.injectIntoGlobalHook(window);
+    window.$RefreshReg$ = () => {};
+    window.$RefreshSig$ = () => (type) => type;
+    window.__vite_plugin_react_preamble_installed__ = true;
+
+    await import(`${viteBase}/@vite/client`);
+    await import(`${viteBase}/src/main.tsx`);
+  }
+
+  function bootStatic() {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.crossOrigin = "";
+    link.href = `/docs/spiral/assets/spiral-docs.css?v=${assetVersion}`;
+    document.head.appendChild(link);
+
+    const script = document.createElement("script");
+    script.type = "module";
+    script.crossOrigin = "";
+    script.src = `/docs/spiral/assets/spiral-docs.js?v=${assetVersion}`;
+    document.body.appendChild(script);
+  }
+
+  bootVite().catch((err) => {
+    console.warn("[spiral-docs] Vite unavailable on deep link, falling back to static:", err);
+    bootStatic();
+  });
+</script>
+{{ else }}
 <script>
 (function () {
   var path = location.pathname || "";
@@ -26,4 +84,5 @@
     </div>
   </div>
 </div>
+{{ end }}
 {{ end }}

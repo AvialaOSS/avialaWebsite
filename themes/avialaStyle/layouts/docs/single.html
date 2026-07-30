@@ -4,12 +4,53 @@
   <div id="spiral-docs-root"></div>
 </div>
 <script>
-  document.body.classList.add('docs-app-active');
+  document.body.classList.add("docs-app-active");
 </script>
 {{ $v := "0" }}
 {{ with site.Data.spiraldocs }}{{ with .assetVersion }}{{ $v = . }}{{ end }}{{ end }}
+{{ if hugo.IsServer }}
+<meta http-equiv="Cache-Control" content="no-store" />
+<script type="module">
+  const viteBase = "http://localhost:5175/docs/spiral";
+  const assetVersion = {{ printf "%q" $v }};
+
+  async function bootVite() {
+    const probe = await fetch(`${viteBase}/@vite/client`, { method: "HEAD", cache: "no-store" });
+    if (!probe.ok) throw new Error(`vite ${probe.status}`);
+
+    const RefreshRuntime = (await import(`${viteBase}/@react-refresh`)).default;
+    RefreshRuntime.injectIntoGlobalHook(window);
+    window.$RefreshReg$ = () => {};
+    window.$RefreshSig$ = () => (type) => type;
+    window.__vite_plugin_react_preamble_installed__ = true;
+
+    await import(`${viteBase}/@vite/client`);
+    await import(`${viteBase}/src/main.tsx`);
+  }
+
+  function bootStatic() {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.crossOrigin = "";
+    link.href = `/docs/spiral/assets/spiral-docs.css?v=${assetVersion}`;
+    document.head.appendChild(link);
+
+    const script = document.createElement("script");
+    script.type = "module";
+    script.crossOrigin = "";
+    script.src = `/docs/spiral/assets/spiral-docs.js?v=${assetVersion}`;
+    document.body.appendChild(script);
+  }
+
+  bootVite().catch((err) => {
+    console.warn("[spiral-docs] Vite unavailable, falling back to static build:", err);
+    bootStatic();
+  });
+</script>
+{{ else }}
 <link rel="stylesheet" crossorigin href="/docs/spiral/assets/spiral-docs.css?v={{ $v }}">
 <script type="module" crossorigin src="/docs/spiral/assets/spiral-docs.js?v={{ $v }}"></script>
+{{ end }}
 {{ else }}
 <div class="docs-page">
   <div class="uui-emptyInfomation full-box">

@@ -133,7 +133,8 @@ body.docs-app-active > main {
   overflow: hidden;
 }
 
-body.docs-app-active footer {
+/* Only hide Hugo site footer — not nested SPA footers like .docs-pager */
+body.docs-app-active > footer {
   display: none;
 }
 

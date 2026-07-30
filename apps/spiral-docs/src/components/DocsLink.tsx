@@ -1,5 +1,5 @@
 import { Link, type LinkProps } from "@aviala-design/spiral";
-import type { MouseEvent } from "react";
+import { startTransition, type MouseEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 type DocsLinkProps = Omit<LinkProps, "href" | "asChild"> & {
@@ -18,7 +18,9 @@ export function DocsLink({ to, onClick, children, ...props }: DocsLinkProps) {
       return;
     }
     event.preventDefault();
-    navigate(to);
+    startTransition(() => {
+      navigate(to);
+    });
   };
 
   return (

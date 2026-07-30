@@ -107,7 +107,8 @@
   height: 100%;
 }
 
-body.tools-app-active footer {
+/* Only hide Hugo site footer — not nested app footers */
+body.tools-app-active > footer {
   display: none;
 }
 

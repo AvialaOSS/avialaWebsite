@@ -247,6 +247,41 @@
   margin: 0 auto;
 }
 
+.docs-page-transition--idle {
+  opacity: 1;
+}
+
+/* Enter-only: short fade. No `both` fill — that kept huge trees at opacity:0 until paint. */
+.docs-page-transition--enter.docs-page-transition--forward,
+.docs-page-transition--enter.docs-page-transition--back {
+  animation: docs-page-fade-in 120ms ease-out;
+}
+
+@keyframes docs-page-fade-in {
+  from {
+    opacity: 0.35;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.docs-content--pending .docs-page-transition {
+  opacity: 0.72;
+  transition: opacity 80ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .docs-page-transition--enter {
+    animation: none;
+  }
+
+  .docs-content--pending .docs-page-transition {
+    transition: none;
+  }
+}
+
 /* 覆盖 Hugo 主题 header { align-items: center } 对文档页头的误伤 */
 header.docs-page-header {
   display: flex;
@@ -656,6 +691,24 @@ header.docs-page-header {
   min-height: 220px;
 }
 
+.docs-monaco-placeholder {
+  margin: 0;
+  min-height: 220px;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  overflow: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.45;
+  white-space: pre;
+  color: var(--foreground);
+  background: var(--docs-surface, #fff);
+}
+
+[data-mode="dark"] .docs-monaco-placeholder {
+  background: #000;
+}
+
 .docs-monaco-focus-gate {
   position: absolute;
   inset: 0;
@@ -830,12 +883,25 @@ header.docs-page-header {
 }
 
 .docs-pager {
+  /* Reset Hugo theme `footer { opacity:0; height:0; display:none }` */
   display: flex;
-  justify-content: space-between;
-  gap: var(--gap-block-space, 14px);
+  opacity: 1;
+  visibility: visible;
+  height: auto;
+  max-height: none;
+  overflow: visible;
   margin-top: 48px;
   padding-top: var(--gap-page-space, 24px);
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border: none;
   border-top: 1px solid var(--border);
+  transform: none;
+  transition: none;
+  justify-content: space-between;
+  gap: var(--gap-block-space, 14px);
+  box-sizing: border-box;
 }
 
 .docs-mobile-menu-btn,
@@ -892,6 +958,8 @@ header.docs-page-header {
 }
 
 .docs-icons-category {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 3rem;
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: var(--border-radius-big, 12px);
@@ -919,19 +987,11 @@ header.docs-page-header {
 .docs-icons-category-chevron {
   flex-shrink: 0;
   color: var(--muted-foreground);
-  transition: transform 0.15s ease;
-}
-
-.docs-icons-category-chevron.is-open {
-  transform: rotate(180deg);
 }
 
 .docs-icons-category-count {
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--background);
-  padding: 2px 8px;
-  font-size: var(--size-small, 12px);
+  flex-shrink: 0;
+  font-size: var(--typography-caption-size);
   color: var(--muted-foreground);
 }
 
@@ -1031,8 +1091,12 @@ header.docs-page-header {
 
 .docs-icons-preview-actions {
   display: flex;
-  flex-wrap: wrap;
   gap: var(--gap-component-space, 8px);
+}
+
+.docs-icons-preview-actions > .aviala-button {
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .docs-icons-snippet {

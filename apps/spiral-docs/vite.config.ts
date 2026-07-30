@@ -74,7 +74,18 @@ export default defineConfig({
     // published; always resolve the built entry points instead.
     conditions: ["module", "browser", "import", "default"],
   },
-  server: { host: true, port: 5175 },
+  server: {
+    host: true,
+    port: 5175,
+    // Allow Hugo (localhost:1313) to load Vite modules + HMR websocket.
+    cors: true,
+    origin: "http://localhost:5175",
+    hmr: {
+      host: "localhost",
+      protocol: "ws",
+      clientPort: 5175,
+    },
+  },
   preview: { host: true, port: 5175 },
   build: {
     outDir: path.resolve(dirname, "../../static/docs/spiral"),

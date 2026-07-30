@@ -67,16 +67,27 @@ CI 会自行构建两个前端应用，无需本地构建。
 ```bash
 npm ci
 
-# 只调文档 app（Vite HMR，最快）
+# 只调文档 app（Vite HMR，最快；无站点顶栏）
 npm run dev:spiral-docs        # http://localhost:5175/docs/spiral/
 
-# 完整站点
+# 完整站点 + Spiral 文档 HMR（Hugo 顶栏 + Vite 热更新）
+# 需同时跑 Vite(:5175) 与 Hugo(:1313)；`dev:site` 会一起拉起
+npm run dev:site               # http://localhost:1313/docs/spiral/
+# 或分别开两个终端：
+#   npm run dev:spiral-docs
+#   npm run dev:hugo
+
+# 生产形态（静态产物嵌入 Hugo，无 HMR）
 npm run build:colorcat
 npm run build:spiral-docs
 hugo server -D --bind 127.0.0.1 --port 1313
 ```
 
-`static/docs/spiral/`、`static/tools/colorcat/` 与 `data/spiraldocs.json` 都是构建产物，已在 `.gitignore` 中；**首次或清理后必须先构建，Hugo 才能正常渲染这两个页面。**
+`hugo server` 下 `/docs/spiral/` 会从 `http://localhost:5175` 拉 Vite 模块（见 `themes/avialaStyle/layouts/docs/single.html`），因此改 `apps/spiral-docs` 可在 1313 上热更新；正式构建 / CI 仍用 `static/docs/spiral/` 静态资源。
+
+`static/docs/spiral/`、`static/tools/colorcat/` 与 `data/spiraldocs.json` 都是构建产物，已在 `.gitignore` 中；**CI / 纯静态本地预览**前必须先构建。
+
+站点顶栏搜索（`/index.json`）会合并 `data/spiraldocs.json` 里的 `searchPages`（由 `finalize.mjs` 从 nav / MDX / DocPageHeader / props 生成）。`dev:site` 的 Vite HMR **不会**刷新该索引；改完 Spiral 文档文案后需再跑 `npm run build:spiral-docs`（或至少 finalize）并重启 / 刷新 Hugo，搜索结果才会更新。
 
 核对：
 
@@ -136,7 +147,9 @@ hugo server -D --bind 127.0.0.1 --port 1313
 |------|------|
 | `apps/spiral-docs/` | Spiral 文档 SPA 源码 |
 | `apps/spiral-docs/scripts/sync-props.mjs` | 从已安装的 Spiral 包同步 API 元数据 |
-| `apps/spiral-docs/scripts/finalize.mjs` | 删除 Vite `index.html`，写 `data/spiraldocs.json` |
+| `apps/spiral-docs/scripts/build-search-index.mjs` | 从 nav / MDX / DocPageHeader / props 生成 Spiral `searchPages` |
+| `apps/spiral-docs/scripts/finalize.mjs` | 删除 Vite `index.html`，写 `data/spiraldocs.json`（含 `searchPages`） |
+| `layouts/_default/index.json` | Fuse 搜索索引；合并 Spiral `searchPages` |
 | `content/docs/` | `/docs/`、`/docs/spiral/` 的 Hugo 内容 |
 | `themes/avialaStyle/layouts/docs/` | 文档 hub 与嵌入布局 |
 | `themes/avialaStyle/layouts/404.html` | Spiral 深链回跳 |

@@ -25,6 +25,9 @@ import { flattenNavItems, nav, navPathToHref, type NavSection } from "../nav";
 type SidebarProps = {
   onNavigate?: () => void;
   onCollapse?: () => void;
+  /** Eager highlight path (updates on click before route content commits). */
+  activePath?: string;
+  onPathPreview?: (path: string) => void;
 };
 
 type SectionConfig = {
@@ -54,12 +57,14 @@ function DocsNavSection({
   expanded,
   onToggle,
   onNavigate,
+  onPathPreview,
   pathname,
 }: {
   section: NavSection;
   expanded: boolean;
   onToggle: () => void;
   onNavigate?: () => void;
+  onPathPreview?: (path: string) => void;
   pathname: string;
 }) {
   const Icon = SECTION_CONFIG[section.section]?.icon ?? GeneralSetting;
@@ -86,7 +91,13 @@ function DocsNavSection({
 
           return (
             <NavigationItem key={item.path} itemType="child" asChild active={isActive}>
-              <NavLink to={href} onClick={onNavigate}>
+              <NavLink
+                to={href}
+                onClick={() => {
+                  onPathPreview?.(item.path);
+                  onNavigate?.();
+                }}
+              >
                 <Typography level="text" as="span" className="aviala-navigation-item__label">
                   {item.label}
                 </Typography>
@@ -99,21 +110,22 @@ function DocsNavSection({
   );
 }
 
-export function Sidebar({ onNavigate, onCollapse }: SidebarProps) {
+export function Sidebar({ onNavigate, onCollapse, activePath, onPathPreview }: SidebarProps) {
   const location = useLocation();
+  const pathname = activePath ?? location.pathname;
   const [expandedSections, setExpandedSections] = useState(() =>
-    getInitialExpandedSections(location.pathname)
+    getInitialExpandedSections(pathname)
   );
 
   useEffect(() => {
-    const activeSection = findSectionForPath(location.pathname);
+    const activeSection = findSectionForPath(pathname);
     if (!activeSection) return;
 
     setExpandedSections((current) => {
       if (current.has(activeSection.section)) return current;
       return new Set([...current, activeSection.section]);
     });
-  }, [location.pathname]);
+  }, [pathname]);
 
   const toggleSection = useCallback((sectionName: string) => {
     setExpandedSections((current) => {
@@ -144,7 +156,8 @@ export function Sidebar({ onNavigate, onCollapse }: SidebarProps) {
               expanded={expandedSections.has(section.section)}
               onToggle={() => toggleSection(section.section)}
               onNavigate={onNavigate}
-              pathname={location.pathname}
+              onPathPreview={onPathPreview}
+              pathname={pathname}
             />
           ))}
         </NavigationGroup>

@@ -11,6 +11,12 @@
         "description": "Figma `All-Round`"
       },
       {
+        "name": "compact",
+        "type": "boolean",
+        "required": false,
+        "description": ""
+      },
+      {
         "name": "mode",
         "type": "enum",
         "required": false,
@@ -1245,7 +1251,7 @@
   },
   "Popover": {
     "displayName": "Popover",
-    "description": "Radix Popover closes on `window` blur (e.g. focusing DevTools). Suppress only\nblur-initiated closes; pointer-down (outside click, trigger toggle) and Escape\nmust still dismiss on the first interaction.",
+    "description": "Thin controlled/uncontrolled wrapper around Radix `Popover.Root`. We don't add\nany custom close-suppression: a non-modal Popover already prevents focus-outside\nfrom dismissing (`onFocusOutside` is default-prevented by Radix), so a window\nblur never closes it — no extra bookkeeping needed, and it keeps Escape a\nsingle, predictable dismiss.",
     "props": []
   },
   "Modal": {

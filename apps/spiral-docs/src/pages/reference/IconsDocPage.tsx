@@ -1,5 +1,6 @@
 import {
-  DirectionArrowDown,
+  DirectionArrowDownLight,
+  DirectionArrowUpLight,
   GeneralSearch,
   ICON_MODES,
   ICON_THICKNESSES,
@@ -20,7 +21,7 @@ import {
   Typography,
   type FeedbackType,
 } from "@aviala-design/spiral";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, startTransition } from "react";
 
 import { DocsLink } from "../../components/DocsLink";
 import { DocPageHeader } from "../../components/TableOfContents";
@@ -69,12 +70,23 @@ function CategoryAccordion({
         onClick={() => setOpen((value) => !value)}
         className="docs-icons-category-header"
       >
-        <DirectionArrowDown
-          aria-hidden
-          width={18}
-          height={18}
-          className={cn("docs-icons-category-chevron", open && "is-open")}
-        />
+        {open ? (
+          <DirectionArrowUpLight
+            aria-hidden
+            thickness="Medium"
+            width={18}
+            height={18}
+            className="docs-icons-category-chevron"
+          />
+        ) : (
+          <DirectionArrowDownLight
+            aria-hidden
+            thickness="Medium"
+            width={18}
+            height={18}
+            className="docs-icons-category-chevron"
+          />
+        )}
         <Typography level="text" as="span" className="flex-1 font-medium">
           {group.label}
         </Typography>
@@ -90,7 +102,7 @@ function CategoryAccordion({
                 <button
                   key={entry.name}
                   type="button"
-                  title={`选择并复制 ${entry.name}`}
+                  title={`选择 ${entry.name}`}
                   aria-pressed={selected}
                   onClick={() => onSelect(entry)}
                   className={cn(
@@ -168,10 +180,10 @@ function PreviewPanel({
         </div>
 
         <div className="docs-icons-preview-actions">
-          <Button mode="second" size="small" onClick={() => onCopySvg(stageRef.current)}>
+          <Button mode="default" size="regular" onClick={() => onCopySvg(stageRef.current)}>
             {svgCopied ? "已复制 SVG" : "复制 SVG"}
           </Button>
-          <Button mode="second" size="small" onClick={() => onDownloadSvg(stageRef.current)}>
+          <Button mode="default" size="regular" onClick={() => onDownloadSvg(stageRef.current)}>
             下载 SVG
           </Button>
         </div>
@@ -181,6 +193,7 @@ function PreviewPanel({
             预览粗细
           </Typography>
           <SegmentatorGroup
+            equalWidth
             value={thickness}
             onValueChange={(value) => onThicknessChange(value as IconThickness)}
           >
@@ -200,7 +213,11 @@ function PreviewPanel({
           <Typography level="text" as="p" className="mb-2 text-[var(--muted-foreground)]">
             模式
           </Typography>
-          <SegmentatorGroup value={mode} onValueChange={(value) => onModeChange(value as IconMode)}>
+          <SegmentatorGroup
+            equalWidth
+            value={mode}
+            onValueChange={(value) => onModeChange(value as IconMode)}
+          >
             {ICON_MODES.map((value) => (
               <SegmentatorItem key={value} value={value} disabled={!entry.modes.includes(value)}>
                 {value}
@@ -243,6 +260,15 @@ export function IconsDocPage() {
   const [panelCopied, setPanelCopied] = useState(false);
   const [svgCopied, setSvgCopied] = useState(false);
   const [toast, setToast] = useState<CopyToast | null>(null);
+  /** Shell first; catalog grids mount after paint so route swap stays responsive. */
+  const [catalogReady, setCatalogReady] = useState(false);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      startTransition(() => setCatalogReady(true));
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
 
   const showToast = useCallback((message: string, type: FeedbackType = "success") => {
     setToast({ message, type, key: Date.now() });
@@ -271,7 +297,7 @@ export function IconsDocPage() {
   );
 
   const selectIcon = useCallback(
-    (entry: IconCatalogEntry, shouldCopy: boolean) => {
+    (entry: IconCatalogEntry) => {
       let nextThickness = thickness;
       let nextMode = mode;
 
@@ -285,12 +311,8 @@ export function IconsDocPage() {
       setSelected(entry);
       setThickness(nextThickness);
       setMode(nextMode);
-
-      if (shouldCopy) {
-        void copySnippet(entry, nextThickness, nextMode);
-      }
     },
-    [copySnippet, mode, thickness]
+    [mode, thickness]
   );
 
   const copyFromPanel = useCallback(async () => {
@@ -368,7 +390,7 @@ export function IconsDocPage() {
                 ? `${totalVisible} 个匹配图标`
                 : `${categories.length} 个分类 · ${iconCatalog.length} 个图标`}
               {" · "}
-              点击图标选择并复制导入代码
+              点击图标选择预览
             </Typography>
           </div>
 
@@ -376,6 +398,12 @@ export function IconsDocPage() {
             <div className="docs-icons-empty">
               <Typography level="text" as="p" className="text-[var(--muted-foreground)]">
                 没有匹配的图标，请调整搜索或筛选条件。
+              </Typography>
+            </div>
+          ) : !catalogReady ? (
+            <div className="docs-icons-empty" aria-busy="true">
+              <Typography level="text" as="p" className="text-[var(--muted-foreground)]">
+                正在加载图标目录…
               </Typography>
             </div>
           ) : (
@@ -387,7 +415,7 @@ export function IconsDocPage() {
                 defaultOpen={index === 0}
                 selectedName={selected.name}
                 copiedName={copiedName}
-                onSelect={(entry) => selectIcon(entry, true)}
+                onSelect={selectIcon}
               />
             ))
           )}

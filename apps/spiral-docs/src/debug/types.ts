@@ -52,7 +52,7 @@ export type DebugNodeSchema<TState = unknown> = {
 
   /** Merge knob values into preview state */
 
-  applyOverride: (state: TState, value: KnobValues) => TState;
+  applyOverride(state: TState, value: KnobValues): TState;
 
   /** Shown when node has no knobs (leaf presentation parts) */
 
@@ -76,7 +76,7 @@ export type DebugComponentEntry<TState = unknown> = {
 
   /** Live preview from merged override state */
 
-  renderPreview: (state: TState) => ReactNode;
+  renderPreview(state: TState): ReactNode;
 
 };
 

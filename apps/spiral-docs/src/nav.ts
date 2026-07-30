@@ -192,8 +192,24 @@ export const nav: NavSection[] = [
   },
 ];
 
+let flatNavItemsCache: NavItem[] | null = null;
+let navPathIndexCache: Map<string, number> | null = null;
+
 export function flattenNavItems(): NavItem[] {
-  return nav.flatMap((section) => section.items);
+  if (!flatNavItemsCache) {
+    flatNavItemsCache = nav.flatMap((section) => section.items);
+  }
+  return flatNavItemsCache;
+}
+
+/** O(1) nav order lookup for transition direction. */
+export function getNavPathIndex(path: string): number {
+  if (!navPathIndexCache) {
+    navPathIndexCache = new Map(
+      flattenNavItems().map((item, index) => [item.path, index]),
+    );
+  }
+  return navPathIndexCache.get(path) ?? -1;
 }
 
 export function navPathToHref(path: string): string {

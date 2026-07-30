@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { buildSearchPages } from "./build-search-index.mjs";
 import { readSpiralVersion } from "./spiral-package.mjs";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -25,9 +26,16 @@ for (const asset of ["assets/spiral-docs.js", "assets/spiral-docs.css"]) {
 }
 
 const spiralVersion = readSpiralVersion();
+const searchPages = buildSearchPages();
 const dataFile = path.join(siteRoot, "data/spiraldocs.json");
-const payload = { assetVersion: hash.digest("hex").slice(0, 12), spiralVersion };
+const payload = {
+  assetVersion: hash.digest("hex").slice(0, 12),
+  spiralVersion,
+  searchPages,
+};
 
 mkdirSync(path.dirname(dataFile), { recursive: true });
 writeFileSync(dataFile, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
-console.log(`Wrote ${dataFile} (spiral ${spiralVersion}, asset ${payload.assetVersion})`);
+console.log(
+  `Wrote ${dataFile} (spiral ${spiralVersion}, asset ${payload.assetVersion}, searchPages ${searchPages.length})`,
+);

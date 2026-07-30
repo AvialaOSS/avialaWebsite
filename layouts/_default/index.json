@@ -1,5 +1,15 @@
+{{- $hasSpiralSearch := and site.Data.spiraldocs site.Data.spiraldocs.searchPages (gt (len site.Data.spiraldocs.searchPages) 0) -}}
 {{- $.Scratch.Add "index" slice -}}
 {{- range .Site.RegularPages -}}
-    {{- $.Scratch.Add "index" (dict "title" .Title "tags" .Params.tags "categories" .Params.categories "contents" .Plain "permalink" .Permalink) -}}
+    {{- $isSpiralShell := eq .RelPermalink "/docs/spiral/" -}}
+    {{- if and $hasSpiralSearch $isSpiralShell -}}
+    {{- else -}}
+        {{- $.Scratch.Add "index" (dict "title" .Title "tags" .Params.tags "categories" .Params.categories "contents" .Plain "permalink" .Permalink) -}}
+    {{- end -}}
+{{- end -}}
+{{- if $hasSpiralSearch -}}
+    {{- range site.Data.spiraldocs.searchPages -}}
+        {{- $.Scratch.Add "index" (dict "title" .title "tags" .tags "categories" .categories "contents" .contents "permalink" .permalink) -}}
+    {{- end -}}
 {{- end -}}
 {{- $.Scratch.Get "index" | jsonify -}}

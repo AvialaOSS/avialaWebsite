@@ -5,34 +5,137 @@ import {
   GeneralMenu,
 } from "@aviala-design/icons";
 import { Button } from "@aviala-design/spiral";
-import { useRef, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { flattenNavItems, navPathToHref } from "../nav";
+import {
+  startTransition,
+  useDeferredValue,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import { useLocation, useNavigate, useOutlet } from "react-router-dom";
+import { getNavPathIndex, navPathToHref } from "../nav";
 import { getAdjacentPages, Sidebar } from "./Sidebar";
 import { TableOfContents } from "./TableOfContents";
 import { ThemeToolbar } from "./ThemeToolbar";
 
+type DocsNavDirection = "forward" | "back";
+
+const HEAVY_DOC_PATHS = new Set(["/reference/icons", "/reference/icons/playground"]);
+
+function prefersReducedMotion() {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
+/** Later nav index → forward; earlier → back; unknown → forward. */
+function getDocsNavDirection(fromPath: string, toPath: string): DocsNavDirection {
+  const fromIndex = getNavPathIndex(fromPath);
+  const toIndex = getNavPathIndex(toPath);
+  if (fromIndex < 0 || toIndex < 0) return "forward";
+  return toIndex >= fromIndex ? "forward" : "back";
+}
+
+/**
+ * Instant route swap + enter-only motion on the new page.
+ * Avoids keeping the previous React tree mounted through an exit phase
+ * (that delayed heavy pages by 200ms+ before they could even mount).
+ */
+function DocsPageTransition({
+  pathname,
+  children,
+}: {
+  pathname: string;
+  children: ReactNode;
+}) {
+  const prevPathRef = useRef(pathname);
+  const directionRef = useRef<DocsNavDirection>("forward");
+  const isFirstPathRef = useRef(true);
+
+  if (pathname !== prevPathRef.current) {
+    directionRef.current = getDocsNavDirection(prevPathRef.current, pathname);
+    prevPathRef.current = pathname;
+    isFirstPathRef.current = false;
+  }
+
+  const skipMotion =
+    isFirstPathRef.current ||
+    prefersReducedMotion() ||
+    HEAVY_DOC_PATHS.has(pathname);
+  const direction = directionRef.current;
+  const className = skipMotion
+    ? "docs-page-transition docs-page-transition--idle"
+    : `docs-page-transition docs-page-transition--enter docs-page-transition--${direction}`;
+
+  return (
+    <div key={pathname} className={className}>
+      {children}
+    </div>
+  );
+}
+
 export function DocLayout() {
   const contentRef = useRef<HTMLElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const outlet = useOutlet();
+  /** Defer only the page body so chrome can stay responsive while heavy trees render. */
+  const deferredOutlet = useDeferredValue(outlet);
+  const isOutletPending = deferredOutlet !== outlet;
+  const displayedPathRef = useRef(location.pathname);
+  if (!isOutletPending) {
+    displayedPathRef.current = location.pathname;
+  }
+  const displayedPath = displayedPathRef.current;
   const [mobileOpen, setMobileOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  /** Urgent highlight — updates on click before the route transition commits. */
+  const [eagerPath, setEagerPath] = useState(location.pathname);
 
-  const docPath =
-    flattenNavItems().find((item) => item.path === location.pathname)?.path ??
-    "/start/introduction";
-  const { prev, next } = getAdjacentPages(docPath);
-  const hideToc = location.pathname === "/reference/icons/playground";
+  const pathname = location.pathname;
+  const isContentPending = isOutletPending || eagerPath !== displayedPath;
+  const hideToc =
+    displayedPath === "/reference/icons" || displayedPath === "/reference/icons/playground";
+  const { prev, next } = getAdjacentPages(
+    getNavPathIndex(pathname) >= 0 ? pathname : "/start/introduction"
+  );
+
+  useEffect(() => {
+    setEagerPath(pathname);
+  }, [pathname]);
+
+  useEffect(() => {
+    mainRef.current?.scrollTo(0, 0);
+  }, [displayedPath]);
+
+  const previewPath = (path: string) => {
+    setEagerPath(path);
+  };
+
+  const goTo = (path: string) => {
+    setEagerPath(path);
+    startTransition(() => {
+      navigate(navPathToHref(path));
+    });
+  };
 
   return (
     <div className={`docs-shell${sidebarCollapsed ? " docs-shell--sidebar-collapsed" : ""}`}>
       <Sidebar
+        activePath={eagerPath}
+        onPathPreview={previewPath}
         onNavigate={() => setMobileOpen(false)}
         onCollapse={() => setSidebarCollapsed(true)}
       />
       <div className={`docs-mobile-drawer${mobileOpen ? " is-open" : ""}`}>
-        <Sidebar onNavigate={() => setMobileOpen(false)} />
+        <Sidebar
+          activePath={eagerPath}
+          onPathPreview={previewPath}
+          onNavigate={() => setMobileOpen(false)}
+        />
       </div>
       {mobileOpen ? (
         <button
@@ -43,7 +146,7 @@ export function DocLayout() {
         />
       ) : null}
 
-      <div className="docs-main">
+      <div ref={mainRef} className="docs-main">
         <div className="docs-floating-controls">
           <div className="docs-floating-controls__left">
             {sidebarCollapsed ? (
@@ -75,16 +178,21 @@ export function DocLayout() {
         </div>
 
         <div className={`docs-body${hideToc ? " docs-body--no-toc" : ""}`}>
-          <article ref={contentRef} className="docs-content">
-            <Outlet key={location.pathname} context={{ contentRef }} />
+          <article
+            ref={contentRef}
+            className={`docs-content${isContentPending ? " docs-content--pending" : ""}`}
+          >
+            <DocsPageTransition pathname={displayedPath}>
+              {deferredOutlet}
+            </DocsPageTransition>
             <footer className="docs-pager" aria-label="相邻文档">
               {prev ? (
                 <Button
                   type="button"
-                  mode="secondary"
+                  mode="second"
                   size="regular"
                   leftIcon={<DirectionArrowLeftLight aria-hidden />}
-                  onClick={() => navigate(navPathToHref(prev.path))}
+                  onClick={() => goTo(prev.path)}
                 >
                   {prev.label}
                 </Button>
@@ -94,10 +202,10 @@ export function DocLayout() {
               {next ? (
                 <Button
                   type="button"
-                  mode="secondary"
+                  mode="second"
                   size="regular"
                   rightIcon={<DirectionArrowRightLight aria-hidden />}
-                  onClick={() => navigate(navPathToHref(next.path))}
+                  onClick={() => goTo(next.path)}
                 >
                   {next.label}
                 </Button>
@@ -106,7 +214,9 @@ export function DocLayout() {
               )}
             </footer>
           </article>
-          {hideToc ? null : <TableOfContents containerRef={contentRef} />}
+          {hideToc ? null : (
+            <TableOfContents key={displayedPath} containerRef={contentRef} />
+          )}
         </div>
       </div>
     </div>
