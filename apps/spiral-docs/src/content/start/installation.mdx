@@ -2,12 +2,12 @@
 
 ## 环境要求
 
-- Node.js 20+
-- pnpm 9+
+- Node.js 20 及以上
+- pnpm 9 及以上
 
-## 在 monorepo 中使用
+## 在 monorepo 里使用
 
-Spiral 2 当前以 workspace 包形式发布：
+Spiral 2 目前以 workspace 包的形式发布：
 
 ```bash
 pnpm add @aviala-design/spiral @aviala-design/tokens @aviala-design/icons
@@ -15,7 +15,7 @@ pnpm add @aviala-design/spiral @aviala-design/tokens @aviala-design/icons
 
 ## 引入样式
 
-在应用入口引入 Spiral 样式与 ALD 主题：
+在应用入口把 Spiral 的样式和 ALD 主题一起引进来：
 
 ```tsx
 import "@aviala-design/spiral/styles.css";
@@ -25,9 +25,9 @@ import "@aviala-design/tokens/basic-input-effects.css";
 import "@aviala-design/tokens/button-effects.css";
 ```
 
-按需引入其他组件的效果样式（如 `popover-effects.css`、`cascader-effects.css` 等）。
+其余组件按需补上对应的效果样式，比如 `popover-effects.css`、`cascader-effects.css`。
 
-## 挂载 ThemeProvider
+## 挂上 ThemeProvider
 
 ```tsx
 import { ThemeProvider, Button } from "@aviala-design/spiral";
@@ -41,15 +41,15 @@ export function App() {
 }
 ```
 
-## 本地开发
+## 本地跑文档站
 
-本文档站的源码位于 `avialaWebsite` 仓库，通过 npm 上已发布的 `@aviala-design/*` 消费组件库：
+文档站源码在这个 `avialaWebsite` 仓库，组件库本身是通过 npm 上发布的 `@aviala-design/*` 来消费的：
 
 ```bash
 npm ci
 npm run dev:spiral-docs
 ```
 
-文档站默认运行在 `http://localhost:5175/docs/spiral/`。
+默认运行在 `http://localhost:5175/docs/spiral/`。
 
-组件库本身的开发在 [spiral-2](https://github.com/AvialaOSS/spiral-2) 仓库进行，改动需发布新版本后文档站才会同步。
+组件库的开发在 [spiral-2](https://github.com/AvialaOSS/spiral-2) 仓库进行。改完发版后，文档站才会跟着更新。

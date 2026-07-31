@@ -59,6 +59,12 @@ CI 会自行构建两个前端应用，无需本地构建。
 4. 提交更新后的 `package-lock.json` 并 push
 
 > 组件 API 表格数据来自 `@aviala-design/spiral` 包内的 `props.json`。构建脚本 `apps/spiral-docs/scripts/sync-props.mjs` 会把它复制到 `src/generated/props.json`；若安装的版本尚未附带该文件，则回退到仓库里已提交的副本，并打印一条 warning。
+>
+> 组件更新记录来自 Spiral2 的 `packages/ui/changelogs/*.md`（构建为 `component-changelogs.json`）。`sync-changelog.mjs` 优先从已安装包或邻仓 Spiral2 同步，否则使用已提交的 `src/generated/component-changelogs.json`。
+>
+> 文档覆盖版本见 `apps/spiral-docs/src/versions/manifest.json`。构建时会查询 npm latest；若最新包高于文档 `default`，站点顶栏显示过时提醒。
+>
+> 正式构建（`npm run build:spiral-docs`）会对每个 covered patch：从 npm 安装对应 `@aviala-design/spiral` → 打出 `static/docs/spiral/v/{version}/`，并额外打一份默认版到 `static/docs/spiral/assets/`。生产环境访问 `/docs/spiral/` 会跳到 `/docs/spiral/v/{default}/`；深链由 404 页按版本挂载对应 SPA。本地 `dev` 仍用单份 Vite（当前 lockfile 包）。发版后自动开文档 PR：见 [SPIRAL_DOCS_DISPATCH.zh_cn.md](./SPIRAL_DOCS_DISPATCH.zh_cn.md)（英文：[SPIRAL_DOCS_DISPATCH.md](./SPIRAL_DOCS_DISPATCH.md)；需在 Spiral2 配置 `AVIALA_WEBSITE_TOKEN`）。
 
 ---
 
@@ -147,6 +153,10 @@ hugo server -D --bind 127.0.0.1 --port 1313
 |------|------|
 | `apps/spiral-docs/` | Spiral 文档 SPA 源码 |
 | `apps/spiral-docs/scripts/sync-props.mjs` | 从已安装的 Spiral 包同步 API 元数据 |
+| `apps/spiral-docs/scripts/sync-changelog.mjs` | 同步组件 changelog JSON |
+| `apps/spiral-docs/scripts/sync-npm-latest.mjs` | 查询 npm 上最新 Spiral 版本（过时横幅） |
+| `apps/spiral-docs/src/versions/manifest.json` | 文档已覆盖的 Spiral 版本与组件 inherit |
+| `apps/spiral-docs/src/doc-revisions/` | 按组件 / 修订号的手写文档内容（`{Component}/{rev}.ts`） |
 | `apps/spiral-docs/scripts/build-search-index.mjs` | 从 nav / MDX / DocPageHeader / props 生成 Spiral `searchPages` |
 | `apps/spiral-docs/scripts/finalize.mjs` | 删除 Vite `index.html`，写 `data/spiraldocs.json`（含 `searchPages`） |
 | `layouts/_default/index.json` | Fuse 搜索索引；合并 Spiral `searchPages` |

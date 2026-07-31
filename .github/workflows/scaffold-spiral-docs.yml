@@ -1,0 +1,102 @@
+name: Scaffold Spiral docs version
+
+# Opened by Spiral2 after npm publish (repository_dispatch), or manually.
+on:
+  repository_dispatch:
+    types: [spiral-released]
+  workflow_dispatch:
+    inputs:
+      spiral_version:
+        description: Published @aviala-design/spiral version (e.g. 2.3.1)
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: scaffold-spiral-docs
+  cancel-in-progress: false
+
+jobs:
+  scaffold:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Resolve Spiral version
+        id: ver
+        run: |
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            VERSION="${{ github.event.client_payload.spiral_version }}"
+          else
+            VERSION="${{ inputs.spiral_version }}"
+          fi
+          if [ -z "$VERSION" ]; then
+            echo "Missing spiral_version" >&2
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Scaffolding docs coverage for @aviala-design/spiral@$VERSION"
+
+      - name: Fetch component-changelogs.json from npm
+        working-directory: apps/spiral-docs
+        run: |
+          mkdir -p .tmp
+          URL="https://cdn.jsdelivr.net/npm/@aviala-design/spiral@${{ steps.ver.outputs.version }}/dist/component-changelogs.json"
+          if curl -fsSL "$URL" -o .tmp/component-changelogs.json; then
+            echo "Downloaded changelogs from jsDelivr"
+          else
+            echo "No component-changelogs.json on npm yet; continuing with empty set"
+            echo '{}' > .tmp/component-changelogs.json
+          fi
+
+      - name: Scaffold manifest + revision stubs
+        working-directory: apps/spiral-docs
+        env:
+          SPIRAL_VERSION: ${{ steps.ver.outputs.version }}
+          COMPONENT_CHANGELOGS: ${{ github.workspace }}/apps/spiral-docs/.tmp/component-changelogs.json
+          OPEN_PR: "0"
+        run: node ./scripts/scaffold-docs-version-pr.mjs
+
+      - name: Create pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ steps.ver.outputs.version }}"
+          BRANCH="docs/spiral-${VERSION}"
+          TITLE="docs(spiral): scaffold coverage for ${VERSION}"
+
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No file changes; skip PR."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add apps/spiral-docs/src/versions/manifest.json apps/spiral-docs/src/doc-revisions || true
+          git status
+          git commit -m "$TITLE" || { echo "Nothing to commit"; exit 0; }
+          git push -u origin "$BRANCH"
+
+          BODY=$(cat <<EOF
+          ## Summary
+          - Scaffold docs manifest entry for \`@aviala-design/spiral@${VERSION}\` (status: draft).
+          - Changed components get \`rev\` + \`doc-revisions/{Name}/${VERSION}.ts\` stubs.
+          - Unchanged components \`inherits\` the previous covered version.
+
+          ## Checklist
+          - [ ] Update doc revisions / demos for changed components
+          - [ ] Set manifest \`status\` to \`ready\`
+          - [ ] Point \`default\` to \`${VERSION}\`
+          - [ ] Verify stale banner clears after merge
+          EOF
+          )
+
+          gh pr create --title "$TITLE" --body "$BODY" || gh pr view --json url -q .url

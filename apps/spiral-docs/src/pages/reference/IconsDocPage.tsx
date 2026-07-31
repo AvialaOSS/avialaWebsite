@@ -63,7 +63,7 @@ function CategoryAccordion({
   }, [forceOpen]);
 
   return (
-    <section className="docs-icons-category">
+    <section className="docs-icons-category" data-open={open}>
       <button
         type="button"
         aria-expanded={open}
@@ -92,8 +92,12 @@ function CategoryAccordion({
         </Typography>
         <span className="docs-icons-category-count">{group.icons.length}</span>
       </button>
-      {open ? (
-        <div className="docs-icons-category-body">
+      <div
+        className="docs-icons-category-body"
+        /* Collapsed panels are hidden from the tab order and pointer events. */
+        inert={!open}
+      >
+        <div className="docs-icons-category-body-inner">
           <div className="docs-icons-grid">
             {group.icons.map((entry) => {
               const selected = entry.name === selectedName;
@@ -129,7 +133,7 @@ function CategoryAccordion({
             })}
           </div>
         </div>
-      ) : null}
+      </div>
     </section>
   );
 }

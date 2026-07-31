@@ -14,7 +14,10 @@ import {
   type ReactNode,
 } from "react";
 import { useLocation, useNavigate, useOutlet } from "react-router-dom";
-import { getNavPathIndex, navPathToHref } from "../nav";
+import { getNavItemByPath, getNavPathIndex, navPathToHref } from "../nav";
+import { ComponentChangelog } from "./ComponentChangelog";
+import { DocsStaleBanner } from "./DocsStaleBanner";
+import { DocsVersionSwitcher } from "./DocsVersionSwitcher";
 import { getAdjacentPages, Sidebar } from "./Sidebar";
 import { TableOfContents } from "./TableOfContents";
 import { ThemeToolbar } from "./ThemeToolbar";
@@ -99,6 +102,7 @@ export function DocLayout() {
   const isContentPending = isOutletPending || eagerPath !== displayedPath;
   const hideToc =
     displayedPath === "/reference/icons" || displayedPath === "/reference/icons/playground";
+  const pageComponent = getNavItemByPath(displayedPath)?.component;
   const { prev, next } = getAdjacentPages(
     getNavPathIndex(pathname) >= 0 ? pathname : "/start/introduction"
   );
@@ -147,6 +151,7 @@ export function DocLayout() {
       ) : null}
 
       <div ref={mainRef} className="docs-main">
+        <DocsStaleBanner />
         <div className="docs-floating-controls">
           <div className="docs-floating-controls__left">
             {sidebarCollapsed ? (
@@ -173,6 +178,7 @@ export function DocLayout() {
             />
           </div>
           <div className="docs-floating-controls__right">
+            <DocsVersionSwitcher />
             <ThemeToolbar />
           </div>
         </div>
@@ -184,6 +190,7 @@ export function DocLayout() {
           >
             <DocsPageTransition pathname={displayedPath}>
               {deferredOutlet}
+              {pageComponent ? <ComponentChangelog component={pageComponent} /> : null}
             </DocsPageTransition>
             <footer className="docs-pager" aria-label="相邻文档">
               {prev ? (

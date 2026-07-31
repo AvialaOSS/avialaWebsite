@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@aviala-design/spiral";
 import { AppRoutes } from "./App";
+import { getDocsBasename } from "./docs-base";
 import "./index.css";
 import "@aviala-design/tokens/ald-theme.css";
 import "@aviala-design/tokens/input-effects.css";
@@ -29,6 +30,7 @@ import "@aviala-design/tokens/information-collect-extras.css";
 import "@aviala-design/tokens/structure-navigation-extras.css";
 
 const SPIRAL_DOCS_REDIRECT_KEY = "aviala-spiral-docs-redirect";
+const docsBasename = getDocsBasename();
 
 try {
   const redirect = sessionStorage.getItem(SPIRAL_DOCS_REDIRECT_KEY);
@@ -47,7 +49,7 @@ if (mount) {
   createRoot(mount).render(
     <StrictMode>
       <ThemeProvider defaultMode="light" defaultPresetId="ald" storageKey="aviala-spiral-docs">
-        <BrowserRouter basename="/docs/spiral">
+        <BrowserRouter basename={docsBasename}>
           <AppRoutes />
         </BrowserRouter>
       </ThemeProvider>
