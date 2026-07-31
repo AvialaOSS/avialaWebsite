@@ -17,6 +17,7 @@ export const nav: NavSection[] = [
       { label: "介绍", path: "/start/introduction" },
       { label: "安装", path: "/start/installation" },
       { label: "主题", path: "/start/theme" },
+      { label: "更新记录", path: "/start/changelog" },
     ],
   },
   {
@@ -214,4 +215,9 @@ export function getNavPathIndex(path: string): number {
 
 export function navPathToHref(path: string): string {
   return path.startsWith("/") ? path : `/${path}`;
+}
+
+/** O(1) lookup of a nav item by its path. */
+export function getNavItemByPath(path: string): NavItem | undefined {
+  return flattenNavItems().find((item) => item.path === path);
 }

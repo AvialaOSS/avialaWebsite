@@ -1,0 +1,25 @@
+{
+  "covered": ["2.2.0"],
+  "default": "2.2.0",
+  "versions": {
+    "2.2.0": {
+      "spiral": "2.2.0",
+      "tokens": "2.2.0",
+      "icons": "2.0.2",
+      "status": "ready",
+      "components": {
+        "Button": { "inherits": "2.1.0" },
+        "Popover": { "rev": "2.2.0" },
+        "Tooltip": { "rev": "2.2.0" },
+        "Pagination": { "inherits": "2.1.0" },
+        "Navigation": { "inherits": "2.1.0" },
+        "SegmentatorGroup": { "inherits": "2.1.0" },
+        "CascaderField": { "inherits": "2.0.0" },
+        "Modal": { "inherits": "2.0.0" },
+        "DatePickerField": { "inherits": "2.0.0" },
+        "Typeface": { "inherits": "2.0.0" }
+      }
+    }
+  },
+  "notes": "covered builds ship at /docs/spiral/v/{version}/. Component doc content resolves via rev/inherits → src/doc-revisions/{Component}/{rev}.ts. inherits may name another docs version or a content-revision id directly."
+}

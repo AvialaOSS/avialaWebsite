@@ -1,6 +1,6 @@
 # 主题
 
-Spiral 2 通过 `ThemeProvider` 与 `@aviala-design/tokens` 主题引擎管理亮色/暗色模式、品牌主色与 **base-numbers 密度**。
+Spiral 2 用 `ThemeProvider` 和 `@aviala-design/tokens` 主题引擎来管亮暗模式、品牌主色和 **base-numbers 密度**。
 
 ## ThemeProvider
 
@@ -18,7 +18,7 @@ import { ThemeProvider } from "@aviala-design/spiral";
 
 ## 密度：Default 与 Mobile Friendly
 
-ALD `base-numbers` 提供两套尺寸令牌：
+ALD 的 `base-numbers` 给了两套尺寸令牌：
 
 | 令牌示例 | Default | Mobile Friendly |
 | --- | --- | --- |
@@ -40,10 +40,10 @@ function DensitySwitch() {
 }
 ```
 
-或在 CSS 中，Mobile Friendly 规则挂载于 `[data-density="mobile-friendly"]`。
+也可以在 CSS 里切：Mobile Friendly 的规则挂在 `[data-density="mobile-friendly"]` 上。
 
 ## 预设与主色
 
-`useTheme()` 还提供 `setMode`、`setPrimaryColor`、`applyPreset` 等 API，偏好会写入 `localStorage`（键名默认 `aviala-theme`）。
+`useTheme()` 还提供了 `setMode`、`setPrimaryColor`、`applyPreset` 等接口，偏好会写进 `localStorage`（默认键名 `aviala-theme`）。
 
-使用文档顶栏的 **浅色/深色** 与 **Default / Mobile Friendly** 按钮即可实时预览组件在不同主题下的表现。
+直接用文档顶栏的 **浅色/深色** 和 **Default / Mobile Friendly** 按钮，就能实时看组件在不同主题下的样子。

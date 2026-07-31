@@ -26,15 +26,12 @@ import {
   TableHead,
   TableRow,
   Tag,
-  Typography,
   Upload,
 } from "@aviala-design/spiral";
 import { useState } from "react";
 
-import { DemoBlock } from "../../components/DemoBlock";
 import type { KnobDef, KnobValues } from "../../components/DemoKnobs";
-import { PropsTable } from "../../components/PropsTable";
-import { DocPageHeader } from "../../components/TableOfContents";
+import { ComponentDocView } from "../../components/ComponentDocView";
 import {
   avatarKnobs,
   avatarLiveCode,
@@ -79,7 +76,6 @@ import {
   uploadKnobs,
   uploadLiveCode,
 } from "../../demos/component-demos";
-import { getComponentProps } from "../../props-registry";
 
 function DocShell({
   title,
@@ -100,23 +96,20 @@ function DocShell({
   buildCode: (values: KnobValues) => string;
   liveCode: string;
 }) {
-  const doc = getComponentProps(componentKey);
   return (
-    <>
-      <DocPageHeader title={title} description={description} />
-      <div className="docs-prose">
-        <Typography level="text" as="p">
-          {prose}
-        </Typography>
-      </div>
-      <DemoBlock
-        initialCode={liveCode}
-        scope={scope}
-        knobs={knobs}
-        buildCode={buildCode}
-      />
-      {doc ? <PropsTable props={doc.props} /> : null}
-    </>
+    <ComponentDocView
+      component={componentKey}
+      scope={scope}
+      fallback={{
+        title,
+        description,
+        prose,
+        propsKey: componentKey,
+        liveCode,
+        knobs,
+        buildCode,
+      }}
+    />
   );
 }
 

@@ -4,8 +4,10 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "node ./scripts/sync-props.mjs && vite",
-    "build": "node ./scripts/sync-props.mjs && vite build && node ./scripts/finalize.mjs",
+    "dev": "node ./scripts/sync-props.mjs && node ./scripts/sync-changelog.mjs && node ./scripts/sync-npm-latest.mjs && vite",
+    "build": "node ./scripts/build-versioned.mjs",
+    "build:single": "node ./scripts/sync-props.mjs && node ./scripts/sync-changelog.mjs && node ./scripts/sync-npm-latest.mjs && vite build && node ./scripts/finalize.mjs",
+    "build:versioned": "node ./scripts/build-versioned.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -b"
   },

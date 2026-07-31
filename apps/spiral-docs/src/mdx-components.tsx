@@ -1,6 +1,6 @@
-import { Typography } from "@aviala-design/spiral";
+import { Link, Typography } from "@aviala-design/spiral";
 import type { ComponentPropsWithoutRef } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { DocsLink } from "./components/DocsLink";
 
 /** HTML attributes forwarded to Typography for headings/paragraphs.
  *  `content` (an RDFa global HTML attribute typed `string`) collides with
@@ -14,14 +14,16 @@ type TypographyHtmlProps = Omit<
 function MdxLink({ href = "", children, ...props }: ComponentPropsWithoutRef<"a">) {
   if (href.startsWith("/docs/spiral/")) {
     const to = href.replace(/^\/docs\/spiral\/?/, "");
-    return <RouterLink to={to}>{children}</RouterLink>;
+    return <DocsLink to={to}>{children}</DocsLink>;
   }
+  const externalProps =
+    /^https?:\/\//.test(href)
+      ? { target: "_blank", rel: "noopener noreferrer" }
+      : {};
   return (
-    <Typography level="text" asChild>
-      <a href={href} className="text-[var(--primary)]" {...props}>
-        {children}
-      </a>
-    </Typography>
+    <Link href={href} {...externalProps} {...props}>
+      {children}
+    </Link>
   );
 }
 

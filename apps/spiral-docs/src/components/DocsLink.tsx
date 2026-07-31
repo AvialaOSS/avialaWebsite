@@ -1,15 +1,16 @@
 import { Link, type LinkProps } from "@aviala-design/spiral";
 import { startTransition, type MouseEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { docsPathToHref } from "../docs-base";
 
 type DocsLinkProps = Omit<LinkProps, "href" | "asChild"> & {
   to: string;
 };
 
-/** In-app docs navigation that respects BrowserRouter basename. */
+/** In-app docs navigation that respects BrowserRouter basename (incl. /v/{version}). */
 export function DocsLink({ to, onClick, children, ...props }: DocsLinkProps) {
   const navigate = useNavigate();
-  const href = `/docs/spiral${to.startsWith("/") ? to : `/${to}`}`;
+  const href = docsPathToHref(to);
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
     onClick?.(event);

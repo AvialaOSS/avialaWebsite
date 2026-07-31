@@ -14,5 +14,6 @@ dist/
 # Built by `npm run build:spiral-docs`
 /static/docs/spiral/
 /data/spiraldocs.json
+/apps/spiral-docs/.docs-pkg-cache/
 /.workbuddy
 /.cursor

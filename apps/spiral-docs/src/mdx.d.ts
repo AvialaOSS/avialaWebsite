@@ -8,3 +8,40 @@ declare module "./generated/props.json" {
   const value: PropsRegistry;
   export default value;
 }
+
+declare module "./generated/component-changelogs.json" {
+  const value: Record<
+    string,
+    Array<{ version: string; sections: Record<string, string[]> }>
+  >;
+  export default value;
+}
+
+declare module "./generated/npm-latest.json" {
+  const value: {
+    name: string;
+    version: string;
+    fetchedAt: string | null;
+    error?: string;
+  };
+  export default value;
+}
+
+declare module "./versions/manifest.json" {
+  const value: {
+    covered: string[];
+    default: string;
+    versions: Record<
+      string,
+      {
+        spiral: string;
+        tokens: string;
+        icons: string;
+        status: "ready" | "draft";
+        components: Record<string, { rev?: string; inherits?: string }>;
+      }
+    >;
+    notes?: string;
+  };
+  export default value;
+}

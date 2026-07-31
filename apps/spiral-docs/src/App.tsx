@@ -45,6 +45,7 @@ import {
 import { InstallationPage } from "./pages/guides/InstallationPage";
 import { IntroductionPage } from "./pages/guides/IntroductionPage";
 import { ThemePage } from "./pages/guides/ThemePage";
+import { ChangelogPage } from "./pages/guides/ChangelogPage";
 import { DebuggerPage } from "./pages/reference/DebuggerPage";
 import { IconsDocPage } from "./pages/reference/IconsDocPage";
 import { IconsPlaygroundPage } from "./pages/reference/IconsPlaygroundPage";
@@ -58,6 +59,7 @@ export function AppRoutes() {
         <Route path="start/introduction" element={<IntroductionPage />} />
         <Route path="start/installation" element={<InstallationPage />} />
         <Route path="start/theme" element={<ThemePage />} />
+        <Route path="start/changelog" element={<ChangelogPage />} />
         <Route path="reference/icons" element={<IconsDocPage />} />
         <Route path="reference/icons/playground" element={<IconsPlaygroundPage />} />
         <Route path="reference/debugger" element={<DebuggerPage />} />
