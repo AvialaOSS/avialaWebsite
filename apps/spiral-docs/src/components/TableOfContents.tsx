@@ -1,6 +1,24 @@
-import { Anchor, AnchorItem, Typography } from "@aviala-design/spiral";
-import { useEffect, useState } from "react";
+import { GeneralHistory, GeneralTodoList } from "@aviala-design/icons";
+import {
+  Alert,
+  Anchor,
+  AnchorItem,
+  Button,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+  Typography,
+} from "@aviala-design/spiral";
+import { useEffect, useState, type RefObject } from "react";
 import { useLocation } from "react-router-dom";
+import { useDocsStaleInfo } from "../lib/docs-stale";
+import { getNavItemByPath } from "../nav";
+import { DocsUpdatesModal } from "./DocsUpdatesModal";
+import { DocsVersionSwitcher } from "./DocsVersionSwitcher";
 
 type Heading = {
   id: string;
@@ -9,14 +27,16 @@ type Heading = {
 };
 
 type TableOfContentsProps = {
-  containerRef: React.RefObject<HTMLElement | null>;
+  containerRef: RefObject<HTMLElement | null>;
+  /** `rail` = sticky side column; `float` = compact popover trigger. */
+  variant?: "rail" | "float";
 };
 
 function headingIndentLevel(level: Heading["level"]): 0 | 1 {
   return level === 2 ? 0 : 1;
 }
 
-export function TableOfContents({ containerRef }: TableOfContentsProps) {
+function usePageHeadings(containerRef: RefObject<HTMLElement | null>) {
   const location = useLocation();
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -78,25 +98,82 @@ export function TableOfContents({ containerRef }: TableOfContentsProps) {
     return () => observer.disconnect();
   }, [headings]);
 
+  return { headings, activeId, setActiveId };
+}
+
+function TocAnchorList({
+  headings,
+  activeId,
+  onNavigate,
+}: {
+  headings: Heading[];
+  activeId: string | null;
+  onNavigate?: () => void;
+}) {
+  return (
+    <Anchor aria-label="本页目录">
+      {headings.map((heading) => (
+        <AnchorItem
+          key={heading.id}
+          href={`#${heading.id}`}
+          activated={heading.id === activeId}
+          indentLevel={headingIndentLevel(heading.level)}
+          onClick={() => onNavigate?.()}
+        >
+          {heading.text}
+        </AnchorItem>
+      ))}
+    </Anchor>
+  );
+}
+
+export function TableOfContents({
+  containerRef,
+  variant = "rail",
+}: TableOfContentsProps) {
+  const { headings, activeId } = usePageHeadings(containerRef);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [variant]);
+
   if (headings.length === 0) return null;
+
+  if (variant === "float") {
+    return (
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            type="button"
+            mode="noBackgroundCustom"
+            size="regular"
+            iconOnly
+            className="docs-float-btn docs-toc-float-btn"
+            aria-label="本页目录"
+            leftIcon={<GeneralTodoList aria-hidden />}
+          />
+        </PopoverTrigger>
+        <PopoverContent align="end" className="docs-toc-float-panel">
+          <Typography level="caption" as="p" className="docs-toc-float-title">
+            本页目录
+          </Typography>
+          <TocAnchorList
+            headings={headings}
+            activeId={activeId}
+            onNavigate={() => setOpen(false)}
+          />
+        </PopoverContent>
+      </Popover>
+    );
+  }
 
   return (
     <aside className="docs-toc" aria-label="本页目录">
-      <Typography level="caption" as="p" className="mb-3 text-[var(--muted-foreground)]">
+      <Typography level="caption" as="p" className="docs-toc-title">
         本页目录
       </Typography>
-      <Anchor aria-label="本页目录">
-        {headings.map((heading) => (
-          <AnchorItem
-            key={heading.id}
-            href={`#${heading.id}`}
-            activated={heading.id === activeId}
-            indentLevel={headingIndentLevel(heading.level)}
-          >
-            {heading.text}
-          </AnchorItem>
-        ))}
-      </Anchor>
+      <TocAnchorList headings={headings} activeId={activeId} />
     </aside>
   );
 }
@@ -104,18 +181,75 @@ export function TableOfContents({ containerRef }: TableOfContentsProps) {
 type DocPageHeaderProps = {
   title: string;
   description?: string;
+  /**
+   * Version switcher + changelog history — only for component doc pages.
+   * Guides / reference tools leave this off.
+   */
+  showVersionControls?: boolean;
 };
 
-export function DocPageHeader({ title, description }: DocPageHeaderProps) {
+export function DocPageHeader({
+  title,
+  description,
+  showVersionControls = false,
+}: DocPageHeaderProps) {
+  const [updatesOpen, setUpdatesOpen] = useState(false);
+  const { pathname } = useLocation();
+  const component = getNavItemByPath(pathname)?.component;
+  const stale = useDocsStaleInfo(component, showVersionControls);
+
   return (
     <header className="docs-page-header">
-      <Typography level="headline1" as="h1">
-        {title}
-      </Typography>
+      <div className="docs-page-header__title-row">
+        <Typography level="headline1" as="h1" className="docs-page-header__title">
+          {title}
+        </Typography>
+        {showVersionControls ? (
+          <div className="docs-page-header__actions">
+            <DocsVersionSwitcher variant="header" />
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    type="button"
+                    mode="defaultCustom"
+                    size="regular"
+                    iconOnly
+                    className="docs-page-header__updates-btn"
+                    aria-label="更新历史记录"
+                    leftIcon={<GeneralHistory aria-hidden />}
+                    onClick={() => setUpdatesOpen(true)}
+                  />
+                </TooltipTrigger>
+                <TooltipContent side="bottom">更新历史记录</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        ) : null}
+      </div>
       {description ? (
         <Typography level="text" as="p" className="docs-page-description">
           {description}
         </Typography>
+      ) : null}
+      {stale ? (
+        <Alert
+          className="docs-page-header__stale"
+          type="warning"
+          appearance="light"
+          title="内容可能过时。"
+          description={
+            <>
+              组件 <code>{stale.component}</code> 在文档覆盖版{" "}
+              <code>{stale.docsVersion}</code> 之后仍有变更（npm 最新{" "}
+              <code>{stale.latest}</code>）。
+            </>
+          }
+          dismissible={false}
+        />
+      ) : null}
+      {showVersionControls ? (
+        <DocsUpdatesModal open={updatesOpen} onOpenChange={setUpdatesOpen} />
       ) : null}
     </header>
   );

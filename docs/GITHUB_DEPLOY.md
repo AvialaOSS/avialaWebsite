@@ -64,7 +64,7 @@ CI 会自行构建两个前端应用，无需本地构建。
 >
 > 文档覆盖版本见 `apps/spiral-docs/src/versions/manifest.json`。构建时会查询 npm latest；若最新包高于文档 `default`，站点顶栏显示过时提醒。
 >
-> 正式构建（`npm run build:spiral-docs`）会对每个 covered patch：从 npm 安装对应 `@aviala-design/spiral` → 打出 `static/docs/spiral/v/{version}/`，并额外打一份默认版到 `static/docs/spiral/assets/`。生产环境访问 `/docs/spiral/` 会跳到 `/docs/spiral/v/{default}/`；深链由 404 页按版本挂载对应 SPA。本地 `dev` 仍用单份 Vite（当前 lockfile 包）。发版后自动开文档 PR：见 [SPIRAL_DOCS_DISPATCH.zh_cn.md](./SPIRAL_DOCS_DISPATCH.zh_cn.md)（英文：[SPIRAL_DOCS_DISPATCH.md](./SPIRAL_DOCS_DISPATCH.md)；需在 Spiral2 配置 `AVIALA_WEBSITE_TOKEN`）。
+> 正式构建（`npm run build:spiral-docs`）会对每个 covered patch：从 npm 安装对应 `@aviala-design/spiral` → 打出 `static/docs/spiral/v/{version}/`，并额外打一份默认版到 `static/docs/spiral/assets/`。深链由 404 页就地挂载 SPA（保留顶栏；`head` 里会在首屏前改掉 404 标题并隐藏 404 占位）。本地 `dev` 仍是单份 Vite（当前 lockfile 包），页头版本 Select 会**软切换**文档修订（`doc-revisions` / prose）；正式环境在多份 `/v/{version}/` 构建之间整页跳转。发版后自动开文档 PR：见 [SPIRAL_DOCS_DISPATCH.zh_cn.md](./SPIRAL_DOCS_DISPATCH.zh_cn.md)（英文：[SPIRAL_DOCS_DISPATCH.md](./SPIRAL_DOCS_DISPATCH.md)；需在 Spiral2 配置 `AVIALA_WEBSITE_TOKEN`）。
 
 ---
 
@@ -82,6 +82,13 @@ npm run dev:site               # http://localhost:1313/docs/spiral/
 # 或分别开两个终端：
 #   npm run dev:spiral-docs
 #   npm run dev:hugo
+
+# 临时用邻仓 Spiral2 源码/产物（未发 npm 也能验组件）
+# 默认解析 `../Spiral2`；可用 DOCS_SPIRAL_ROOT 覆盖路径
+# tokens / icons 需在 Spiral2 里至少 build 过一次 dist
+npm run dev:spiral-docs:local
+npm run dev:site:local
+# 强制用 Spiral2 packages/ui/dist（不要 src）：DOCS_SPIRAL_LOCAL_DIST=1
 
 # 生产形态（静态产物嵌入 Hugo，无 HMR）
 npm run build:colorcat
@@ -101,10 +108,10 @@ hugo server -D --bind 127.0.0.1 --port 1313
 |-----|------|
 | http://127.0.0.1:1313/docs/ | 文档 hub |
 | http://127.0.0.1:1313/docs/spiral/ | 嵌入 Spiral 文档，保留站点顶栏 |
-| http://127.0.0.1:1313/docs/spiral/start/introduction | 返回 404 状态，但页面会经 SPA 回跳恢复到该路径 |
+| http://127.0.0.1:1313/docs/spiral/start/introduction | HTTP 404，但就地挂载 SPA（不闪 404 文案；title 在首屏前改掉） |
 | http://127.0.0.1:1313/tools/ | ColorCat 等工具页正常 |
 
-深链走的是 `themes/avialaStyle/layouts/404.html`：把原路径写入 `sessionStorage`，跳转到 `/docs/spiral/` 后由 `main.tsx` 还原。
+深链走的是 `themes/avialaStyle/layouts/404.html`：就地挂载 Spiral SPA；`head.html` 在首屏前把 title 改成文档标题并隐藏 404 占位。
 
 ---
 
@@ -123,6 +130,7 @@ hugo server -D --bind 127.0.0.1 --port 1313
 | 现象 | 可能原因 | 处理 |
 |------|----------|------|
 | `Missing "./xxx-effects.css" specifier in "@aviala-design/tokens"` | 已发布的 tokens 版本还没有该导出 | 在 Spiral2 发版后 `npm update @aviala-design/tokens` |
+| `DOCS_SPIRAL_LOCAL` 启动后样式/组件不对 | 邻仓 tokens/icons 未 build，或路径不是 `../Spiral2` | 在 Spiral2 执行 `pnpm --filter @aviala-design/tokens build` 与 icons build；或设 `DOCS_SPIRAL_ROOT` |
 | 构建报 `Failed to resolve entry for package @aviala-design/spiral` | 命中了包里指向未发布 `src/` 的 `development` 导出条件 | 确认 `apps/spiral-docs/vite.config.ts` 的 `resolve.conditions` 未被改动 |
 | 本地 `/docs/spiral/` 空白 | 没跑过 `npm run build:spiral-docs` | 先构建再启动 Hugo |
 | API 表格缺列或过时 | 安装的 Spiral 版本无 `props.json`，回退到旧副本 | 发版后 `npm update`，构建日志会显示实际来源版本 |

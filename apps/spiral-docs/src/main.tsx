@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@aviala-design/spiral";
 import { AppRoutes } from "./App";
+import { DocsVersionProvider } from "./components/DocsVersionProvider";
 import { getDocsBasename } from "./docs-base";
 import "./index.css";
 import "@aviala-design/tokens/ald-theme.css";
@@ -50,7 +51,9 @@ if (mount) {
     <StrictMode>
       <ThemeProvider defaultMode="light" defaultPresetId="ald" storageKey="aviala-spiral-docs">
         <BrowserRouter basename={docsBasename}>
-          <AppRoutes />
+          <DocsVersionProvider>
+            <AppRoutes />
+          </DocsVersionProvider>
         </BrowserRouter>
       </ThemeProvider>
     </StrictMode>

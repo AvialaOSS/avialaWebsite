@@ -1,23 +1,13 @@
 {{ define "main" }}
 {{ if eq .File.ContentBaseName "spiral" }}
-{{ $v := "0" }}
-{{ $defaultVer := "" }}
-{{ with site.Data.spiraldocs }}
-  {{ with .assetVersion }}{{ $v = . }}{{ end }}
-  {{ with .docsCoveredVersion }}{{ $defaultVer = . }}{{ end }}
-{{ end }}
-{{ if and (not hugo.IsServer) $defaultVer }}
-<script>
-  location.replace({{ printf "/docs/spiral/v/%s/" $defaultVer | jsonify }});
-</script>
-<p><a href="{{ printf "/docs/spiral/v/%s/" $defaultVer }}">前往 Spiral {{ $defaultVer }} 文档</a></p>
-{{ else }}
 <div class="docs-app-page" data-docs="spiral">
   <div id="spiral-docs-root"></div>
 </div>
 <script>
   document.body.classList.add("docs-app-active");
 </script>
+{{ $v := "0" }}
+{{ with site.Data.spiraldocs }}{{ with .assetVersion }}{{ $v = . }}{{ end }}{{ end }}
 {{ if hugo.IsServer }}
 <meta http-equiv="Cache-Control" content="no-store" />
 <script type="module">
@@ -58,9 +48,9 @@
   });
 </script>
 {{ else }}
+{{/* Root Hugo page keeps site chrome; always boot the unversioned basename SPA. */}}
 <link rel="stylesheet" crossorigin href="/docs/spiral/assets/spiral-docs.css?v={{ $v }}">
 <script type="module" crossorigin src="/docs/spiral/assets/spiral-docs.js?v={{ $v }}"></script>
-{{ end }}
 {{ end }}
 {{ else }}
 <div class="docs-page">

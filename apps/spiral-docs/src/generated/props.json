@@ -18,13 +18,32 @@
       },
       {
         "name": "mode",
-        "type": "enum",
+        "type": "\"default\" | \"primary\" | \"second\" | \"defaultCustom\" | \"noBackground\" | \"noBackgroundCustom\" | \"destructive\"",
+        "values": [
+          "default",
+          "primary",
+          "second",
+          "defaultCustom",
+          "noBackground",
+          "noBackgroundCustom",
+          "destructive"
+        ],
         "required": false,
         "description": "Figma `Mode` — preferred over legacy `variant`."
       },
       {
         "name": "size",
-        "type": "enum",
+        "type": "\"default\" | \"icon\" | \"tiny\" | \"small\" | \"regular\" | \"big\" | \"sm\" | \"lg\"",
+        "values": [
+          "default",
+          "icon",
+          "tiny",
+          "small",
+          "regular",
+          "big",
+          "sm",
+          "lg"
+        ],
         "required": false,
         "description": "Figma `Size` — preferred over legacy shadcn sizes."
       },
@@ -36,7 +55,15 @@
       },
       {
         "name": "variant",
-        "type": "enum",
+        "type": "\"default\" | \"destructive\" | \"secondary\" | \"outline\" | \"ghost\" | \"link\"",
+        "values": [
+          "default",
+          "destructive",
+          "secondary",
+          "outline",
+          "ghost",
+          "link"
+        ],
         "required": false,
         "description": "@deprecated Use `mode` instead."
       },
@@ -87,7 +114,11 @@
       },
       {
         "name": "size",
-        "type": "enum",
+        "type": "\"regular\" | \"big\"",
+        "values": [
+          "regular",
+          "big"
+        ],
         "defaultValue": "regular",
         "required": false,
         "description": "Figma `Size`"
@@ -154,6 +185,494 @@
         "required": false,
         "description": ""
       }
+    ],
+    "parts": [
+      {
+        "displayName": "SelectTrigger",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "size",
+            "type": "\"big\" | \"regular\"",
+            "values": [
+              "big",
+              "regular"
+            ],
+            "defaultValue": "regular",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "allRound",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "leftIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "rightIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "expandIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Override chevron expand icon (defaults to DirectionArrowDownLight)."
+          },
+          {
+            "name": "placeholder",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "SelectContent",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "portalled",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "Render without Portal — use inside nested overlays (e.g. ColorPicker popover)."
+          }
+        ]
+      },
+      {
+        "displayName": "SelectItem",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemFunction",
+            "type": "\"checkbox\" | \"radio\" | \"action\" | \"simple\" | \"form-checkbox\" | \"form-radio\"",
+            "values": [
+              "checkbox",
+              "radio",
+              "action",
+              "simple",
+              "form-checkbox",
+              "form-radio"
+            ],
+            "defaultValue": "action",
+            "required": false,
+            "description": "Figma Function variant (default Action Item)"
+          },
+          {
+            "name": "layout",
+            "type": "\"title\" | \"default\" | \"people\" | \"checked\"",
+            "values": [
+              "title",
+              "default",
+              "people",
+              "checked"
+            ],
+            "defaultValue": "default",
+            "required": false,
+            "description": "Figma Type variant"
+          },
+          {
+            "name": "leftIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showLeftIcon",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "rightIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showRightIcon",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "badge",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showBadge",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showMoreFunction",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "moreAction",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Inline action before the function icon (Figma MoreFunction)"
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Override trailing function slot (Figma function icon)"
+          },
+          {
+            "name": "showFunctionIcon",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "Show trailing function icon (Figma showFunctionIcon; hidden when layout=`checked` and selected)"
+          },
+          {
+            "name": "avatar",
+            "type": "ReactNode",
+            "required": false,
+            "description": "People layout — 26px avatar node; defaults to UsersUserCircle"
+          },
+          {
+            "name": "subtitle",
+            "type": "ReactNode",
+            "required": false,
+            "description": "People layout — secondary caption line"
+          }
+        ]
+      },
+      {
+        "displayName": "SelectItemGroup",
+        "description": "",
+        "props": [
+          {
+            "name": "label",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showDivider",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "SelectItemPeople",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "leftIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "rightIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemFunction",
+            "type": "\"checkbox\" | \"radio\" | \"action\" | \"simple\" | \"form-checkbox\" | \"form-radio\"",
+            "values": [
+              "checkbox",
+              "radio",
+              "action",
+              "simple",
+              "form-checkbox",
+              "form-radio"
+            ],
+            "defaultValue": "action",
+            "required": false,
+            "description": "Figma Function variant (default Action Item)"
+          },
+          {
+            "name": "showLeftIcon",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showRightIcon",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "badge",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showBadge",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showMoreFunction",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "moreAction",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Inline action before the function icon (Figma MoreFunction)"
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Override trailing function slot (Figma function icon)"
+          },
+          {
+            "name": "showFunctionIcon",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "Show trailing function icon (Figma showFunctionIcon; hidden when layout=`checked` and selected)"
+          },
+          {
+            "name": "avatar",
+            "type": "ReactNode",
+            "required": false,
+            "description": "People layout — 26px avatar node; defaults to UsersUserCircle"
+          },
+          {
+            "name": "subtitle",
+            "type": "ReactNode",
+            "required": false,
+            "description": "People layout — secondary caption line"
+          }
+        ]
+      },
+      {
+        "displayName": "SelectSubItem",
+        "description": "Figma Select Menu Item with nested sub-menu — opens a flyout panel on hover/focus.\nCompose with {@link SelectSubMenu} for sub-menu items.",
+        "props": [
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemFunction",
+            "type": "\"checkbox\" | \"radio\" | \"action\" | \"simple\" | \"form-checkbox\" | \"form-radio\"",
+            "values": [
+              "checkbox",
+              "radio",
+              "action",
+              "simple",
+              "form-checkbox",
+              "form-radio"
+            ],
+            "defaultValue": "action",
+            "required": false,
+            "description": "Figma Function variant (default Action Item — trailing chevron)"
+          },
+          {
+            "name": "layout",
+            "type": "\"title\" | \"default\" | \"people\" | \"checked\"",
+            "values": [
+              "title",
+              "default",
+              "people",
+              "checked"
+            ],
+            "defaultValue": "default",
+            "required": false,
+            "description": "Figma Type variant"
+          },
+          {
+            "name": "leftIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showLeftIcon",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "rightIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showRightIcon",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "badge",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showBadge",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showMoreFunction",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "moreAction",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showFunctionIcon",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "avatar",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "subtitle",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "side",
+            "type": "\"left\" | \"right\"",
+            "values": [
+              "left",
+              "right"
+            ],
+            "required": false,
+            "description": "Popover side when space allows (default right). Flips to left on collision."
+          },
+          {
+            "name": "sideOffset",
+            "type": "number",
+            "defaultValue": "8",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "portalled",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "Render flyout in a Portal (default false — keeps panel inside SelectContent)."
+          }
+        ]
+      },
+      {
+        "displayName": "SelectValue",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
     ]
   },
   "SegmentatorGroup": {
@@ -180,7 +699,11 @@
       },
       {
         "name": "mode",
-        "type": "enum",
+        "type": "\"nested\" | \"tiled\"",
+        "values": [
+          "nested",
+          "tiled"
+        ],
         "defaultValue": "nested",
         "required": false,
         "description": ""
@@ -204,6 +727,38 @@
         "type": "boolean",
         "required": false,
         "description": ""
+      }
+    ],
+    "parts": [
+      {
+        "displayName": "SegmentatorItem",
+        "description": "",
+        "props": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "leftIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "rightIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "iconOnly",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
       }
     ]
   },
@@ -265,21 +820,36 @@
     "props": [
       {
         "name": "type",
-        "type": "enum",
+        "type": "\"info\" | \"warning\" | \"error\" | \"success\" | \"neutral\"",
+        "values": [
+          "info",
+          "warning",
+          "error",
+          "success",
+          "neutral"
+        ],
         "defaultValue": "info",
         "required": false,
         "description": ""
       },
       {
         "name": "size",
-        "type": "enum",
+        "type": "\"default\" | \"small\"",
+        "values": [
+          "default",
+          "small"
+        ],
         "defaultValue": "default",
         "required": false,
         "description": ""
       },
       {
         "name": "appearance",
-        "type": "enum",
+        "type": "\"default\" | \"light\"",
+        "values": [
+          "default",
+          "light"
+        ],
         "defaultValue": "default",
         "required": false,
         "description": ""
@@ -374,21 +944,36 @@
     "props": [
       {
         "name": "type",
-        "type": "enum",
+        "type": "\"information\" | \"warning\" | \"wrong\" | \"success\" | \"normal\"",
+        "values": [
+          "information",
+          "warning",
+          "wrong",
+          "success",
+          "normal"
+        ],
         "defaultValue": "information",
         "required": false,
         "description": ""
       },
       {
         "name": "size",
-        "type": "enum",
+        "type": "\"default\" | \"small\"",
+        "values": [
+          "default",
+          "small"
+        ],
         "defaultValue": "default",
         "required": false,
         "description": ""
       },
       {
         "name": "mode",
-        "type": "enum",
+        "type": "\"default\" | \"primary\"",
+        "values": [
+          "default",
+          "primary"
+        ],
         "defaultValue": "default",
         "required": false,
         "description": ""
@@ -445,7 +1030,11 @@
     "props": [
       {
         "name": "size",
-        "type": "enum",
+        "type": "\"regular\" | \"big\"",
+        "values": [
+          "regular",
+          "big"
+        ],
         "defaultValue": "regular",
         "required": false,
         "description": ""
@@ -511,7 +1100,11 @@
       },
       {
         "name": "mode",
-        "type": "enum",
+        "type": "\"single\" | \"range\"",
+        "values": [
+          "single",
+          "range"
+        ],
         "defaultValue": "single",
         "required": false,
         "description": ""
@@ -583,6 +1176,218 @@
         "required": false,
         "description": ""
       }
+    ],
+    "parts": [
+      {
+        "displayName": "DatePicker",
+        "description": "Radix Popover closes on `window` blur (e.g. focusing DevTools). Suppress only\nblur-initiated closes; pointer-down and Escape must still dismiss on first interaction.",
+        "props": [
+          {
+            "name": "mode",
+            "type": "\"single\" | \"range\"",
+            "values": [
+              "single",
+              "range"
+            ],
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "open",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "defaultOpen",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onOpenChange",
+            "type": "(open: boolean) => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "size",
+            "type": "\"regular\" | \"big\"",
+            "values": [
+              "regular",
+              "big"
+            ],
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "minDate",
+            "type": "Date",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "maxDate",
+            "type": "Date",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "enableTime",
+            "type": "boolean",
+            "required": false,
+            "description": "Figma DatePickerLIstGroup — footer date/time Segmentator"
+          },
+          {
+            "name": "timeValue",
+            "type": "DatePickerTimeValue",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "defaultTimeValue",
+            "type": "DatePickerTimeValue",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onTimeChange",
+            "type": "(value: DatePickerTimeValue) => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "value",
+            "type": "Date | DateRange",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "defaultValue",
+            "type": "Date | DateRange",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onValueChange",
+            "type": "((value: Date) => void) | ((value: DateRange) => void)",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "DatePickerTrigger",
+        "description": "",
+        "props": [
+          {
+            "name": "size",
+            "type": "\"regular\" | \"big\"",
+            "values": [
+              "regular",
+              "big"
+            ],
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "allRound",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "leftIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "rightIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "rangePlaceholder",
+            "type": "string",
+            "defaultValue": "Start date - End date",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "displayValue",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "rangeSeparator",
+            "type": "string",
+            "defaultValue": "-",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "editable",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "When false, shows a read-only value instead of an editable input. Default true."
+          }
+        ]
+      },
+      {
+        "displayName": "DatePickerContent",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "portalled",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "DatePickerCalendar",
+        "description": "",
+        "props": [
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
     ]
   },
   "TimePickerField": {
@@ -591,7 +1396,11 @@
     "props": [
       {
         "name": "size",
-        "type": "enum",
+        "type": "\"regular\" | \"big\"",
+        "values": [
+          "regular",
+          "big"
+        ],
         "defaultValue": "regular",
         "required": false,
         "description": ""
@@ -671,6 +1480,186 @@
         "required": false,
         "description": ""
       }
+    ],
+    "parts": [
+      {
+        "displayName": "TimePicker",
+        "description": "",
+        "props": [
+          {
+            "name": "value",
+            "type": "TimePickerValue",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "defaultValue",
+            "type": "TimePickerValue",
+            "defaultValue": "{ hours: 17, minutes: 0 }",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onValueChange",
+            "type": "(value: TimePickerValue) => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "open",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "defaultOpen",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onOpenChange",
+            "type": "(open: boolean) => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "size",
+            "type": "\"regular\" | \"big\"",
+            "values": [
+              "regular",
+              "big"
+            ],
+            "defaultValue": "regular",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "TimePickerTrigger",
+        "description": "",
+        "props": [
+          {
+            "name": "size",
+            "type": "\"regular\" | \"big\"",
+            "values": [
+              "regular",
+              "big"
+            ],
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "allRound",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "leftIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "rightIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "placeholder",
+            "type": "string",
+            "defaultValue": "HH:mm",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "displayValue",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "TimePickerContent",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "portalled",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "TimePickerPanel",
+        "description": "",
+        "props": [
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "TimePickerWheels",
+        "description": "",
+        "props": [
+          {
+            "name": "value",
+            "type": "TimePickerWheelsValue",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "onChange",
+            "type": "(value: TimePickerWheelsValue) => void",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
     ]
   },
   "Switch": {
@@ -685,7 +1674,11 @@
       },
       {
         "name": "size",
-        "type": "enum",
+        "type": "\"small\" | \"regular\"",
+        "values": [
+          "small",
+          "regular"
+        ],
         "defaultValue": "regular",
         "required": false,
         "description": ""
@@ -698,14 +1691,22 @@
     "props": [
       {
         "name": "level",
-        "type": "enum",
+        "type": "\"caption\" | \"text\"",
+        "values": [
+          "caption",
+          "text"
+        ],
         "defaultValue": "caption",
         "required": false,
         "description": ""
       },
       {
         "name": "mode",
-        "type": "enum",
+        "type": "\"noBackground\" | \"noBackgroundCustom\"",
+        "values": [
+          "noBackground",
+          "noBackgroundCustom"
+        ],
         "defaultValue": "noBackground",
         "required": false,
         "description": ""
@@ -749,7 +1750,11 @@
     "props": [
       {
         "name": "size",
-        "type": "enum",
+        "type": "\"regular\" | \"big\"",
+        "values": [
+          "regular",
+          "big"
+        ],
         "defaultValue": "regular",
         "required": false,
         "description": "Figma `Size`"
@@ -798,6 +1803,56 @@
         "required": false,
         "description": "Figma Checkbox `Round`"
       }
+    ],
+    "parts": [
+      {
+        "displayName": "CheckboxGroup",
+        "description": "",
+        "props": [
+          {
+            "name": "direction",
+            "type": "\"vertical\" | \"horizontal\"",
+            "values": [
+              "vertical",
+              "horizontal"
+            ],
+            "defaultValue": "vertical",
+            "required": false,
+            "description": "Figma Checkbox Input Group `Direction`"
+          }
+        ]
+      },
+      {
+        "displayName": "CheckboxInput",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "round",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": "Figma Checkbox `Round`"
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Figma Typeface caption line"
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
     ]
   },
   "RadioGroup": {
@@ -812,10 +1867,63 @@
       },
       {
         "name": "direction",
-        "type": "enum",
+        "type": "\"vertical\" | \"horizontal\"",
+        "values": [
+          "vertical",
+          "horizontal"
+        ],
         "defaultValue": "vertical",
         "required": false,
         "description": "Figma Radio Input Group `Direction`"
+      }
+    ],
+    "parts": [
+      {
+        "displayName": "RadioGroupItem",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "RadioInput",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Figma Typeface caption line"
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "variant",
+            "type": "\"normal\" | \"card\"",
+            "values": [
+              "normal",
+              "card"
+            ],
+            "defaultValue": "normal",
+            "required": false,
+            "description": "Figma Radio Input `Style`"
+          }
+        ]
       }
     ]
   },
@@ -850,7 +1958,11 @@
       },
       {
         "name": "size",
-        "type": "enum",
+        "type": "\"big\" | \"regular\"",
+        "values": [
+          "big",
+          "regular"
+        ],
         "defaultValue": "regular",
         "required": false,
         "description": ""
@@ -955,6 +2067,379 @@
         "required": false,
         "description": ""
       }
+    ],
+    "parts": [
+      {
+        "displayName": "Cascader",
+        "description": "Radix Popover closes on `window` blur (e.g. focusing DevTools). Suppress only\nblur-initiated closes; pointer-down (outside click, item select, trigger toggle)\nand Escape must still dismiss on the first interaction.",
+        "props": [
+          {
+            "name": "options",
+            "type": "CascaderOption[]",
+            "defaultValue": "[]",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "value",
+            "type": "string[]",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "defaultValue",
+            "type": "string[]",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onValueChange",
+            "type": "(value: string[], selectedOptions: CascaderOption[]) => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "open",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "defaultOpen",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onOpenChange",
+            "type": "(open: boolean) => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "size",
+            "type": "\"big\" | \"regular\"",
+            "values": [
+              "big",
+              "regular"
+            ],
+            "defaultValue": "regular",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "changeOnSelect",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "Select parent nodes — Figma allows any-level selection (default true)."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "CascaderTrigger",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "size",
+            "type": "\"big\" | \"regular\"",
+            "values": [
+              "big",
+              "regular"
+            ],
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "allRound",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "leftIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "rightIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "expandIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "placeholder",
+            "type": "string",
+            "defaultValue": "Text",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "error",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "displayValue",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Override display when using manual composition without `options`."
+          },
+          {
+            "name": "separator",
+            "type": "string",
+            "defaultValue": "/",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "CascaderContent",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "portalled",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "CascaderMenu",
+        "description": "Figma Cascader Menu — horizontal column container (`348:13915`).",
+        "props": [
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "CascaderColumn",
+        "description": "Figma Cascader Menu Item Group Group — single cascade column (`345:20543`).",
+        "props": [
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "animateEnter",
+            "type": "boolean",
+            "required": false,
+            "description": "Slide + fade in when a new cascade column appears (options-driven menus set this automatically)."
+          },
+          {
+            "name": "animateExit",
+            "type": "boolean",
+            "required": false,
+            "description": "Slide + fade out before unmount when a cascade column is removed (options-driven menus set this automatically)."
+          },
+          {
+            "name": "exitLayout",
+            "type": "{ left: number; width: number; }",
+            "required": false,
+            "description": "Frozen layout slot for exit overlay columns (keeps flex width stable while animating out)."
+          }
+        ]
+      },
+      {
+        "displayName": "CascaderItem",
+        "description": "Figma Cascader Menu Item (`345:12487`).",
+        "props": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "pathPrefix",
+            "type": "string[]",
+            "defaultValue": "[]",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "itemFunction",
+            "type": "\"search\" | \"checkbox\" | \"radio\" | \"simple\" | \"form-checkbox\" | \"form-radio\" | \"custom\"",
+            "values": [
+              "search",
+              "checkbox",
+              "radio",
+              "simple",
+              "form-checkbox",
+              "form-radio",
+              "custom"
+            ],
+            "defaultValue": "simple",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "layout",
+            "type": "\"title\" | \"custom\" | \"default\"",
+            "values": [
+              "title",
+              "custom",
+              "default"
+            ],
+            "defaultValue": "default",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "leftIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showLeftIcon",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "rightIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showRightIcon",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "badge",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showBadge",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showFunctionIcon",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "hasChildren",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "CascaderItemGroup",
+        "description": "Figma Cascader Menu Item Group (`345:16552`).",
+        "props": [
+          {
+            "name": "label",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showDivider",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "CascaderOptionsMenu",
+        "description": "Renders cascade columns from `Cascader` `options` prop.",
+        "props": [
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
     ]
   },
   "ColorPicker": {
@@ -981,13 +2466,23 @@
       },
       {
         "name": "format",
-        "type": "enum",
+        "type": "\"hex\" | \"rgb\" | \"hsl\"",
+        "values": [
+          "hex",
+          "rgb",
+          "hsl"
+        ],
         "required": false,
         "description": ""
       },
       {
         "name": "defaultFormat",
-        "type": "enum",
+        "type": "\"hex\" | \"rgb\" | \"hsl\"",
+        "values": [
+          "hex",
+          "rgb",
+          "hsl"
+        ],
         "required": false,
         "description": ""
       },
@@ -1047,6 +2542,365 @@
         "required": false,
         "description": ""
       }
+    ],
+    "parts": [
+      {
+        "displayName": "ColorPickerTrigger",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "size",
+            "type": "\"big\" | \"regular\"",
+            "values": [
+              "big",
+              "regular"
+            ],
+            "defaultValue": "regular",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "allRound",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "placeholder",
+            "type": "string",
+            "defaultValue": "Select color",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ColorPickerContent",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showEyedropper",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showPresets",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ColorPickerPanel",
+        "description": "",
+        "props": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onChange",
+            "type": "(value: string, meta?: ColorPickerChangeMeta) => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "format",
+            "type": "\"hex\" | \"rgb\" | \"hsl\"",
+            "values": [
+              "hex",
+              "rgb",
+              "hsl"
+            ],
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "defaultFormat",
+            "type": "\"hex\" | \"rgb\" | \"hsl\"",
+            "values": [
+              "hex",
+              "rgb",
+              "hsl"
+            ],
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onFormatChange",
+            "type": "(format: ColorFormat) => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "presets",
+            "type": "string[]",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onPresetsChange",
+            "type": "(presets: string[]) => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "maxPresets",
+            "type": "number",
+            "defaultValue": "8",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showEyedropper",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showPresets",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ColorPickButton",
+        "description": "",
+        "props": [
+          {
+            "name": "color",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "selected",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ColorPickerArea",
+        "description": "",
+        "props": [
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onChange",
+            "type": "(value: string, meta?: ColorPickerChangeMeta) => void",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ColorPickerSlider",
+        "description": "",
+        "props": [
+          {
+            "name": "kind",
+            "type": "\"hue\" | \"alpha\"",
+            "values": [
+              "hue",
+              "alpha"
+            ],
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onChange",
+            "type": "(value: string, meta?: ColorPickerChangeMeta) => void",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ColorPickerInputs",
+        "description": "",
+        "props": [
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showEyedropper",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onChange",
+            "type": "(value: string, meta?: ColorPickerChangeMeta) => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "format",
+            "type": "\"hex\" | \"rgb\" | \"hsl\"",
+            "values": [
+              "hex",
+              "rgb",
+              "hsl"
+            ],
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onFormatChange",
+            "type": "(format: ColorFormat) => void",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ColorPickerPresets",
+        "description": "",
+        "props": [
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "presets",
+            "type": "string[]",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onPresetsChange",
+            "type": "(presets: string[]) => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "maxPresets",
+            "type": "number",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
     ]
   },
   "Navigation": {
@@ -1055,21 +2909,33 @@
     "props": [
       {
         "name": "as",
-        "type": "enum",
+        "type": "\"nav\" | \"div\"",
+        "values": [
+          "nav",
+          "div"
+        ],
         "defaultValue": "nav",
         "required": false,
         "description": ""
       },
       {
         "name": "background",
-        "type": "enum",
+        "type": "\"none\" | \"default\"",
+        "values": [
+          "none",
+          "default"
+        ],
         "defaultValue": "default",
         "required": false,
         "description": ""
       },
       {
         "name": "direction",
-        "type": "enum",
+        "type": "\"horizontal\" | \"vertical\"",
+        "values": [
+          "horizontal",
+          "vertical"
+        ],
         "defaultValue": "vertical",
         "required": false,
         "description": ""
@@ -1081,12 +2947,357 @@
         "required": false,
         "description": "Figma `Dividing line` variant"
       }
+    ],
+    "parts": [
+      {
+        "displayName": "NavigationBrand",
+        "description": "Figma Navigation Items `Content=Brand` (624:119379)",
+        "props": []
+      },
+      {
+        "displayName": "NavigationBrandTitle",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "NavigationSection",
+        "description": "Section label — docs grouping above tab items",
+        "props": []
+      },
+      {
+        "displayName": "NavigationGroup",
+        "description": "Figma Navigation Tab Items Group (1651:20222)",
+        "props": []
+      },
+      {
+        "displayName": "NavigationItemGroup",
+        "description": "Figma Navigation Vertical Tab Child Items Group (643:127007)",
+        "props": [
+          {
+            "name": "expanded",
+            "type": "boolean",
+            "required": false,
+            "description": "When set, animates expand/collapse. Omit for always-visible groups."
+          }
+        ]
+      },
+      {
+        "displayName": "NavigationItem",
+        "description": "Figma Navigation Items `Content=Tab Item` (624:119382, 624:119385, 643:118728)",
+        "props": [
+          {
+            "name": "active",
+            "type": "boolean",
+            "required": false,
+            "description": "Figma `Starting=Active` — also inferred from `aria-current=\"page\"`"
+          },
+          {
+            "name": "leftIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "rightIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "NavigationItemMenu",
+        "description": "",
+        "props": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": false,
+            "description": "Selected child value — similar to Select `value`."
+          },
+          {
+            "name": "defaultValue",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onValueChange",
+            "type": "(value: string) => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "open",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onOpenChange",
+            "type": "(open: boolean) => void",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "NavigationItemMenuTrigger",
+        "description": "Parent item — renders as a Navigation tab item and anchors the flyout.",
+        "props": [
+          {
+            "name": "active",
+            "type": "boolean",
+            "required": false,
+            "description": "Defaults to highlighted when the menu has a selected child."
+          },
+          {
+            "name": "leftIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "rightIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "NavigationItemMenuContent",
+        "description": "Flyout surface — right of the item in vertical, below it in horizontal.",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "NavigationItemMenuItem",
+        "description": "Child option — highlighted when selected, no check icon by default.",
+        "props": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "selected",
+            "type": "boolean",
+            "required": false,
+            "description": "Defaults to highlighted when it matches the menu value."
+          },
+          {
+            "name": "leftIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "rightIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "NavigationActions",
+        "description": "Figma Navigation Items `Content=Aciton Group` (624:119388)",
+        "props": []
+      }
     ]
   },
   "List": {
     "displayName": "List",
     "description": "Figma Structure Navigation → List root",
-    "props": []
+    "props": [],
+    "parts": [
+      {
+        "displayName": "ListTitle",
+        "description": "Figma List title row — Typography text level",
+        "props": []
+      },
+      {
+        "displayName": "ListGroup",
+        "description": "Figma List card container — rounded white surface for items",
+        "props": []
+      },
+      {
+        "displayName": "ListItem",
+        "description": "Figma Structure Navigation → List item",
+        "props": [
+          {
+            "name": "leading",
+            "type": "\"shaped\" | \"default\" | \"none\"",
+            "values": [
+              "shaped",
+              "default",
+              "none"
+            ],
+            "defaultValue": "shaped",
+            "required": false,
+            "description": "Figma `left icon setting` variant"
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Leading icon node — defaults to GeneralSetting"
+          },
+          {
+            "name": "title",
+            "type": "ReactNode",
+            "required": true,
+            "description": "Primary line (Typeface text)"
+          },
+          {
+            "name": "subtitle",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Secondary line (Typeface caption)"
+          },
+          {
+            "name": "actionLabel",
+            "type": "ReactNode",
+            "defaultValue": "Text",
+            "required": false,
+            "description": "Primary trailing button label"
+          },
+          {
+            "name": "action",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Override primary trailing button"
+          },
+          {
+            "name": "secondaryAction",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Secondary icon-only button for `action` type"
+          },
+          {
+            "name": "select",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Trailing select slot for `select` type"
+          },
+          {
+            "name": "switchProps",
+            "type": "Omit<SwitchProps, \"size\">",
+            "required": false,
+            "description": "Trailing switch props for `switch` type"
+          },
+          {
+            "name": "trailing",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Fully custom trailing region — overrides type presets.\nPass `null` to hide trailing actions + divider (same as `showTrailing={false}`).\nFor `action` type, the chevron is still shown unless `showChevron={false}`."
+          },
+          {
+            "name": "showTrailing",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "When false, hide trailing actions and the vertical divider.\n`action` type still shows the chevron unless `showChevron={false}`.\nDefault true."
+          },
+          {
+            "name": "showChevron",
+            "type": "boolean",
+            "required": false,
+            "description": "Show the trailing chevron for `action` type. Default true when `itemType=\"action\"`."
+          },
+          {
+            "name": "showTopDivider",
+            "type": "boolean",
+            "required": false,
+            "description": "Show the top hairline on the content row (between items).\nDefault: auto — hidden for the first child in a `ListGroup`, shown otherwise.\nSet explicitly to force show/hide."
+          },
+          {
+            "name": "selected",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "interactive",
+            "type": "boolean",
+            "required": false,
+            "description": "Enables hover highlight (auto when `onClick` / `href` is set)"
+          },
+          {
+            "name": "href",
+            "type": "string",
+            "required": false,
+            "description": "Render as a link — navigates when the row is activated"
+          },
+          {
+            "name": "target",
+            "type": "HTMLAttributeAnchorTarget",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ListItemGroup",
+        "description": "Convenience wrapper — titled list section (Figma List title + card)",
+        "props": [
+          {
+            "name": "label",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ListDivider",
+        "description": "Vertical divider between trailing actions (Figma `last` separator)",
+        "props": []
+      },
+      {
+        "displayName": "ListSeparator",
+        "description": "Horizontal separator between list groups",
+        "props": []
+      }
+    ]
   },
   "Typography": {
     "displayName": "Typography",
@@ -1094,14 +3305,27 @@
     "props": [
       {
         "name": "level",
-        "type": "enum",
+        "type": "\"display\" | \"headline1\" | \"headline2\" | \"title\" | \"subtitle\" | \"text\" | \"caption\"",
+        "values": [
+          "display",
+          "headline1",
+          "headline2",
+          "title",
+          "subtitle",
+          "text",
+          "caption"
+        ],
         "defaultValue": "text",
         "required": false,
         "description": ""
       },
       {
         "name": "tone",
-        "type": "enum",
+        "type": "\"default\" | \"white\"",
+        "values": [
+          "default",
+          "white"
+        ],
         "defaultValue": "default",
         "required": false,
         "description": "Figma `White` — light text on dark surfaces"
@@ -1115,7 +3339,19 @@
       },
       {
         "name": "as",
-        "type": "enum",
+        "type": "\"p\" | \"span\" | \"div\" | \"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\" | \"label\"",
+        "values": [
+          "p",
+          "span",
+          "div",
+          "h1",
+          "h2",
+          "h3",
+          "h4",
+          "h5",
+          "h6",
+          "label"
+        ],
         "defaultValue": "span",
         "required": false,
         "description": ""
@@ -1128,7 +3364,15 @@
     "props": [
       {
         "name": "content",
-        "type": "enum",
+        "type": "\"allCustom\" | \"textCaption\" | \"textCaptionSubtitle\" | \"textTitle\" | \"textHeadline2\" | \"textHeadline1\"",
+        "values": [
+          "allCustom",
+          "textCaption",
+          "textCaptionSubtitle",
+          "textTitle",
+          "textHeadline2",
+          "textHeadline1"
+        ],
         "defaultValue": "allCustom",
         "required": false,
         "description": "Figma `Content` preset"
@@ -1153,31 +3397,123 @@
       },
       {
         "name": "primaryContent",
-        "type": "enum",
+        "type": "\"number\" | \"text\"",
+        "values": [
+          "number",
+          "text"
+        ],
         "defaultValue": "text",
         "required": false,
         "description": "Per-line content mode for numeric text"
       },
       {
         "name": "secondaryContent",
-        "type": "enum",
+        "type": "\"number\" | \"text\"",
+        "values": [
+          "number",
+          "text"
+        ],
         "defaultValue": "text",
         "required": false,
         "description": ""
       },
       {
         "name": "tertiaryContent",
-        "type": "enum",
+        "type": "\"number\" | \"text\"",
+        "values": [
+          "number",
+          "text"
+        ],
         "defaultValue": "text",
         "required": false,
         "description": ""
       },
       {
         "name": "tone",
-        "type": "enum",
+        "type": "\"default\" | \"white\"",
+        "values": [
+          "default",
+          "white"
+        ],
         "defaultValue": "default",
         "required": false,
         "description": ""
+      }
+    ],
+    "parts": [
+      {
+        "displayName": "TypefacePair",
+        "description": "",
+        "props": [
+          {
+            "name": "primary",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Primary line — overrides preset first line"
+          },
+          {
+            "name": "secondary",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Secondary line — overrides preset second line"
+          },
+          {
+            "name": "tertiary",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Tertiary line — used by `textCaptionSubtitle`"
+          },
+          {
+            "name": "primaryContent",
+            "type": "\"number\" | \"text\"",
+            "values": [
+              "number",
+              "text"
+            ],
+            "defaultValue": "text",
+            "required": false,
+            "description": "Per-line content mode for numeric text"
+          },
+          {
+            "name": "secondaryContent",
+            "type": "\"number\" | \"text\"",
+            "values": [
+              "number",
+              "text"
+            ],
+            "defaultValue": "text",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "tertiaryContent",
+            "type": "\"number\" | \"text\"",
+            "values": [
+              "number",
+              "text"
+            ],
+            "defaultValue": "text",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "tone",
+            "type": "\"default\" | \"white\"",
+            "values": [
+              "default",
+              "white"
+            ],
+            "defaultValue": "default",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          }
+        ]
       }
     ]
   },
@@ -1229,7 +3565,11 @@
       },
       {
         "name": "direction",
-        "type": "enum",
+        "type": "\"vertical\" | \"horizontal\"",
+        "values": [
+          "vertical",
+          "horizontal"
+        ],
         "defaultValue": "vertical",
         "required": false,
         "description": "Figma `Direction` — vertical stacks label above control; horizontal places label beside"
@@ -1242,27 +3582,364 @@
     "props": [
       {
         "name": "as",
-        "type": "enum",
+        "type": "\"nav\" | \"div\"",
+        "values": [
+          "nav",
+          "div"
+        ],
         "defaultValue": "nav",
         "required": false,
         "description": ""
+      }
+    ],
+    "parts": [
+      {
+        "displayName": "AnchorItem",
+        "description": "",
+        "props": [
+          {
+            "name": "activated",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "indentLevel",
+            "type": "\"0\" | \"1\" | \"2\" | \"3\"",
+            "values": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ],
+            "defaultValue": "0",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          }
+        ]
       }
     ]
   },
   "Popover": {
     "displayName": "Popover",
     "description": "Thin controlled/uncontrolled wrapper around Radix `Popover.Root`. We don't add\nany custom close-suppression: a non-modal Popover already prevents focus-outside\nfrom dismissing (`onFocusOutside` is default-prevented by Radix), so a window\nblur never closes it — no extra bookkeeping needed, and it keeps Escape a\nsingle, predictable dismiss.",
-    "props": []
+    "props": [],
+    "parts": [
+      {
+        "displayName": "PopoverTrigger",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "PopoverContent",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "portalled",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "Render without Portal — use inside nested overlays."
+          },
+          {
+            "name": "showArrow",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": "Show a caret arrow pointing at the trigger (Figma with-arrow variant)."
+          },
+          {
+            "name": "flush",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": "Strip surface padding — consumer controls inner spacing."
+          },
+          {
+            "name": "appearance",
+            "type": "\"tooltip\" | \"default\" | \"primary\"",
+            "values": [
+              "tooltip",
+              "default",
+              "primary"
+            ],
+            "defaultValue": "default",
+            "required": false,
+            "description": "Visual skin of the surface:\n- `default` — light bordered panel (select-menu aligned), text typography, stroked caret.\n- `tooltip` — shared inverted tooltip skin (dark, caption text, borderless, solid caret).\n- `primary` — brand primary surface with white text, borderless, solid caret."
+          }
+        ]
+      },
+      {
+        "displayName": "PopoverAnchor",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ]
   },
   "Modal": {
     "displayName": "Modal",
     "description": "",
-    "props": []
+    "props": [],
+    "parts": [
+      {
+        "displayName": "ModalTrigger",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ModalOverlay",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ModalContent",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"large\"",
+            "values": [
+              "default",
+              "large"
+            ],
+            "defaultValue": "default",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "portalled",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "Render without Portal — use inside nested overlays."
+          },
+          {
+            "name": "showOverlay",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "Show the default overlay scrim."
+          }
+        ]
+      },
+      {
+        "displayName": "ModalHeader",
+        "description": "",
+        "props": [
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional leading status icon"
+          },
+          {
+            "name": "showIcon",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": "Show the leading icon slot"
+          },
+          {
+            "name": "showClose",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "Show the header close control"
+          },
+          {
+            "name": "closeLabel",
+            "type": "string",
+            "defaultValue": "Close dialog",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ModalHeaderText",
+        "description": "",
+        "props": [
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional leading status icon"
+          },
+          {
+            "name": "showIcon",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": "Show the leading icon slot"
+          },
+          {
+            "name": "showClose",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "Show the header close control"
+          },
+          {
+            "name": "closeLabel",
+            "type": "string",
+            "defaultValue": "Close dialog",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ModalTitle",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ModalDescription",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ModalBody",
+        "description": "",
+        "props": [
+          {
+            "name": "layout",
+            "type": "\"text\" | \"default\"",
+            "values": [
+              "text",
+              "default"
+            ],
+            "defaultValue": "default",
+            "required": false,
+            "description": "Figma `Content=Text` — title + body copy preset"
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ModalClose",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ]
   },
   "Tooltip": {
     "displayName": "Tooltip",
     "description": "",
-    "props": []
+    "props": [],
+    "parts": [
+      {
+        "displayName": "TooltipTrigger",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "TooltipContent",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showArrow",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "Show a caret arrow pointing at the trigger (default true)."
+          }
+        ]
+      }
+    ]
   },
   "Loading": {
     "displayName": "Loading",
@@ -1270,14 +3947,30 @@
     "props": [
       {
         "name": "level",
-        "type": "enum",
+        "type": "\"display\" | \"headline1\" | \"headline2\" | \"title\" | \"subtitle\" | \"text\" | \"caption\"",
+        "values": [
+          "display",
+          "headline1",
+          "headline2",
+          "title",
+          "subtitle",
+          "text",
+          "caption"
+        ],
         "defaultValue": "text",
         "required": false,
         "description": ""
       },
       {
         "name": "mode",
-        "type": "enum",
+        "type": "\"theme\" | \"themeText\" | \"black\" | \"white\" | \"inherit\"",
+        "values": [
+          "theme",
+          "themeText",
+          "black",
+          "white",
+          "inherit"
+        ],
         "defaultValue": "theme",
         "required": false,
         "description": ""
@@ -1304,14 +3997,26 @@
     "props": [
       {
         "name": "style",
-        "type": "enum",
+        "type": "\"theme\" | \"info\" | \"fail\" | \"warning\" | \"success\" | \"normal\"",
+        "values": [
+          "theme",
+          "info",
+          "fail",
+          "warning",
+          "success",
+          "normal"
+        ],
         "defaultValue": "theme",
         "required": false,
         "description": ""
       },
       {
         "name": "level",
-        "type": "enum",
+        "type": "\"caption\" | \"text\"",
+        "values": [
+          "caption",
+          "text"
+        ],
         "defaultValue": "caption",
         "required": false,
         "description": ""
@@ -1349,7 +4054,15 @@
     "props": [
       {
         "name": "level",
-        "type": "enum",
+        "type": "\"display\" | \"headline1\" | \"headline2\" | \"title\" | \"subtitle\" | \"text\"",
+        "values": [
+          "display",
+          "headline1",
+          "headline2",
+          "title",
+          "subtitle",
+          "text"
+        ],
         "defaultValue": "text",
         "required": false,
         "description": ""
@@ -1394,7 +4107,11 @@
     "props": [
       {
         "name": "level",
-        "type": "enum",
+        "type": "\"caption\" | \"text\"",
+        "values": [
+          "caption",
+          "text"
+        ],
         "defaultValue": "caption",
         "required": false,
         "description": ""
@@ -1470,21 +4187,34 @@
     "props": [
       {
         "name": "type",
-        "type": "enum",
+        "type": "\"default\" | \"success\" | \"fail\"",
+        "values": [
+          "default",
+          "success",
+          "fail"
+        ],
         "defaultValue": "default",
         "required": false,
         "description": ""
       },
       {
         "name": "size",
-        "type": "enum",
+        "type": "\"default\" | \"big\"",
+        "values": [
+          "default",
+          "big"
+        ],
         "defaultValue": "default",
         "required": false,
         "description": ""
       },
       {
         "name": "shape",
-        "type": "enum",
+        "type": "\"bar\" | \"ring\"",
+        "values": [
+          "bar",
+          "ring"
+        ],
         "defaultValue": "bar",
         "required": false,
         "description": ""
@@ -1517,14 +4247,22 @@
     "props": [
       {
         "name": "size",
-        "type": "enum",
+        "type": "\"default\" | \"small\"",
+        "values": [
+          "default",
+          "small"
+        ],
         "defaultValue": "default",
         "required": false,
         "description": ""
       },
       {
         "name": "orientation",
-        "type": "enum",
+        "type": "\"vertical\" | \"horizontal\"",
+        "values": [
+          "vertical",
+          "horizontal"
+        ],
         "defaultValue": "vertical",
         "required": false,
         "description": ""
@@ -1543,14 +4281,22 @@
       },
       {
         "name": "size",
-        "type": "enum",
+        "type": "\"big\" | \"default\"",
+        "values": [
+          "big",
+          "default"
+        ],
         "defaultValue": "default",
         "required": false,
         "description": ""
       },
       {
         "name": "type",
-        "type": "enum",
+        "type": "\"default\" | \"range\"",
+        "values": [
+          "default",
+          "range"
+        ],
         "defaultValue": "default",
         "required": false,
         "description": "Figma `Type` — single thumb vs range (two thumbs)"
@@ -1563,7 +4309,11 @@
     "props": [
       {
         "name": "style",
-        "type": "enum",
+        "type": "\"default\" | \"large\"",
+        "values": [
+          "default",
+          "large"
+        ],
         "defaultValue": "default",
         "required": false,
         "description": ""
@@ -1623,7 +4373,89 @@
   "ScrollPicker": {
     "displayName": "ScrollPicker",
     "description": "",
-    "props": []
+    "props": [],
+    "parts": [
+      {
+        "displayName": "ScrollPickerColumn",
+        "description": "",
+        "props": [
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "values",
+            "type": "readonly T[]",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "value",
+            "type": "T",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "onChange",
+            "type": "(value: T) => void",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "loop",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "formatValue",
+            "type": "(value: T) => ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "getValueKey",
+            "type": "(value: T, index: number) => string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "ScrollPickerItem",
+        "description": "",
+        "props": [
+          {
+            "name": "id",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "selected",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onSelect",
+            "type": "() => void",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ]
   },
   "Breadcrumb": {
     "displayName": "Breadcrumb",
@@ -1631,10 +4463,85 @@
     "props": [
       {
         "name": "size",
-        "type": "enum",
+        "type": "\"default\" | \"small\"",
+        "values": [
+          "default",
+          "small"
+        ],
         "defaultValue": "default",
         "required": false,
         "description": ""
+      }
+    ],
+    "parts": [
+      {
+        "displayName": "BreadcrumbItem",
+        "description": "",
+        "props": [
+          {
+            "name": "href",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "current",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "BreadcrumbEllipsis",
+        "description": "Figma `Storage item button` — collapsed middle path",
+        "props": [
+          {
+            "name": "activated",
+            "type": "boolean",
+            "required": false,
+            "description": "Figma `activated` on Storage item button.\nOFF = muted ellipsis; ON = full opacity + open Select Menu (when `menu` is set)."
+          },
+          {
+            "name": "defaultActivated",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "onActivatedChange",
+            "type": "(activated: boolean) => void",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "menu",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Collapsed middle-path items shown in the Select Menu when activated"
+          }
+        ]
+      },
+      {
+        "displayName": "BreadcrumbEllipsisItem",
+        "description": "Figma Select Menu Item inside Storage item button activated=ON",
+        "props": [
+          {
+            "name": "showChevron",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "Figma Select Menu Item trailing chevron — default true"
+          }
+        ]
       }
     ]
   },
@@ -1674,10 +4581,82 @@
     "props": [
       {
         "name": "direction",
-        "type": "enum",
+        "type": "\"horizontal\" | \"vertical\"",
+        "values": [
+          "horizontal",
+          "vertical"
+        ],
         "defaultValue": "horizontal",
         "required": false,
         "description": ""
+      }
+    ],
+    "parts": [
+      {
+        "displayName": "StepsItem",
+        "description": "",
+        "props": [
+          {
+            "name": "state",
+            "type": "\"default\" | \"done\" | \"fail\" | \"warning\" | \"waiting\" | \"inProgress\"",
+            "values": [
+              "default",
+              "done",
+              "fail",
+              "warning",
+              "waiting",
+              "inProgress"
+            ],
+            "defaultValue": "default",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "index",
+            "type": "number",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "StepsIcon",
+        "description": "",
+        "props": [
+          {
+            "name": "state",
+            "type": "\"default\" | \"done\" | \"fail\" | \"warning\" | \"waiting\" | \"inProgress\"",
+            "values": [
+              "default",
+              "done",
+              "fail",
+              "warning",
+              "waiting",
+              "inProgress"
+            ],
+            "defaultValue": "default",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "index",
+            "type": "number",
+            "required": false,
+            "description": "Step number shown for default / inProgress / waiting"
+          }
+        ]
       }
     ]
   },
@@ -1776,12 +4755,205 @@
   "Card": {
     "displayName": "Card",
     "description": "",
-    "props": []
+    "props": [],
+    "parts": [
+      {
+        "displayName": "CardHead",
+        "description": "",
+        "props": [
+          {
+            "name": "slotType",
+            "type": "\"select\" | \"switch\" | \"action\"",
+            "values": [
+              "select",
+              "switch",
+              "action"
+            ],
+            "defaultValue": "action",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "actionLabel",
+            "type": "ReactNode",
+            "defaultValue": "Text",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "action",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "secondaryAction",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "select",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "switchProps",
+            "type": "Omit<SwitchProps, \"size\">",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "trailing",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "CardBottom",
+        "description": "",
+        "props": [
+          {
+            "name": "slotType",
+            "type": "\"select\" | \"switch\" | \"action\"",
+            "values": [
+              "select",
+              "switch",
+              "action"
+            ],
+            "defaultValue": "action",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "actionLabel",
+            "type": "ReactNode",
+            "defaultValue": "Text",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "action",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "secondaryAction",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "select",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "switchProps",
+            "type": "Omit<SwitchProps, \"size\">",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "trailing",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ]
   },
   "Table": {
     "displayName": "Table",
     "description": "",
-    "props": []
+    "props": [],
+    "parts": [
+      {
+        "displayName": "TableRow",
+        "description": "",
+        "props": [
+          {
+            "name": "header",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "TableCell",
+        "description": "",
+        "props": [
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "text",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "people",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "badge",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "badgeLabel",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "switchProps",
+            "type": "SwitchProps",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "actions",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "checkboxProps",
+            "type": "Omit<Omit<CheckboxProps & RefAttributes<HTMLButtonElement>, \"ref\"> & { round?: boolean; } & RefAttributes<HTMLButtonElement>, \"ref\">",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ]
   },
   "NumberInput": {
     "displayName": "NumberInput",

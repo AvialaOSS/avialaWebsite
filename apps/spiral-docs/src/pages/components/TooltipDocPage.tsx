@@ -1,12 +1,21 @@
 import {
   Button,
+  ResponsiveTooltip,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@aviala-design/spiral";
 import { ComponentDocView } from "../../components/ComponentDocView";
-import { buildTooltipCode, tooltipKnobs, tooltipLiveCode } from "../../demos/component-demos";
+import { DemoBlock } from "../../components/DemoBlock";
+import {
+  buildResponsiveTooltipCode,
+  buildTooltipCode,
+  responsiveTooltipKnobs,
+  responsiveTooltipLiveCode,
+  tooltipKnobs,
+  tooltipLiveCode,
+} from "../../demos/component-demos";
 
 export function TooltipDocPage() {
   return (
@@ -27,6 +36,14 @@ export function TooltipDocPage() {
         knobs: tooltipKnobs,
         buildCode: buildTooltipCode,
       }}
-    />
+    >
+      <DemoBlock
+        title="ResponsiveTooltip（跨端，触摸保持 tooltip 外观）"
+        initialCode={responsiveTooltipLiveCode}
+        scope={{ ResponsiveTooltip, TooltipProvider, Button }}
+        knobs={responsiveTooltipKnobs}
+        buildCode={buildResponsiveTooltipCode}
+      />
+    </ComponentDocView>
   );
 }

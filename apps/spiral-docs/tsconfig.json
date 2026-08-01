@@ -24,6 +24,7 @@
     "src/generated/props.json",
     "src/generated/component-changelogs.json",
     "src/generated/npm-latest.json",
+    "src/generated/npm-releases.json",
     "src/versions/manifest.json"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]

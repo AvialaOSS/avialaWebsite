@@ -138,6 +138,18 @@ body.docs-app-active > footer {
   display: none;
 }
 
+/*
+ * Spiral Modal portals to body with z-index 50/51; Hugo header is 100.
+ * Raise overlays above site chrome while the docs SPA is active.
+ */
+body.docs-app-active .aviala-modal-overlay {
+  z-index: 1100;
+}
+
+body.docs-app-active .aviala-modal-content {
+  z-index: 1101;
+}
+
 body.docs-app-active[data-scroll-locked] {
   padding-top: var(--gap-gap-component-space, 6px) !important;
   padding-right: var(--gap-gap-component-space, 6px) !important;

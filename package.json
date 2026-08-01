@@ -8,9 +8,11 @@
     "dev:colorcat": "npm run dev -w @aviala/colorcat",
     "build:colorcat": "npm run build -w @aviala/colorcat",
     "dev:spiral-docs": "npm run dev -w @aviala/spiral-docs",
+    "dev:spiral-docs:local": "node apps/spiral-docs/scripts/with-local-spiral.mjs npm run dev -w @aviala/spiral-docs",
     "build:spiral-docs": "npm run build -w @aviala/spiral-docs",
     "dev:hugo": "hugo server -D --bind 127.0.0.1 --port 1313 --disableFastRender",
-    "dev:site": "npx --yes concurrently -k -n vite,hugo -c cyan,magenta \"npm run dev:spiral-docs\" \"npm run dev:hugo\""
+    "dev:site": "npx --yes concurrently -k -n vite,hugo -c cyan,magenta \"npm run dev:spiral-docs\" \"npm run dev:hugo\"",
+    "dev:site:local": "node apps/spiral-docs/scripts/with-local-spiral.mjs npx --yes concurrently -k -n vite,hugo -c cyan,magenta \"npm run dev -w @aviala/spiral-docs\" \"npm run dev:hugo\""
   },
   "version": "1.0.0",
   "description": "",

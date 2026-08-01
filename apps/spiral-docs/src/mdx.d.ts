@@ -27,6 +27,17 @@ declare module "./generated/npm-latest.json" {
   export default value;
 }
 
+declare module "./generated/npm-releases.json" {
+  const value: {
+    name: string;
+    repositoryUrl: string;
+    fetchedAt: string | null;
+    versions: Record<string, { publishedAt: string }>;
+    error?: string;
+  };
+  export default value;
+}
+
 declare module "./versions/manifest.json" {
   const value: {
     covered: string[];

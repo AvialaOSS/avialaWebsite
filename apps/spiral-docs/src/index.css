@@ -3,6 +3,8 @@
 
 @source "../../../node_modules/@aviala-design/spiral/dist";
 @source "../src";
+/* Populated when DOCS_SPIRAL_LOCAL=1 (sibling Spiral2 ui/src). */
+@import "./.generated/local-spiral-sources.css";
 
 @layer base {
   * {

@@ -1,10 +1,6 @@
 {{ define "main" }}
 {{ $v := "0" }}
-{{ $defaultVer := "" }}
-{{ with site.Data.spiraldocs }}
-  {{ with .assetVersion }}{{ $v = . }}{{ end }}
-  {{ with .docsCoveredVersion }}{{ $defaultVer = . }}{{ end }}
-{{ end }}
+{{ with site.Data.spiraldocs }}{{ with .assetVersion }}{{ $v = . }}{{ end }}{{ end }}
 <script>
 (function () {
   var path = location.pathname || "";
@@ -65,35 +61,44 @@
 </script>
 {{ else }}
 {{/*
-  Production: Hugo has no per-version content pages. Mount the correct SPA in place
-  on any /docs/spiral/** 404 (including /docs/spiral/v/{version}/**).
+  Production: all /docs/spiral/** deep links are Hugo 404s.
+  Mount the SPA in place (keep header). Do not redirect — that flashed the 404 UI.
+  html.spiral-docs-boot (set in head) hides the fallback before first paint.
 */}}
+<div class="docs-app-page" data-docs="spiral" id="spiral-docs-404-mount" hidden>
+  <div id="spiral-docs-root"></div>
+</div>
+<div class="docs-page" id="spiral-docs-404-fallback">
+  <div class="uui-emptyInfomation full-box">
+    <img src="/empty.svg" alt="empty" />
+    <div class="uui-typeface center">
+      <h1>页面不存在</h1>
+      <p>你访问的地址无法找到，请从导航返回首页或文档。</p>
+      <p>
+        <a class="uui-button Regular Second" href="/">返回首页</a>
+        <a class="uui-button Regular" href="/docs/">前往文档</a>
+      </p>
+    </div>
+  </div>
+</div>
 <script>
 (function () {
   var path = location.pathname || "";
-  if (path.indexOf("/docs/spiral/") !== 0 && path !== "/docs/spiral") {
-    // fall through to generic 404 markup below
-    return;
-  }
-  document.body.innerHTML = "";
+  var isSpiral = path.indexOf("/docs/spiral/") === 0 || path === "/docs/spiral";
+  if (!isSpiral) return;
+
   document.body.classList.add("docs-app-active");
-  var wrap = document.createElement("div");
-  wrap.className = "docs-app-page";
-  wrap.setAttribute("data-docs", "spiral");
-  var root = document.createElement("div");
-  root.id = "spiral-docs-root";
-  wrap.appendChild(root);
-  // Keep site chrome if present — append into main if we can find it.
-  var main = document.querySelector("main") || document.body;
-  main.innerHTML = "";
-  main.appendChild(wrap);
+  var mount = document.getElementById("spiral-docs-404-mount");
+  var fallback = document.getElementById("spiral-docs-404-fallback");
+  if (fallback) fallback.hidden = true;
+  if (mount) mount.hidden = false;
 
   var assetVersion = {{ printf "%q" $v }};
   var versionAssetVersions = {{ with site.Data.spiraldocs }}{{ with .versionAssetVersions }}{{ jsonify . }}{{ else }}{}{{ end }}{{ else }}{}{{ end }};
   var versionMatch = path.match(/^\/docs\/spiral\/v\/([^/]+)/);
   var docsVersion = versionMatch ? versionMatch[1] : "";
   var assetBase = docsVersion ? "/docs/spiral/v/" + docsVersion : "/docs/spiral";
-  var versionedAssetVersion = docsVersion && versionAssetVersions[docsVersion]
+  var versionedAssetVersion = (docsVersion && versionAssetVersions[docsVersion])
     ? versionAssetVersions[docsVersion]
     : assetVersion;
 
@@ -110,18 +115,5 @@
   document.body.appendChild(script);
 })();
 </script>
-<div class="docs-page">
-  <div class="uui-emptyInfomation full-box">
-    <img src="/empty.svg" alt="empty" />
-    <div class="uui-typeface center">
-      <h1>页面不存在</h1>
-      <p>你访问的地址无法找到，请从导航返回首页或文档。</p>
-      <p>
-        <a class="uui-button Regular Second" href="/">返回首页</a>
-        <a class="uui-button Regular" href="/docs/">前往文档</a>
-      </p>
-    </div>
-  </div>
-</div>
 {{ end }}
 {{ end }}
