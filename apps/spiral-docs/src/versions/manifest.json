@@ -3,7 +3,7 @@
     "2.2.0",
     "2.4.1"
   ],
-  "default": "2.2.0",
+  "default": "2.4.1",
   "versions": {
     "2.2.0": {
       "spiral": "2.2.0",
@@ -47,7 +47,7 @@
       "spiral": "2.4.1",
       "tokens": "2.4.1",
       "icons": "2.0.2",
-      "status": "draft",
+      "status": "ready",
       "components": {
         "Button": {
           "inherits": "2.2.0"
