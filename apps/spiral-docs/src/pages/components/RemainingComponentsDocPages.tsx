@@ -297,7 +297,7 @@ export function PaginationDocPage() {
     <DocShell
       title="Pagination 分页"
       description="Figma Structure Navigation → Pagination。"
-      prose="受控页码切换，可选跳转输入。"
+      prose="受控页码切换，可选跳转输入。总页数较多时点击省略号可打开页码跳转 Popover。"
       componentKey="Pagination"
       scope={{ Pagination, useState }}
       knobs={paginationKnobs}

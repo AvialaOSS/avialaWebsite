@@ -4,6 +4,8 @@ export type ComponentPropsDoc = {
   displayName: string;
   description: string;
   props: PropItem[];
+  /** Nested / compound exports shown as additional API tables. */
+  parts?: ComponentPropsDoc[];
 };
 
 export type PropsRegistry = Record<string, ComponentPropsDoc>;

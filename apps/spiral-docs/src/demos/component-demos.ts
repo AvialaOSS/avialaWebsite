@@ -32,6 +32,7 @@ export const buttonKnobs: KnobDef[] = [
   { kind: "boolean", name: "disabled", label: "disabled", defaultValue: false },
   { kind: "boolean", name: "loading", label: "loading", defaultValue: false },
   { kind: "boolean", name: "allRound", label: "allRound", defaultValue: false },
+  { kind: "boolean", name: "compact", label: "compact", defaultValue: false },
   { kind: "boolean", name: "iconOnly", label: "iconOnly", defaultValue: false },
   { kind: "boolean", name: "showLeftIcon", label: "leftIcon 显示", defaultValue: true },
   {
@@ -57,6 +58,7 @@ export function buildButtonCode(values: KnobValues): string {
   const disabled = Boolean(values.disabled);
   const loading = Boolean(values.loading);
   const allRound = Boolean(values.allRound);
+  const compact = Boolean(values.compact);
   const iconOnly = Boolean(values.iconOnly);
   const showLeftIcon = Boolean(values.showLeftIcon);
   const showRightIcon = Boolean(values.showRightIcon);
@@ -72,7 +74,7 @@ export function buildButtonCode(values: KnobValues): string {
   return `render(
   <Button
     mode=${JSON.stringify(mode)}
-    size=${JSON.stringify(size)}${jsxBool(disabled, "disabled")}${jsxBool(loading, "loading")}${jsxBool(allRound, "allRound")}${iconOnlyProp}${leftIconProp}${rightIconProp}${ariaLabelProp}
+    size=${JSON.stringify(size)}${jsxBool(disabled, "disabled")}${jsxBool(loading, "loading")}${jsxBool(allRound, "allRound")}${jsxBool(compact, "compact")}${iconOnlyProp}${leftIconProp}${rightIconProp}${ariaLabelProp}
   >${childrenBlock}</Button>
 );`;
 }
@@ -1087,19 +1089,31 @@ export const popoverKnobs: KnobDef[] = [
     options: ["top", "right", "bottom", "left"],
     defaultValue: "bottom",
   },
+  {
+    kind: "select",
+    name: "appearance",
+    label: "appearance",
+    options: ["default", "tooltip", "primary"],
+    defaultValue: "default",
+  },
   { kind: "boolean", name: "showArrow", label: "showArrow", defaultValue: false },
+  { kind: "boolean", name: "flush", label: "flush", defaultValue: false },
 ];
 
 export function buildPopoverCode(values: KnobValues): string {
   const side = String(values.side ?? "bottom");
+  const appearance = String(values.appearance ?? "default");
   const showArrow = Boolean(values.showArrow);
+  const flush = Boolean(values.flush);
+  const appearanceProp =
+    appearance === "default" ? "" : `\n      appearance=${JSON.stringify(appearance)}`;
 
   return `render(
   <Popover>
     <PopoverTrigger asChild>
       <Button mode="default">Open popover</Button>
     </PopoverTrigger>
-    <PopoverContent side=${JSON.stringify(side)}${jsxBool(showArrow, "showArrow")}>
+    <PopoverContent side=${JSON.stringify(side)}${appearanceProp}${jsxBool(showArrow, "showArrow")}${jsxBool(flush, "flush")}>
       Popover content with text typography.
     </PopoverContent>
   </Popover>
@@ -1108,6 +1122,35 @@ export function buildPopoverCode(values: KnobValues): string {
 
 export const popoverLiveCode = buildPopoverCode(
   Object.fromEntries(popoverKnobs.map((k) => [k.name, k.defaultValue]))
+);
+
+export const hoverPopoverKnobs: KnobDef[] = [
+  {
+    kind: "select",
+    name: "side",
+    label: "side",
+    options: ["top", "right", "bottom", "left"],
+    defaultValue: "top",
+  },
+  { kind: "boolean", name: "showArrow", label: "showArrow", defaultValue: true },
+];
+
+export function buildHoverPopoverCode(values: KnobValues): string {
+  const side = String(values.side ?? "top");
+  const showArrow = Boolean(values.showArrow);
+
+  return `render(
+  <HoverPopover
+    side=${JSON.stringify(side)}${jsxBool(showArrow, "showArrow")}
+    content={<Typography level="text">Rich preview content</Typography>}
+  >
+    <Button mode="default">Hover or focus</Button>
+  </HoverPopover>
+);`;
+}
+
+export const hoverPopoverLiveCode = buildHoverPopoverCode(
+  Object.fromEntries(hoverPopoverKnobs.map((k) => [k.name, k.defaultValue]))
 );
 
 export const modalKnobs: KnobDef[] = [
@@ -1191,6 +1234,38 @@ export function buildTooltipCode(values: KnobValues): string {
 
 export const tooltipLiveCode = buildTooltipCode(
   Object.fromEntries(tooltipKnobs.map((k) => [k.name, k.defaultValue]))
+);
+
+export const responsiveTooltipKnobs: KnobDef[] = [
+  {
+    kind: "select",
+    name: "side",
+    label: "side",
+    options: ["top", "right", "bottom", "left"],
+    defaultValue: "top",
+  },
+  { kind: "boolean", name: "showArrow", label: "showArrow", defaultValue: true },
+];
+
+export function buildResponsiveTooltipCode(values: KnobValues): string {
+  const side = String(values.side ?? "top");
+  const showArrow = Boolean(values.showArrow);
+  const showArrowProp = showArrow ? "" : "\n      showArrow={false}";
+
+  return `render(
+  <TooltipProvider>
+    <ResponsiveTooltip
+      side=${JSON.stringify(side)}${showArrowProp}
+      content="Desktop: hover tooltip · Touch: tap, same tooltip skin"
+    >
+      <Button mode="default">Save</Button>
+    </ResponsiveTooltip>
+  </TooltipProvider>
+);`;
+}
+
+export const responsiveTooltipLiveCode = buildResponsiveTooltipCode(
+  Object.fromEntries(responsiveTooltipKnobs.map((k) => [k.name, k.defaultValue]))
 );
 
 export const loadingKnobs: KnobDef[] = [
@@ -2349,7 +2424,7 @@ export const paginationKnobs: KnobDef[] = [
     kind: "string",
     name: "pageCount",
     label: "pageCount",
-    defaultValue: "3",
+    defaultValue: "20",
     placeholder: "总页数",
   },
   { kind: "boolean", name: "showJump", label: "showJump", defaultValue: true },
@@ -2358,7 +2433,7 @@ export const paginationKnobs: KnobDef[] = [
 
 export function buildPaginationCode(values: KnobValues): string {
   const page = Number(values.page ?? 1);
-  const pageCount = Number(values.pageCount ?? 3);
+  const pageCount = Number(values.pageCount ?? 20);
   const showJump = Boolean(values.showJump);
   const showSizeChanger = Boolean(values.showSizeChanger);
   return `function Demo() {
@@ -2366,7 +2441,7 @@ export function buildPaginationCode(values: KnobValues): string {
   return (
     <Pagination
       page={page}
-      pageCount={${Number.isFinite(pageCount) ? pageCount : 3}}
+      pageCount={${Number.isFinite(pageCount) ? pageCount : 20}}
       onPageChange={setPage}${jsxBool(showJump, "showJump")}${jsxBool(showSizeChanger, "showSizeChanger")}
     />
   );

@@ -1,8 +1,5 @@
-import {
-  getDefaultDocsVersion,
-  resolveComponentRevision,
-} from "../versions-registry";
-import { getDocsVersionFromBasename } from "../docs-base";
+import { resolveComponentRevision } from "../versions-registry";
+import { resolveReadingDocsVersion } from "../components/DocsVersionProvider";
 import type { ComponentDocRevision } from "./types";
 
 type RevisionModule = { default: ComponentDocRevision };
@@ -36,11 +33,9 @@ for (const [path, mod] of Object.entries(revisionModules)) {
   map.set(fileRev, revision);
 }
 
-/** Active docs package version for this SPA build / URL. */
+/** Active docs package version for this SPA build / soft-switch / URL. */
 export function getActiveDocsVersion(): string {
-  const baked = import.meta.env.VITE_DOCS_VERSION;
-  if (typeof baked === "string" && baked.length > 0) return baked;
-  return getDocsVersionFromBasename() ?? getDefaultDocsVersion();
+  return resolveReadingDocsVersion();
 }
 
 export function listComponentRevisions(component: string): string[] {

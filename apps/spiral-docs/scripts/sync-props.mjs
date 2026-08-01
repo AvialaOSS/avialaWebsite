@@ -8,8 +8,10 @@ import { findSpiralPackage, readSpiralVersion } from "./spiral-package.mjs";
 // the committed copy keeps the docs buildable against older published versions.
 // Local patches under props-patches/ merge after sync (e.g. NumberInput omitted from 1.0.0).
 const dirname = path.dirname(fileURLToPath(import.meta.url));
+const repoRoot = path.resolve(dirname, "../../..");
 const target = path.resolve(dirname, "../src/generated/props.json");
 const patchesDir = path.resolve(dirname, "props-patches");
+const siblingProps = path.resolve(repoRoot, "../Spiral2/packages/ui/dist/props.json");
 
 function applyLocalPatches(registry) {
   if (!existsSync(patchesDir)) return registry;
@@ -34,29 +36,48 @@ function applyLocalPatches(registry) {
   return next;
 }
 
-const packageDir = findSpiralPackage();
-const source = packageDir ? path.join(packageDir, "dist/props.json") : null;
+function resolvePropsPath() {
+  // Prefer sibling Spiral2 when present (local monorepo / dual-checkout).
+  // CI without a sibling checkout falls through to the installed package.
+  if (existsSync(siblingProps)) {
+    return { file: siblingProps, label: "sibling Spiral2 dist/props.json" };
+  }
+
+  const packageDir = findSpiralPackage();
+  const fromPackage = packageDir ? path.join(packageDir, "dist/props.json") : null;
+  if (fromPackage && existsSync(fromPackage)) {
+    return {
+      file: fromPackage,
+      label: `@aviala-design/spiral@${readSpiralVersion()}`,
+    };
+  }
+
+  return null;
+}
+
+const resolved = resolvePropsPath();
 
 let registry;
-if (!source || !existsSync(source)) {
+if (!resolved) {
   if (!existsSync(target)) {
     console.error(
-      "No props metadata available: install a Spiral release that ships props.json, or restore src/generated/props.json."
+      "No props metadata available: install a Spiral release that ships props.json, or restore src/generated/props.json.",
     );
     process.exit(1);
   }
   console.warn(
-    `@aviala-design/spiral@${readSpiralVersion()} ships no props.json; using the committed src/generated/props.json.`
+    `@aviala-design/spiral@${readSpiralVersion()} ships no props.json; using the committed src/generated/props.json.`,
   );
   registry = JSON.parse(readFileSync(target, "utf8"));
 } else {
   mkdirSync(path.dirname(target), { recursive: true });
-  copyFileSync(source, target);
+  copyFileSync(resolved.file, target);
   registry = JSON.parse(readFileSync(target, "utf8"));
+  console.log(`Synced props from ${resolved.label}`);
 }
 
 registry = applyLocalPatches(registry);
 writeFileSync(target, `${JSON.stringify(registry, null, 2)}\n`);
 
 const count = Object.keys(registry).length;
-console.log(`Synced ${count} component prop docs from @aviala-design/spiral@${readSpiralVersion()}`);
+console.log(`Wrote ${count} component prop docs → ${target}`);

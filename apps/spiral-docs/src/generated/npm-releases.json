@@ -1,0 +1,31 @@
+{
+  "name": "@aviala-design/spiral",
+  "repositoryUrl": "https://github.com/AvialaOSS/spiral-2",
+  "fetchedAt": "2026-07-31T23:13:53.596Z",
+  "versions": {
+    "0.0.2": {
+      "publishedAt": "2026-07-08T16:56:05.325Z"
+    },
+    "0.1.0": {
+      "publishedAt": "2026-07-28T15:59:11.829Z"
+    },
+    "0.2.0": {
+      "publishedAt": "2026-07-28T19:50:56.528Z"
+    },
+    "1.0.0": {
+      "publishedAt": "2026-07-29T03:43:38.097Z"
+    },
+    "2.0.0": {
+      "publishedAt": "2026-07-29T17:43:25.115Z"
+    },
+    "2.1.0": {
+      "publishedAt": "2026-07-30T05:30:53.663Z"
+    },
+    "2.2.0": {
+      "publishedAt": "2026-07-30T19:53:45.041Z"
+    },
+    "2.3.1": {
+      "publishedAt": "2026-07-31T06:55:06.719Z"
+    }
+  }
+}

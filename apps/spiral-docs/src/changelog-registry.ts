@@ -1,4 +1,5 @@
 import registry from "./generated/component-changelogs.json";
+import npmReleases from "./generated/npm-releases.json";
 import { flattenNavItems } from "./nav";
 
 export type ChangelogSections = Record<string, string[]>;
@@ -18,8 +19,11 @@ export type AggregatedChange = {
 
 export type AggregatedRelease = {
   version: string;
+  publishedAt?: string;
   changes: AggregatedChange[];
 };
+
+export const SPIRAL_PACKAGE_NAME = "@aviala-design/spiral";
 
 const SECTION_ORDER = ["Added", "Changed", "Fixed", "Deprecated", "Removed"] as const;
 
@@ -38,6 +42,32 @@ function compareSemverDesc(a: string, b: string): number {
 
 function componentDocPath(name: string): string | undefined {
   return flattenNavItems().find((item) => item.component === name)?.path;
+}
+
+export function getSpiralRepositoryUrl(): string {
+  return npmReleases.repositoryUrl || "https://github.com/AvialaOSS/spiral-2";
+}
+
+export type SpiralPackageManager = "npm" | "yarn" | "pnpm";
+
+export function getSpiralGithubReleaseUrl(version: string): string {
+  const tag = `${SPIRAL_PACKAGE_NAME}@${version}`;
+  return `${getSpiralRepositoryUrl()}/releases/tag/${encodeURIComponent(tag)}`;
+}
+
+export function getSpiralInstallCommand(
+  version: string,
+  manager: SpiralPackageManager = "npm",
+): string {
+  const pkg = `${SPIRAL_PACKAGE_NAME}@${version}`;
+  if (manager === "yarn") return `yarn add ${pkg}`;
+  if (manager === "pnpm") return `pnpm add ${pkg}`;
+  return `npm install ${pkg}`;
+}
+
+export function getReleasePublishedAt(version: string): string | undefined {
+  const versions = npmReleases.versions as Record<string, { publishedAt?: string } | undefined>;
+  return versions[version]?.publishedAt;
 }
 
 export function getComponentChangelogs(): ComponentChangelogs {
@@ -74,6 +104,7 @@ export function getAggregatedReleases(): AggregatedRelease[] {
     .sort(([a], [b]) => compareSemverDesc(a, b))
     .map(([version, changes]) => ({
       version,
+      publishedAt: getReleasePublishedAt(version),
       changes: changes.sort((a, b) => a.component.localeCompare(b.component)),
     }));
 }

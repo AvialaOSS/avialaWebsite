@@ -1,6 +1,14 @@
 /* 文档站布局 — 组件样式由 Spiral + tokens 提供 */
 
+/* Soft-switch remount wrapper — pass through the height chain to .docs-shell. */
+.docs-version-root {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .docs-shell {
+  position: relative;
   display: grid;
   grid-template-columns: var(--docs-sidebar-width, 260px) minmax(0, 1fr);
   height: 100%;
@@ -8,6 +16,7 @@
   overflow: hidden;
   background: var(--background);
   color: var(--foreground);
+  transition: grid-template-columns 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* 主背景与侧边栏背景 — 浅色纯白 / 深色纯黑 */
@@ -31,32 +40,45 @@
 }
 
 .docs-shell--sidebar-collapsed {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.docs-shell--sidebar-collapsed > .docs-sidebar {
-  display: none;
+  grid-template-columns: 0px minmax(0, 1fr);
 }
 
 .docs-sidebar {
   position: relative;
+  box-sizing: border-box;
+  width: var(--docs-sidebar-width, 260px);
+  min-width: 0;
   height: 100%;
-  min-height: 0;
   max-height: 100%;
   overflow: auto;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.docs-shell--sidebar-collapsed > .docs-sidebar {
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .docs-shell,
+  .docs-sidebar {
+    transition: none;
+  }
 }
 
 .docs-sidebar-nav {
   min-height: 100%;
 }
 
-.docs-sidebar-expand-btn {
-  display: none;
+.docs-sidebar-expand-btn.aviala-button {
+  display: none !important;
 }
 
 @media (min-width: 901px) {
-  .docs-shell--sidebar-collapsed .docs-sidebar-expand-btn {
-    display: inline-flex;
+  .docs-shell--sidebar-collapsed .docs-sidebar-expand-btn.aviala-button {
+    display: inline-flex !important;
   }
 }
 
@@ -106,54 +128,18 @@
   right: var(--gap-page-space, 24px);
 }
 
-.docs-stale-banner {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  padding: var(--gap-inside-space, 6px) var(--gap-page-space, 24px);
-  background: color-mix(in srgb, var(--warning, #c47b16) 14%, var(--docs-surface, var(--background)));
-  border-bottom: 1px solid var(--border);
-}
-
-.docs-stale-banner p {
-  margin: 0;
-}
-
-.docs-stale-banner code {
-  font-size: 0.92em;
-}
-
 .docs-version-switcher {
   display: inline-flex;
-  align-items: baseline;
-  gap: 4px;
-  padding: 4px 10px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--docs-surface, var(--background));
+  align-items: center;
+  gap: 8px;
 }
 
-.docs-version-switcher__label {
-  opacity: 0.64;
+.docs-version-switcher--header {
+  min-width: 7.5rem;
 }
 
-.docs-version-switcher__value {
-  font-variant-numeric: tabular-nums;
-}
-
-.docs-version-switcher--select {
-  cursor: pointer;
-}
-
-.docs-version-switcher__select {
-  border: 0;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  font-variant-numeric: tabular-nums;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
+.docs-version-switcher__trigger {
+  min-width: 7.5rem;
 }
 
 /* 双 class 提高特异性 — button-effects.css 中 noBackgroundCustom 的
@@ -283,8 +269,14 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--docs-toc-width, 200px);
   gap: var(--gap-page-space, 24px);
-  padding: var(--gap-page-space, 24px);
-  padding-bottom: 64px;
+  /* Clear floating theme / nav controls over the page header. */
+  --docs-float-size: 32px;
+  --docs-float-clearance: calc(
+    var(--gap-block-space, 14px) + var(--docs-float-size) + var(--gap-block-space, 14px)
+  );
+  /* Match L/R; top clearance already clears floating controls. */
+  --docs-body-inline-pad: var(--gap-page-space, 24px);
+  padding: var(--docs-float-clearance) var(--docs-body-inline-pad) 64px;
 }
 
 .docs-body--no-toc {
@@ -349,9 +341,49 @@ header.docs-page-header {
   margin-bottom: var(--gap-page-space, 24px);
 }
 
+.docs-page-header__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-component-space, 8px);
+  width: 100%;
+}
+
+.docs-page-header__title {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+}
+
+.docs-page-header__updates-btn {
+  flex: 0 0 auto;
+}
+
+.docs-page-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-component-space, 8px);
+  flex: 0 0 auto;
+}
+
 .docs-page-description {
   margin: var(--gap-component-space, 8px) 0 0;
   color: var(--muted-foreground);
+}
+
+.docs-page-header__stale {
+  margin-top: var(--gap-page-space, 24px);
+  width: 100%;
+}
+
+.docs-updates-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-page-space, 24px);
+  max-height: min(70vh, 640px);
+  overflow: auto;
 }
 
 /* 文档正文排版 — 只调行高与间距，外观仍交给 Spiral / tokens */
@@ -413,6 +445,7 @@ header.docs-page-header {
 }
 
 .docs-prose pre {
+  margin: 0 0 1.25em;
   overflow: auto;
   padding: var(--gap-block-space, 14px);
   border-radius: var(--border-radius-small, 8px);
@@ -445,6 +478,11 @@ header.docs-page-header {
 
 .docs-demo {
   margin: var(--gap-page-space, 24px) 0;
+}
+
+.docs-demo > .aviala-typography,
+.docs-props > .aviala-typography {
+  margin: 0 0 var(--gap-block-space, 14px);
 }
 
 .docs-demo-surface {
@@ -904,20 +942,12 @@ header.docs-page-header {
   }
 }
 
-.docs-revision-meta {
-  margin: -4px 0 12px;
-  opacity: 0.72;
-}
-
-.docs-revision-meta code {
-  font-size: 0.92em;
+.docs-revision-inherit {
+  margin: 0 0 16px;
+  width: 100%;
 }
 
 .docs-props {
-  margin-top: 40px;
-}
-
-.docs-changelog {
   margin-top: 40px;
 }
 
@@ -928,9 +958,109 @@ header.docs-page-header {
   gap: var(--gap-component-space, 8px);
 }
 
+.docs-changelog-overview-release-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-component-space, 8px) var(--gap-block-space, 14px);
+}
+
+.docs-changelog-overview .docs-changelog-overview-release-header > .aviala-typography,
+.docs-changelog-overview .docs-changelog-overview-release-header > h2 {
+  margin: 0;
+}
+
+.docs-changelog-overview-release-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-inside-space, 6px) var(--gap-component-space, 8px);
+}
+
+.docs-changelog-overview-release-date {
+  color: var(--muted-foreground, var(--foreground));
+  opacity: 0.72;
+}
+
+.docs-changelog-use-version__anchor {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.docs-changelog-use-version__trigger.aviala-select-trigger {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.docs-changelog-use-version__button {
+  pointer-events: none;
+}
+
+.docs-changelog-use-version__anchor:has(.docs-changelog-use-version__trigger:focus-visible)
+  .docs-changelog-use-version__button {
+  outline: 2px solid var(--ring, var(--primary));
+  outline-offset: 2px;
+}
+
+.docs-changelog-overview-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: var(--gap-block-space, 14px);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius-small, 8px);
+  background: var(--docs-surface, var(--background));
+}
+
+.docs-changelog-overview .docs-changelog-overview-component-heading,
+.docs-changelog-overview-component-heading {
+  margin: 0;
+}
+
+.docs-changelog-overview-component-heading:not(:has(.docs-changelog-overview-component-name)) {
+  margin-bottom: var(--gap-inside-space, 6px);
+}
+
+.docs-changelog-overview .docs-changelog-overview-component-name,
+.docs-changelog-overview-component-name {
+  margin-top: calc(-1 * (var(--padding-min, 2px) + var(--padding-small, 6px)));
+  margin-right: 0;
+  margin-bottom: calc(var(--gap-inside-space, 6px) - var(--padding-min, 2px));
+  margin-left: calc(-1 * var(--padding-small, 6px));
+  justify-content: flex-start;
+  border-radius: var(--border-radius-extra-small-2, 6px);
+  color: var(--foreground);
+}
+
+.docs-changelog-overview-component-heading .docs-changelog-overview-component-name .aviala-link__label {
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+  color: inherit;
+}
+
+.docs-changelog-overview-component + .docs-changelog-overview-component
+  .docs-changelog-overview-component-name {
+  margin-top: calc(-1 * var(--padding-min, 2px));
+}
+
+.docs-changelog-overview .docs-changelog-overview-component-name.aviala-link:hover:not([data-disabled="true"]),
+.docs-changelog-overview-component-name.aviala-link:hover:not([data-disabled="true"]) {
+  color: var(--link-fg-custom, var(--foreground));
+}
+
 .docs-changelog-release + .docs-changelog-release,
 .docs-changelog-overview-component + .docs-changelog-overview-component {
-  margin-top: var(--gap-inside-space, 6px);
+  margin-top: var(--gap-component-space, 8px);
   padding-top: var(--gap-component-space, 8px);
   border-top: 1px solid var(--border);
 }
@@ -947,12 +1077,14 @@ header.docs-page-header {
   margin-top: 4px;
 }
 
+.docs-changelog-overview .docs-changelog-section-title,
 .docs-changelog-section-title {
   margin: 0 0 2px;
   color: var(--muted-foreground, var(--foreground));
   opacity: 0.72;
 }
 
+.docs-changelog-overview .docs-changelog-list,
 .docs-changelog-list {
   margin: 0;
   padding-left: 1.25em;
@@ -1014,8 +1146,24 @@ header.docs-page-header {
   align-self: start;
   max-height: calc(100vh - 96px);
   overflow: auto;
-  padding-left: var(--gap-component-space, 8px);
-  border-left: 1px solid var(--border);
+  padding-left: 0;
+}
+
+.docs-toc-title {
+  margin: 0 0 var(--gap-component-space, 8px);
+  color: var(--muted-foreground);
+}
+
+.docs-toc-float-panel {
+  width: min(260px, calc(100vw - 32px));
+  max-height: min(70vh, 420px);
+  overflow: auto;
+  padding: var(--gap-block-space, 14px);
+}
+
+.docs-toc-float-title {
+  margin: 0 0 var(--gap-component-space, 8px);
+  color: var(--muted-foreground);
 }
 
 .docs-pager {
@@ -1026,7 +1174,7 @@ header.docs-page-header {
   height: auto;
   max-height: none;
   overflow: visible;
-  margin-top: 48px;
+  margin-top: var(--gap-page-space, 24px);
   padding-top: var(--gap-page-space, 24px);
   padding-bottom: 0;
   padding-left: 0;
@@ -1040,17 +1188,37 @@ header.docs-page-header {
   box-sizing: border-box;
 }
 
-.docs-mobile-menu-btn,
+.docs-contrib-list-link {
+  display: block;
+  margin-top: 48px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.docs-contrib-list-link:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-small, 8px);
+}
+
+.docs-contrib-list {
+  width: 100%;
+  max-width: var(--docs-content-max, 960px);
+}
+
+/* First (only) item: hide content top hairline until Spiral ships showTopDivider / first-child rule. */
+.docs-contrib-list .aviala-list-item__content {
+  border-top: none;
+}
+
+/* Beat Button `inline-flex` utility so desktop never shows the mobile menu control. */
+.docs-mobile-menu-btn.aviala-button,
 .docs-mobile-drawer,
 .docs-mobile-backdrop {
-  display: none;
+  display: none !important;
 }
 
 @media (max-width: 1100px) {
-  .docs-toc {
-    display: none;
-  }
-
   .docs-body {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -1387,15 +1555,25 @@ header.docs-page-header {
     display: none;
   }
 
-  .docs-mobile-menu-btn {
-    display: inline-flex;
+  /* Clear floating menu / theme controls above the page header. */
+  .docs-body {
+    padding-top: var(--docs-float-clearance);
+    padding-left: var(--docs-body-inline-pad);
+    padding-right: var(--docs-body-inline-pad);
+  }
+
+  .docs-mobile-menu-btn.aviala-button {
+    display: inline-flex !important;
   }
 
   .docs-mobile-drawer {
-    display: block;
-    position: fixed;
+    display: block !important;
+    /* Contain within .docs-shell (not the viewport / Hugo chrome). */
+    position: absolute;
     inset: 0 auto 0 0;
-    width: min(86vw, 320px);
+    width: min(86%, 320px);
+    max-width: 100%;
+    height: 100%;
     z-index: 40;
     transform: translateX(-100%);
     transition: transform 0.2s ease;
@@ -1408,11 +1586,12 @@ header.docs-page-header {
   .docs-mobile-drawer .docs-sidebar {
     display: block;
     width: 100%;
+    height: 100%;
   }
 
   .docs-mobile-backdrop {
-    display: block;
-    position: fixed;
+    display: block !important;
+    position: absolute;
     inset: 0;
     z-index: 30;
     border: 0;

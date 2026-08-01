@@ -1,6 +1,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
 <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" .Title site.Title }}{{ end }}</title>
+{{/* Spiral SPA deep links are served as Hugo 404 — fix title + hide 404 chrome before paint. */}}
+<script>
+(function () {
+  var path = location.pathname || "";
+  if (path.indexOf("/docs/spiral/") !== 0 && path !== "/docs/spiral") return;
+  document.documentElement.classList.add("spiral-docs-boot");
+  document.title = "Spiral 2 组件文档 — Aviala Design";
+})();
+</script>
+<style>
+  html.spiral-docs-boot #spiral-docs-404-fallback { display: none !important; }
+  html.spiral-docs-boot #spiral-docs-404-mount[hidden] { display: flex !important; }
+</style>
 {{ partial "head/css.html" . }}
 {{ partial "head/js.html" . }}
 {{ partial "head/favicon.html" . }}

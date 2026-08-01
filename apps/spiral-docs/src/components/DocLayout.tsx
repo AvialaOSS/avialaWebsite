@@ -1,10 +1,11 @@
 import {
+  CommunicateMessages,
   DirectionArrowLeftLight,
   DirectionArrowRightLight,
   GeneralExpandSidebar,
   GeneralMenu,
 } from "@aviala-design/icons";
-import { Button } from "@aviala-design/spiral";
+import { Button, List, ListItem } from "@aviala-design/spiral";
 import {
   startTransition,
   useDeferredValue,
@@ -15,12 +16,12 @@ import {
 } from "react";
 import { useLocation, useNavigate, useOutlet } from "react-router-dom";
 import { getNavItemByPath, getNavPathIndex, navPathToHref } from "../nav";
-import { ComponentChangelog } from "./ComponentChangelog";
-import { DocsStaleBanner } from "./DocsStaleBanner";
-import { DocsVersionSwitcher } from "./DocsVersionSwitcher";
 import { getAdjacentPages, Sidebar } from "./Sidebar";
 import { TableOfContents } from "./TableOfContents";
 import { ThemeToolbar } from "./ThemeToolbar";
+
+const DOCS_CONTRIB_HREF =
+  "https://github.com/AvialaOSS/avialaWebsite/tree/main/apps/spiral-docs";
 
 type DocsNavDirection = "forward" | "back";
 
@@ -97,12 +98,14 @@ export function DocLayout() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   /** Urgent highlight — updates on click before the route transition commits. */
   const [eagerPath, setEagerPath] = useState(location.pathname);
+  const [isMobileNav, setIsMobileNav] = useState(false);
+  const [compactToc, setCompactToc] = useState(false);
 
   const pathname = location.pathname;
   const isContentPending = isOutletPending || eagerPath !== displayedPath;
   const hideToc =
     displayedPath === "/reference/icons" || displayedPath === "/reference/icons/playground";
-  const pageComponent = getNavItemByPath(displayedPath)?.component;
+  const pageLabel = getNavItemByPath(displayedPath)?.label;
   const { prev, next } = getAdjacentPages(
     getNavPathIndex(pathname) >= 0 ? pathname : "/start/introduction"
   );
@@ -112,8 +115,37 @@ export function DocLayout() {
   }, [pathname]);
 
   useEffect(() => {
+    const mq = window.matchMedia("(max-width: 900px)");
+    const sync = () => {
+      const mobile = mq.matches;
+      setIsMobileNav(mobile);
+      if (!mobile) {
+        setMobileOpen(false);
+      }
+    };
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1100px)");
+    const sync = () => setCompactToc(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
     mainRef.current?.scrollTo(0, 0);
   }, [displayedPath]);
+
+  useEffect(() => {
+    const title = pageLabel
+      ? `${pageLabel} — Spiral 2 · Aviala Design`
+      : "Spiral 2 组件文档 — Aviala Design";
+    document.title = title;
+  }, [pageLabel]);
 
   const previewPath = (path: string) => {
     setEagerPath(path);
@@ -151,10 +183,9 @@ export function DocLayout() {
       ) : null}
 
       <div ref={mainRef} className="docs-main">
-        <DocsStaleBanner />
         <div className="docs-floating-controls">
           <div className="docs-floating-controls__left">
-            {sidebarCollapsed ? (
+            {sidebarCollapsed && !isMobileNav ? (
               <Button
                 type="button"
                 mode="noBackgroundCustom"
@@ -166,32 +197,62 @@ export function DocLayout() {
                 onClick={() => setSidebarCollapsed(false)}
               />
             ) : null}
-            <Button
-              type="button"
-              mode="noBackgroundCustom"
-              size="regular"
-              iconOnly
-              className="docs-float-btn docs-mobile-menu-btn"
-              aria-label="打开导航"
-              leftIcon={<GeneralMenu aria-hidden />}
-              onClick={() => setMobileOpen(true)}
-            />
+            {isMobileNav ? (
+              <Button
+                type="button"
+                mode="noBackgroundCustom"
+                size="regular"
+                iconOnly
+                className="docs-float-btn docs-mobile-menu-btn"
+                aria-label="打开导航"
+                leftIcon={<GeneralMenu aria-hidden />}
+                onClick={() => setMobileOpen(true)}
+              />
+            ) : null}
           </div>
           <div className="docs-floating-controls__right">
-            <DocsVersionSwitcher />
+            {!hideToc && compactToc ? (
+              <TableOfContents
+                key={`toc-float-${displayedPath}`}
+                containerRef={contentRef}
+                variant="float"
+              />
+            ) : null}
             <ThemeToolbar />
           </div>
         </div>
 
-        <div className={`docs-body${hideToc ? " docs-body--no-toc" : ""}`}>
+        <div className={`docs-body${hideToc || compactToc ? " docs-body--no-toc" : ""}`}>
           <article
             ref={contentRef}
             className={`docs-content${isContentPending ? " docs-content--pending" : ""}`}
           >
             <DocsPageTransition pathname={displayedPath}>
               {deferredOutlet}
-              {pageComponent ? <ComponentChangelog component={pageComponent} /> : null}
             </DocsPageTransition>
+            <a
+              className="docs-contrib-list-link"
+              href={DOCS_CONTRIB_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <List className="docs-contrib-list">
+                <ListItem
+                  itemType="action"
+                  leading="default"
+                  icon={<CommunicateMessages thickness="Medium" mode="fill" aria-hidden />}
+                  title="对文档有改进意见吗？"
+                  subtitle="欢迎编辑文档，为更多开发者提供帮助"
+                  /* Published List hides chevron with trailing={null}; keep chevron only. */
+                  trailing={
+                    <span className="aviala-list-item__chevron" aria-hidden>
+                      <DirectionArrowRightLight width={18} height={18} />
+                    </span>
+                  }
+                  interactive
+                />
+              </List>
+            </a>
             <footer className="docs-pager" aria-label="相邻文档">
               {prev ? (
                 <Button
@@ -221,9 +282,9 @@ export function DocLayout() {
               )}
             </footer>
           </article>
-          {hideToc ? null : (
-            <TableOfContents key={displayedPath} containerRef={contentRef} />
-          )}
+          {!hideToc && !compactToc ? (
+            <TableOfContents key={`toc-rail-${displayedPath}`} containerRef={contentRef} />
+          ) : null}
         </div>
       </div>
     </div>

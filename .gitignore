@@ -15,5 +15,6 @@ dist/
 /static/docs/spiral/
 /data/spiraldocs.json
 /apps/spiral-docs/.docs-pkg-cache/
+/apps/spiral-docs/src/.generated/
 /.workbuddy
 /.cursor

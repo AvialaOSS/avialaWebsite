@@ -47,15 +47,21 @@ export function resolveComponentRevision(
 
   const entry = manifest.versions[docsVersion];
   const pointer = entry?.components[component];
-  if (!pointer) return undefined;
-  if (pointer.rev) return pointer.rev;
-  if (pointer.inherits) {
+  if (pointer?.rev) return pointer.rev;
+  if (pointer?.inherits) {
     // Prefer walking another docs-version entry; if that version is absent,
     // treat `inherits` as a direct content-revision id (common for baselines).
     if (manifest.versions[pointer.inherits]) {
       return resolveComponentRevision(pointer.inherits, component, seen);
     }
     return pointer.inherits;
+  }
+
+  // No pointer at this docs version → fall back to the previous covered version.
+  const coveredAsc = [...manifest.covered].sort((a, b) => -compareSemverDesc(a, b));
+  const idx = coveredAsc.indexOf(docsVersion);
+  if (idx > 0) {
+    return resolveComponentRevision(coveredAsc[idx - 1], component, seen);
   }
   return undefined;
 }
