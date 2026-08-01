@@ -48,6 +48,37 @@ if (existsSync(changelogsPath)) {
   }
 }
 
+/**
+ * tokens/icons versions do not track the spiral package version — resolve from
+ * the published spiral package dependencies (falls back to previous entry).
+ */
+function resolveCompanionVersions(version) {
+  const result = spawnSync(
+    process.platform === "win32" ? "npm.cmd" : "npm",
+    ["view", `@aviala-design/spiral@${version}`, "dependencies", "--json"],
+    { encoding: "utf8", shell: process.platform === "win32" },
+  );
+  if (result.status === 0 && result.stdout?.trim()) {
+    try {
+      const deps = JSON.parse(result.stdout);
+      const tokens = deps["@aviala-design/tokens"];
+      const icons = deps["@aviala-design/icons"];
+      if (tokens && icons) return { tokens, icons };
+    } catch {
+      // fall through
+    }
+  }
+  console.warn(
+    `Could not resolve companion versions from npm for spiral@${version}; using previous manifest entry.`,
+  );
+  return {
+    tokens: previousEntry?.tokens ?? version,
+    icons: previousEntry?.icons ?? "2.0.2",
+  };
+}
+
+const companions = resolveCompanionVersions(spiralVersion);
+
 const components = {};
 const prevComponents = previousEntry?.components ?? {};
 for (const name of Object.keys(prevComponents)) {
@@ -64,8 +95,8 @@ for (const name of changedComponents) {
 manifest.covered.push(spiralVersion);
 manifest.versions[spiralVersion] = {
   spiral: spiralVersion,
-  tokens: spiralVersion,
-  icons: previousEntry?.icons ?? "2.0.2",
+  tokens: companions.tokens,
+  icons: companions.icons,
   status: "draft",
   components,
 };

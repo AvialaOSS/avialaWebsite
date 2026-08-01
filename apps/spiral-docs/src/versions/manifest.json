@@ -76,8 +76,8 @@
     },
     "2.4.1": {
       "spiral": "2.4.1",
-      "tokens": "2.4.1",
-      "icons": "2.0.2",
+      "tokens": "2.2.1",
+      "icons": "2.2.0",
       "status": "ready",
       "components": {
         "Button": { "inherits": "2.2.0" },
