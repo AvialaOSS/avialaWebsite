@@ -1,4 +1,4 @@
-import { RadioGroup, RadioGroupItem } from "@aviala-design/spiral";
+import { RadioGroup, RadioGroupItem, RadioInput } from "@aviala-design/spiral";
 import { ComponentDocView } from "../../components/ComponentDocView";
 import { buildRadioCode, radioKnobs, radioLiveCode } from "../../demos/component-demos";
 
@@ -6,7 +6,7 @@ export function RadioDocPage() {
   return (
     <ComponentDocView
       component="RadioGroup"
-      scope={{ RadioGroup, RadioGroupItem }}
+      scope={{ RadioGroup, RadioGroupItem, RadioInput }}
       fallback={{
         title: "RadioGroup 单选组",
         description: "Figma Information Collect → Radio。用于互斥选项选择。",
