@@ -1,5 +1,8 @@
 {
-  "covered": ["2.2.0"],
+  "covered": [
+    "2.2.0",
+    "2.4.1"
+  ],
   "default": "2.2.0",
   "versions": {
     "2.2.0": {
@@ -8,16 +11,74 @@
       "icons": "2.0.2",
       "status": "ready",
       "components": {
-        "Button": { "inherits": "2.1.0" },
-        "Popover": { "rev": "2.2.0" },
-        "Tooltip": { "rev": "2.2.0" },
-        "Pagination": { "inherits": "2.1.0" },
-        "Navigation": { "inherits": "2.1.0" },
-        "SegmentatorGroup": { "inherits": "2.1.0" },
-        "CascaderField": { "inherits": "2.0.0" },
-        "Modal": { "inherits": "2.0.0" },
-        "DatePickerField": { "inherits": "2.0.0" },
-        "Typeface": { "inherits": "2.0.0" }
+        "Button": {
+          "inherits": "2.1.0"
+        },
+        "Popover": {
+          "rev": "2.2.0"
+        },
+        "Tooltip": {
+          "rev": "2.2.0"
+        },
+        "Pagination": {
+          "inherits": "2.1.0"
+        },
+        "Navigation": {
+          "inherits": "2.1.0"
+        },
+        "SegmentatorGroup": {
+          "inherits": "2.1.0"
+        },
+        "CascaderField": {
+          "inherits": "2.0.0"
+        },
+        "Modal": {
+          "inherits": "2.0.0"
+        },
+        "DatePickerField": {
+          "inherits": "2.0.0"
+        },
+        "Typeface": {
+          "inherits": "2.0.0"
+        }
+      }
+    },
+    "2.4.1": {
+      "spiral": "2.4.1",
+      "tokens": "2.4.1",
+      "icons": "2.0.2",
+      "status": "draft",
+      "components": {
+        "Button": {
+          "inherits": "2.2.0"
+        },
+        "Popover": {
+          "inherits": "2.2.0"
+        },
+        "Tooltip": {
+          "inherits": "2.2.0"
+        },
+        "Pagination": {
+          "inherits": "2.2.0"
+        },
+        "Navigation": {
+          "inherits": "2.2.0"
+        },
+        "SegmentatorGroup": {
+          "inherits": "2.2.0"
+        },
+        "CascaderField": {
+          "inherits": "2.2.0"
+        },
+        "Modal": {
+          "inherits": "2.2.0"
+        },
+        "DatePickerField": {
+          "inherits": "2.2.0"
+        },
+        "Typeface": {
+          "inherits": "2.2.0"
+        }
       }
     }
   },
