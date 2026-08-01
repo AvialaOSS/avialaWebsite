@@ -1,10 +1,14 @@
-import { GeneralSearch, GeneralSetting } from "@aviala-design/icons";
+import { GeneralCollapseSidebar, GeneralSearch, GeneralSetting, SymbolInformationCircle, UsersUserCircle, DirectionArrowLeft } from "@aviala-design/icons";
 import type { IconCatalogEntry } from "@aviala-design/icons";
 
-/** Fallback icons available before the full catalog lazy-loads. */
+/** Fallback icons available before the full catalog lazy-loads (and for demos that hardcode icons without icon knobs). */
 const FALLBACK_ICON_COMPONENTS = {
   GeneralSetting,
   GeneralSearch,
+  GeneralCollapseSidebar,
+  SymbolInformationCircle,
+  UsersUserCircle,
+  DirectionArrowLeft,
 } as const;
 
 export const DEFAULT_ICON_NAME = "GeneralSetting";

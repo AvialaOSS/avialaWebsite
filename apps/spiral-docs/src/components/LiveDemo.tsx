@@ -163,9 +163,11 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
   }, [usesIconKnobs, catalogReady]);
 
   const mergedScope = useMemo(() => {
-    if (!usesIconKnobs) return scope;
-    const iconScope = buildDemoIconScope(collectIconKnobNames(knobs, knobValues));
-    return { ...scope, ...iconScope };
+    // Always include common icons — many demos hardcode <GeneralSetting /> without icon knobs.
+    const iconScope = buildDemoIconScope(
+      usesIconKnobs ? collectIconKnobNames(knobs, knobValues) : [],
+    );
+    return { ...iconScope, ...scope };
   }, [scope, knobs, knobValues, usesIconKnobs, catalogReady]);
 
   const applyKnobs = useCallback(
