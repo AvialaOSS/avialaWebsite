@@ -23,7 +23,6 @@ import {
 } from "@aviala-design/spiral";
 import { useCallback, useEffect, useMemo, useRef, useState, startTransition } from "react";
 
-import { DocsLink } from "../../components/DocsLink";
 import { DocPageHeader } from "../../components/TableOfContents";
 import {
   buildImportSnippet,
@@ -241,14 +240,6 @@ function PreviewPanel({
           </div>
           <pre className="docs-icons-snippet">{snippet}</pre>
         </div>
-
-        <Typography level="caption" as="p" className="text-[var(--muted-foreground)]">
-          需要预览 level / BiggerSize 尺寸？请前往{" "}
-          <DocsLink to="/reference/icons/playground" level="caption" mode="noBackgroundCustom">
-            Icons Playground
-          </DocsLink>
-          。
-        </Typography>
       </Stack>
     </aside>
   );

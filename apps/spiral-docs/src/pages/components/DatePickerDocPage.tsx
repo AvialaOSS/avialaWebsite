@@ -20,9 +20,9 @@ export function DatePickerDocPage() {
       scope={datePickerScope}
       fallback={{
         title: "DatePicker 日期选择",
-        description: "Figma Information Collect → DatePicker。支持单选、区间选择与日期时间。",
+        description: "用于选择日期，或一段日期范围。",
         prose:
-          "提供 DatePickerField 便捷封装，也可使用 DatePicker + Trigger + Content 组合式 API。默认启用时间（enableTime），触发器显示 YYYY-MM-DD HH:mm；设为 false 时仅选择日期。时间与月份滚轮支持拖拽、鼠标滚轮与触摸滚动；松手或滚轮停止后会吸附到最近选项并居中高亮。",
+          "适合预约、筛选时间段、填写生日等与日历相关的录入场景；需要精确到时刻时也可一并选择。",
         propsKey: "DatePickerField",
         liveCode: datePickerLiveCode,
         knobs: datePickerKnobs,

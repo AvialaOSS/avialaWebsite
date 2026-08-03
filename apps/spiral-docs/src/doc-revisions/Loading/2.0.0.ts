@@ -3,8 +3,8 @@ import type { ComponentDocRevision } from "../types";
 const revision: ComponentDocRevision = {
   revision: "2.0.0",
   title: "Loading 加载",
-  description: "Figma System Composition → Loading Icon。用于加载状态指示。",
-  prose: "多种尺寸与模式的加载指示，可用于按钮内或独立展示。",
+  description: "用于表示内容或操作仍在进行中。",
+  prose: "适合按钮提交中、区块加载中等需要让用户等待的短暂状态。",
 };
 
 export default revision;

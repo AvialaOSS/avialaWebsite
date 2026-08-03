@@ -3,8 +3,8 @@ import type { ComponentDocRevision } from "../types";
 const revision: ComponentDocRevision = {
   revision: "2.0.0",
   title: "Popover 弹出层",
-  description: "Figma System Composition → Popover。用于富内容浮层面板。",
-  prose: "基于 Radix Popover，支持四向 placement、箭头与自定义 anchor 元素。",
+  description: "用于在触发点旁展开一段临时面板。",
+  prose: "适合筛选浮层、快捷菜单、补充说明等不必占满整页的内容。",
 };
 
 export default revision;

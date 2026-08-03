@@ -24,9 +24,6 @@ export const nav: NavSection[] = [
     section: "参考",
     items: [
       { label: "Icons 图标", path: "/reference/icons" },
-      { label: "Icons Playground", path: "/reference/icons/playground" },
-      { label: "Rem 字号调试", path: "/reference/rem-scale" },
-      { label: "组件调试器", path: "/reference/debugger" },
     ],
   },
   {

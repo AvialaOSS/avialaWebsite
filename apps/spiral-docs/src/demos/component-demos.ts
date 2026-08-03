@@ -658,19 +658,28 @@ export const numberInputLiveCode = buildNumberInputCode(
 
 export const checkboxKnobs: KnobDef[] = [
   { kind: "boolean", name: "defaultChecked", label: "defaultChecked", defaultValue: true },
+  {
+    kind: "select",
+    name: "size",
+    label: "size",
+    options: ["default", "huge"],
+    defaultValue: "default",
+  },
   { kind: "boolean", name: "round", label: "round", defaultValue: false },
   { kind: "boolean", name: "disabled", label: "disabled", defaultValue: false },
 ];
 
 export function buildCheckboxCode(values: KnobValues): string {
   const defaultChecked = Boolean(values.defaultChecked);
+  const size = String(values.size ?? "default");
   const round = Boolean(values.round);
   const disabled = Boolean(values.disabled);
+  const sizeAttr = size === "default" ? "" : ` size=${jsxString(size)}`;
 
   return `render(
   <div className="flex items-center gap-3">
     <Checkbox
-      id="demo-checkbox"${jsxBool(defaultChecked, "defaultChecked")}${jsxBool(round, "round")}${jsxBool(disabled, "disabled")}
+      id="demo-checkbox"${jsxBool(defaultChecked, "defaultChecked")}${sizeAttr}${jsxBool(round, "round")}${jsxBool(disabled, "disabled")}
     />
     <label htmlFor="demo-checkbox">Checkbox label</label>
   </div>
@@ -1210,22 +1219,44 @@ export const tooltipKnobs: KnobDef[] = [
     options: ["top", "right", "bottom", "left"],
     defaultValue: "top",
   },
+  {
+    kind: "select",
+    name: "level",
+    label: "level",
+    options: ["caption", "text"],
+    defaultValue: "caption",
+  },
+  {
+    kind: "select",
+    name: "delayDuration",
+    label: "delayDuration",
+    options: ["0", "300"],
+    defaultValue: "300",
+  },
   { kind: "boolean", name: "showArrow", label: "showArrow", defaultValue: true },
 ];
 
 export function buildTooltipCode(values: KnobValues): string {
   const side = String(values.side ?? "top");
+  const level = String(values.level ?? "caption");
+  const delayDuration = Number(values.delayDuration ?? 300);
   const showArrow = Boolean(values.showArrow);
   const showArrowProp = showArrow ? "" : "\n      showArrow={false}";
+  const delayProp =
+    delayDuration === 300 ? "" : `\n    delayDuration={${delayDuration}}`;
+  const label =
+    level === "text"
+      ? "Tooltip with text typography"
+      : "Tooltip with caption typography";
 
   return `render(
-  <TooltipProvider>
+  <TooltipProvider${delayProp}>
     <Tooltip>
       <TooltipTrigger asChild>
         <Button mode="default">Hover me</Button>
       </TooltipTrigger>
-      <TooltipContent side=${JSON.stringify(side)}${showArrowProp}>
-        Tooltip with caption typography
+      <TooltipContent side=${JSON.stringify(side)} level=${JSON.stringify(level)}${showArrowProp}>
+        ${label}
       </TooltipContent>
     </Tooltip>
   </TooltipProvider>
@@ -1244,18 +1275,37 @@ export const responsiveTooltipKnobs: KnobDef[] = [
     options: ["top", "right", "bottom", "left"],
     defaultValue: "top",
   },
+  {
+    kind: "select",
+    name: "level",
+    label: "level",
+    options: ["caption", "text"],
+    defaultValue: "caption",
+  },
+  {
+    kind: "select",
+    name: "delayDuration",
+    label: "delayDuration",
+    options: ["0", "300"],
+    defaultValue: "300",
+  },
   { kind: "boolean", name: "showArrow", label: "showArrow", defaultValue: true },
 ];
 
 export function buildResponsiveTooltipCode(values: KnobValues): string {
   const side = String(values.side ?? "top");
+  const level = String(values.level ?? "caption");
+  const delayDuration = Number(values.delayDuration ?? 300);
   const showArrow = Boolean(values.showArrow);
   const showArrowProp = showArrow ? "" : "\n      showArrow={false}";
+  const delayProp =
+    delayDuration === 300 ? "" : `\n      delayDuration={${delayDuration}}`;
 
   return `render(
   <TooltipProvider>
     <ResponsiveTooltip
-      side=${JSON.stringify(side)}${showArrowProp}
+      side=${JSON.stringify(side)}
+      level=${JSON.stringify(level)}${showArrowProp}${delayProp}
       content="Desktop: hover tooltip · Touch: tap, same tooltip skin"
     >
       <Button mode="default">Save</Button>
@@ -1972,18 +2022,25 @@ export const sliderKnobs: KnobDef[] = [
     defaultValue: "default",
   },
   { kind: "boolean", name: "disabled", label: "disabled", defaultValue: false },
+  {
+    kind: "boolean",
+    name: "showValueTooltip",
+    label: "showValueTooltip",
+    defaultValue: false,
+  },
 ];
 
 export function buildSliderCode(values: KnobValues): string {
   const type = String(values.type ?? "default");
   const size = String(values.size ?? "default");
   const disabled = Boolean(values.disabled);
+  const showValueTooltip = Boolean(values.showValueTooltip);
   const defaultValue = type === "range" ? "[20, 70]" : "[40]";
   return `render(
   <Slider
     type=${JSON.stringify(type)}
     size=${JSON.stringify(size)}
-    defaultValue={${defaultValue}}${jsxBool(disabled, "disabled")}
+    defaultValue={${defaultValue}}${jsxBool(disabled, "disabled")}${jsxBool(showValueTooltip, "showValueTooltip")}
     style={{ width: 220 }}
   />
 );`;
@@ -2504,36 +2561,147 @@ export function buildCardCode(values: KnobValues): string {
 
 export const cardLiveCode = buildCardCode(defaultKnobValues(cardKnobs));
 
+const TABLE_COLUMN_DEFAULTS = [
+  { label: "Name", content: "people" },
+  { label: "Status", content: "badge" },
+  { label: "Notify", content: "switch" },
+];
+
+const TABLE_ROW_DEFAULTS = [
+  { name: "Kai Lark", badge: "Active", switchOn: true, checked: false },
+  { name: "Ada Chen", badge: "Away", switchOn: false, checked: true },
+];
+
 export const tableKnobs: KnobDef[] = [
   { kind: "boolean", name: "showCheckbox", label: "showCheckbox", defaultValue: true },
-  { kind: "boolean", name: "showBadge", label: "showBadge", defaultValue: true },
+  {
+    kind: "items",
+    name: "columns",
+    label: "columns",
+    itemLabel: "Column",
+    min: 1,
+    max: 6,
+    fields: [
+      {
+        kind: "string",
+        name: "label",
+        label: "label",
+        defaultValue: "Column",
+        placeholder: "表头",
+      },
+      {
+        kind: "select",
+        name: "content",
+        label: "content",
+        options: ["people", "text", "badge", "switch", "icon+text"],
+        defaultValue: "text",
+      },
+    ],
+    defaultValue: TABLE_COLUMN_DEFAULTS,
+  },
+  {
+    kind: "items",
+    name: "rows",
+    label: "rows",
+    itemLabel: "Row",
+    min: 1,
+    max: 8,
+    fields: [
+      {
+        kind: "string",
+        name: "name",
+        label: "name / text",
+        defaultValue: "Kai Lark",
+        placeholder: "人名或文本",
+      },
+      {
+        kind: "string",
+        name: "badge",
+        label: "badge",
+        defaultValue: "Active",
+        placeholder: "徽章文案",
+      },
+      { kind: "boolean", name: "switchOn", label: "switchOn", defaultValue: true },
+      { kind: "boolean", name: "checked", label: "checked", defaultValue: false },
+    ],
+    defaultValue: TABLE_ROW_DEFAULTS,
+  },
 ];
+
+function buildTableCellCode(
+  content: string,
+  row: { name?: string | boolean; badge?: string | boolean; switchOn?: string | boolean }
+): string {
+  const name = String(row.name ?? "Text");
+  const badge = String(row.badge ?? "Active");
+  const switchOn = Boolean(row.switchOn);
+  const initial = (name.trim().charAt(0) || "A").toUpperCase();
+
+  if (content === "people") {
+    return `      <TableCell
+        content="people"
+        people={<Avatar content="text" level="text" lineHeightFix={false}>${initial}</Avatar>}
+        text=${jsxString(name)}
+      />`;
+  }
+  if (content === "badge") {
+    return `      <TableCell content="badge" badgeLabel=${jsxString(badge)} />`;
+  }
+  if (content === "switch") {
+    return switchOn
+      ? `      <TableCell content="switch" switchProps={{ defaultChecked: true }} />`
+      : `      <TableCell content="switch" />`;
+  }
+  if (content === "icon+text") {
+    return `      <TableCell
+        content="icon+text"
+        icon={<${DEFAULT_ICON_NAME} aria-hidden />}
+        text=${jsxString(name)}
+      />`;
+  }
+  return `      <TableCell content="text" text=${jsxString(name)} />`;
+}
 
 export function buildTableCode(values: KnobValues): string {
   const showCheckbox = Boolean(values.showCheckbox);
-  const showBadge = Boolean(values.showBadge);
-  const headCheckbox = showCheckbox ? `\n        <TableHead content="checkbox" />` : "";
-  const cellCheckbox = showCheckbox ? `\n        <TableCell content="checkbox" />` : "";
-  const statusCell = showBadge
-    ? `\n        <TableCell content="badge" badgeLabel="Active" />`
-    : `\n        <TableCell content="text" text="Active" />`;
+  const columns = getKnobItems(values, "columns", TABLE_COLUMN_DEFAULTS);
+  const rows = getKnobItems(values, "rows", TABLE_ROW_DEFAULTS);
+
+  const headCells = [
+    showCheckbox ? `      <TableHead content="checkbox" />` : null,
+    ...columns.map((column) => {
+      const label = String(column.label ?? "Column");
+      return `      <TableHead>{${jsxString(label)}}</TableHead>`;
+    }),
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  const bodyRows = rows
+    .map((row) => {
+      const checked = Boolean(row.checked);
+      const checkboxCell = showCheckbox
+        ? checked
+          ? `      <TableCell content="checkbox" checkboxProps={{ defaultChecked: true }} />`
+          : `      <TableCell content="checkbox" />`
+        : null;
+      const dataCells = columns.map((column) =>
+        buildTableCellCode(String(column.content ?? "text"), row)
+      );
+      return `    <TableRow>
+${[checkboxCell, ...dataCells].filter(Boolean).join("\n")}
+    </TableRow>`;
+    })
+    .join("\n");
+
   return `render(
-  <Table style={{ width: 560 }}>
-    <TableRow header>${headCheckbox}
-      <TableHead>Name</TableHead>
-      <TableHead>Status</TableHead>
+  <Table style={{ width: "100%", minWidth: 480 }}>
+    <TableRow header>
+${headCells}
     </TableRow>
-    <TableRow>${cellCheckbox}
-      <TableCell
-        content="people"
-        people={<Avatar content="text" level="text" lineHeightFix={false}>K</Avatar>}
-        text="Kai Lark"
-      />${statusCell}
-    </TableRow>
+${bodyRows}
   </Table>
 );`;
 }
 
-export const tableLiveCode = buildTableCode(
-  Object.fromEntries(tableKnobs.map((k) => [k.name, k.defaultValue]))
-);
+export const tableLiveCode = buildTableCode(defaultKnobValues(tableKnobs));

@@ -89,7 +89,6 @@ export function getAggregatedReleases(): AggregatedRelease[] {
     registry as unknown as ComponentChangelogs,
   )) {
     for (const release of releases) {
-      if (release.version === "Unreleased") continue;
       const list = byVersion.get(release.version) ?? [];
       list.push({
         component,

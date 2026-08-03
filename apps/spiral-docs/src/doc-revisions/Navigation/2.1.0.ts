@@ -3,9 +3,9 @@ import type { ComponentDocRevision } from "../types";
 const revision: ComponentDocRevision = {
   revision: "2.1.0",
   title: "Navigation 导航",
-  description: "Figma Structure Navigation → Navigation。用于侧边栏或顶栏导航结构。",
+  description: "用于承载应用的主导航结构。",
   prose:
-    "支持 vertical / horizontal、default / none 背景与 dividingLine。调参可编辑 Brand、Group items（vertical 下连续 child 会包进 NavigationItemGroup；horizontal 会展平为顶栏 Tab）与 Actions。vertical 模式下，轨道会在悬停/按下时伸展与收缩，便于窄侧栏场景。",
+    "适合侧边栏、顶栏等需要在多个页面或模块间切换的场景。",
 };
 
 export default revision;

@@ -3,8 +3,8 @@ import type { ComponentDocRevision } from "../types";
 const revision: ComponentDocRevision = {
   revision: "2.0.0",
   title: "Link 链接",
-  description: "Figma Basic Input → Link。用于导航或内联操作链接。",
-  prose: "支持多种强调级别与图标组合，可用于页面跳转或触发操作。",
+  description: "用于跳转页面或触发内联操作。",
+  prose: "适合正文中的导航、次要操作入口等文字链接触达的场景。",
 };
 
 export default revision;

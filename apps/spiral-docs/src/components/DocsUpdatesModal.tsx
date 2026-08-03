@@ -2,6 +2,7 @@ import {
   Modal,
   ModalBody,
   ModalContent,
+  ModalFooter,
   ModalHeaderText,
   Typography,
 } from "@aviala-design/spiral";
@@ -144,14 +145,14 @@ export function DocsUpdatesModal({ open, onOpenChange }: DocsUpdatesModalProps) 
               暂无更新记录。
             </Typography>
           )}
-          {component ? (
-            <p className="docs-changelog-more">
-              <DocsLink to="/start/changelog" level="caption" mode="noBackgroundCustom">
-                查看全部组件更新记录
-              </DocsLink>
-            </p>
-          ) : null}
         </ModalBody>
+        {component ? (
+          <ModalFooter className="docs-updates-modal__footer">
+            <DocsLink to="/start/changelog" level="caption" mode="noBackgroundCustom">
+              查看全部组件更新记录
+            </DocsLink>
+          </ModalFooter>
+        ) : null}
       </ModalContent>
     </Modal>
   );

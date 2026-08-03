@@ -9,8 +9,8 @@ export function SwitchDocPage() {
       scope={{ Switch }}
       fallback={{
         title: "Switch 开关",
-        description: "Figma Basic Input → Switch。用于二元状态切换。",
-        prose: "支持 regular / small 尺寸，以及 disabled 与受控 / 非受控用法。",
+        description: "用于立即开关某项设置。",
+        prose: "适合通知开关、功能启用等二元偏好，改完即生效的场景。",
         liveCode: switchLiveCode,
         knobs: switchKnobs,
         buildCode: buildSwitchCode,

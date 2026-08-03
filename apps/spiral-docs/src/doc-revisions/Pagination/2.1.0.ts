@@ -3,9 +3,9 @@ import type { ComponentDocRevision } from "../types";
 const revision: ComponentDocRevision = {
   revision: "2.1.0",
   title: "Pagination 分页",
-  description: "Figma Structure Navigation → Pagination。",
+  description: "用于在大量数据中翻页浏览。",
   prose:
-    "受控页码切换，可选跳转输入与每页条数。总页数较多时中间会出现省略号；点击省略号会打开页码跳转 Popover，可直接选中隐藏区间内的页码。",
+    "适合表格、搜索结果、内容列表等一屏装不下、需要按页查看的场景。",
 };
 
 export default revision;

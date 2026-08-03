@@ -15,8 +15,8 @@ export function CascaderDocPage() {
       scope={{ CascaderField, GeneralSetting, useState }}
       fallback={{
         title: "Cascader 级联选择",
-        description: "Figma Information Collect → Cascader。用于多级选项选择。",
-        prose: "提供 CascaderField 便捷封装，也可使用 Cascader + Trigger + Content 组合式 API。",
+        description: "用于从多级分类中逐级选出一个结果。",
+        prose: "适合地区、类目、组织架构等选项本身有层级关系的选择场景。",
         propsKey: "CascaderField",
         liveCode: cascaderLiveCode,
         knobs: cascaderKnobs,

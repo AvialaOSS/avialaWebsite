@@ -20,12 +20,46 @@
       }
     }
   ],
+  "Checkbox": [
+    {
+      "version": "Unreleased",
+      "sections": {
+        "Added": [
+          "`size=\"huge\"`：对应 Figma Checkbox `Size=Huge`（26px / `--size-large`，圆角 `--border-radius-small`，勾选与半选标记 14px，勾选描边 2px）"
+        ],
+        "Changed": [
+          "勾选图标改用 Figma `symbol_right` Black 描边动效：打钩 / 取消均为 300ms CSS transition（可中途打断），`vector-effect: non-scaling-stroke` 保持线宽",
+          "取消勾选时橙色表面与灰色底交叉淡入淡出，避免背景硬切",
+          "非圆角 Checkbox 圆角改为 `--border-radius-extra-small-2`（6px）"
+        ],
+        "Fixed": [
+          "Huge 尺寸下勾选路径画不全：`stroke-dasharray` / `stroke-dashoffset` 按 `iconSize / 12` 换算，避免 CSS 将无单位 `1` 解析为 `1px` 导致路径短一截"
+        ]
+      }
+    }
+  ],
   "DatePickerField": [
     {
       "version": "2.0.0",
       "sections": {
         "Changed": [
           "键盘与布局细节打磨"
+        ]
+      }
+    }
+  ],
+  "List": [
+    {
+      "version": "2.4.0",
+      "sections": {
+        "Added": [
+          "`ListItem` `showTrailing`：设为 `false`（或 `trailing={null}`）可隐藏尾部操作与竖向分隔线；`action` 类型仍显示 chevron",
+          "`ListItem` `showChevron`：控制 `action` 行尾部 chevron 的显示",
+          "`ListItem` `showTopDivider`：强制显示/隐藏内容行顶部分割线（默认：`ListGroup` 内首个子项隐藏）",
+          "`ListItem` `href` / `target` / `rel`：将行渲染为导航链接"
+        ],
+        "Fixed": [
+          "`ListGroup` 内首个 `ListItem` 默认不再显示顶部分割线"
         ]
       }
     }
@@ -42,6 +76,14 @@
     }
   ],
   "Navigation": [
+    {
+      "version": "Unreleased",
+      "sections": {
+        "Changed": [
+          "激活指示条与展开 / 收拢动效改用更干脆的 ease-out（`--navigation-transition-easing`: `cubic-bezier(0.16, 1, 0.3, 1)`；指示条脚本插值同步）"
+        ]
+      }
+    },
     {
       "version": "2.1.0",
       "sections": {
@@ -62,6 +104,14 @@
     }
   ],
   "Popover": [
+    {
+      "version": "Unreleased",
+      "sections": {
+        "Added": [
+          "`PopoverContent` 支持 `level`（`\"caption\"` | `\"text\"`）；未传时：`appearance=\"tooltip\"` 默认为 `caption`，其余外观默认为 `text`"
+        ]
+      }
+    },
     {
       "version": "2.2.0",
       "sections": {
@@ -89,6 +139,16 @@
   ],
   "SegmentatorGroup": [
     {
+      "version": "Unreleased",
+      "sections": {
+        "Changed": [
+          "内容超出容器时支持横向滚动（隐藏滚动条，触控板 / 触控仍可滑动）",
+          "`equalWidth` 项以 `max-content` 为最小宽度，避免均分过窄裁切文案",
+          "溢出时触控横滑优先滚动并暂停段间拖选（点击切换仍可用）；选中项自动滚入可视区域，滑动拇指随 `scrollLeft` 同步"
+        ]
+      }
+    },
+    {
       "version": "2.1.0",
       "sections": {
         "Changed": [
@@ -97,7 +157,37 @@
       }
     }
   ],
+  "Slider": [
+    {
+      "version": "Unreleased",
+      "sections": {
+        "Added": [
+          "`showValueTooltip`：悬停拇指、拖动或按住轨道调整时，在对应拇指上方显示数值提示",
+          "`formatValueTooltip`：自定义数值提示文案，签名 `(value, index) => ReactNode`"
+        ],
+        "Changed": [
+          "视觉重绘：默认宽度 70→96；轨道更粗且取消描边（Default / Big 共用填充色，仅高度与拇指尺寸不同）；拇指改为白底 + 主色实心芯 + 阴影（不再用描边环）",
+          "禁用态：拇指芯改用次要色，与轨道 OFF 填充对齐",
+          "拇指悬停略放大、按下略缩小（只作用于视觉层，不带动数值提示）",
+          "拇指光标由 `grab` 改为 `pointer`",
+          "点击轨道 / 键盘跳变时，拇指位移与进度条带过渡；拖动时关闭位移过渡以跟手",
+          "尊重 `prefers-reduced-motion`：关闭拇指缩放、跳变与数值提示过渡"
+        ],
+        "Fixed": [
+          "`type` 在 `default` ↔ `range` 间切换时重新挂载，避免第二拇指不显示"
+        ]
+      }
+    }
+  ],
   "Tooltip": [
+    {
+      "version": "Unreleased",
+      "sections": {
+        "Added": [
+          "`TooltipContent` / `ResponsiveTooltip` 支持 `level`：`\"caption\"`（默认）或 `\"text\"`"
+        ]
+      }
+    },
     {
       "version": "2.2.0",
       "sections": {

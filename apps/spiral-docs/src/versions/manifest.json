@@ -82,7 +82,8 @@
       "components": {
         "Button": { "inherits": "2.2.0" },
         "Popover": { "inherits": "2.2.0" },
-        "Tooltip": { "inherits": "2.2.0" },
+        "Tooltip": { "rev": "2.4.1" },
+        "Slider": { "rev": "2.4.1" },
         "Pagination": { "inherits": "2.2.0" },
         "Navigation": { "inherits": "2.2.0" },
         "SegmentatorGroup": { "inherits": "2.2.0" },

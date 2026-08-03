@@ -5,6 +5,8 @@ import { ThemeProvider } from "@aviala-design/spiral";
 import { AppRoutes } from "./App";
 import { DocsVersionProvider } from "./components/DocsVersionProvider";
 import { getDocsBasename } from "./docs-base";
+/* Via JS import so DOCS_SPIRAL_LOCAL resolve plugin applies (CSS @import via Tailwind hits npm). */
+import "@aviala-design/tokens/styles.css";
 import "./index.css";
 import "@aviala-design/tokens/ald-theme.css";
 import "@aviala-design/tokens/input-effects.css";

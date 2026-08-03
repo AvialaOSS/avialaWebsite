@@ -9,8 +9,8 @@ export function RadioDocPage() {
       scope={{ RadioGroup, RadioGroupItem, RadioInput }}
       fallback={{
         title: "RadioGroup 单选组",
-        description: "Figma Information Collect → Radio。用于互斥选项选择。",
-        prose: "提供 RadioGroupItem 基础控件与 RadioInput 卡片式选项，支持 vertical / horizontal 布局。",
+        description: "用于在多个选项里只选一个。",
+        prose: "适合支付方式、排序规则、互斥偏好等必须单选的场景。",
         liveCode: radioLiveCode,
         knobs: radioKnobs,
         buildCode: buildRadioCode,

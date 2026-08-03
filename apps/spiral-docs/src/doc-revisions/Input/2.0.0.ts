@@ -3,9 +3,9 @@ import type { ComponentDocRevision } from "../types";
 const revision: ComponentDocRevision = {
   revision: "2.0.0",
   title: "Input 输入框",
-  description: "单行文本输入，支持 regular / big 尺寸。",
+  description: "用于填写一行短文本。",
   prose:
-    "用于采集短文本。可在编辑器中修改 JSX，或通过 API 调参切换 size、placeholder，以及左右图标的显示与图标选择。",
+    "适合姓名、标题、搜索词等单行信息的录入。",
 };
 
 export default revision;

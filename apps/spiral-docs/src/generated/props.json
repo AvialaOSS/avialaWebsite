@@ -1802,6 +1802,17 @@
         "defaultValue": "false",
         "required": false,
         "description": "Figma Checkbox `Round`"
+      },
+      {
+        "name": "size",
+        "type": "\"default\" | \"huge\"",
+        "values": [
+          "default",
+          "huge"
+        ],
+        "defaultValue": "default",
+        "required": false,
+        "description": "Figma Checkbox `Size`"
       }
     ],
     "parts": [
@@ -1838,6 +1849,17 @@
             "defaultValue": "false",
             "required": false,
             "description": "Figma Checkbox `Round`"
+          },
+          {
+            "name": "size",
+            "type": "\"default\" | \"huge\"",
+            "values": [
+              "default",
+              "huge"
+            ],
+            "defaultValue": "default",
+            "required": false,
+            "description": "Figma Checkbox `Size`"
           },
           {
             "name": "description",
@@ -3686,7 +3708,17 @@
             ],
             "defaultValue": "default",
             "required": false,
-            "description": "Visual skin of the surface:\n- `default` — light bordered panel (select-menu aligned), text typography, stroked caret.\n- `tooltip` — shared inverted tooltip skin (dark, caption text, borderless, solid caret).\n- `primary` — brand primary surface with white text, borderless, solid caret."
+            "description": "Visual skin of the surface:\n- `default` — light bordered panel (select-menu aligned), text typography, stroked caret.\n- `tooltip` — shared inverted tooltip skin (dark, caption text by default, borderless, solid caret).\n- `primary` — brand primary surface with white text, borderless, solid caret."
+          },
+          {
+            "name": "level",
+            "type": "\"caption\" | \"text\"",
+            "values": [
+              "caption",
+              "text"
+            ],
+            "required": false,
+            "description": "Typography level for the surface copy.\nDefaults to `caption` for `appearance=\"tooltip\"`, otherwise `text`."
           }
         ]
       },
@@ -3909,6 +3941,32 @@
     "props": [],
     "parts": [
       {
+        "displayName": "TooltipProvider",
+        "description": "Provides shared hover-delay state for nested Tooltips.\nPass `delayDuration={0}` for instant open on hover.",
+        "props": [
+          {
+            "name": "delayDuration",
+            "type": "number",
+            "defaultValue": "300",
+            "required": false,
+            "description": "Delay before the tooltip opens on hover, in ms.\nDefaults to `TOOLTIP_DELAY_DURATION` (300). Pass `0` for instant open on hover."
+          },
+          {
+            "name": "skipDelayDuration",
+            "type": "number",
+            "defaultValue": "0",
+            "required": false,
+            "description": "When moving between tooltips, skip the open delay within this window (ms)."
+          },
+          {
+            "name": "disableHoverableContent",
+            "type": "boolean",
+            "required": false,
+            "description": "When true, hovering the tooltip content itself does not keep it open."
+          }
+        ]
+      },
+      {
         "displayName": "TooltipTrigger",
         "description": "",
         "props": [
@@ -3936,8 +3994,125 @@
             "defaultValue": "true",
             "required": false,
             "description": "Show a caret arrow pointing at the trigger (default true)."
+          },
+          {
+            "name": "level",
+            "type": "\"caption\" | \"text\"",
+            "values": [
+              "caption",
+              "text"
+            ],
+            "defaultValue": "caption",
+            "required": false,
+            "description": "Typography level for the surface copy.\nFigma default is `caption`; pass `text` for body-sized tooltip copy."
           }
         ]
+      }
+    ]
+  },
+  "ResponsiveTooltip": {
+    "displayName": "ResponsiveTooltip",
+    "description": "Tooltip with a mobile-friendly trigger.\n\nRadix Tooltip is hover/focus only and deliberately ignores touch, so it has\nno trigger on phones. `ResponsiveTooltip` renders the SAME content through the\nright primitive for the device:\n- Desktop (`pointer: fine`): Radix Tooltip — opens on hover and keyboard focus.\n- Touch (`pointer: coarse`): Radix Popover with `appearance=\"tooltip\"` — opens on\n  tap, dismisses on outside tap / Escape, but keeps the tooltip visual skin\n  (dark surface, caption text, solid caret) so it looks identical to desktop.\n\nThe consumer API and the look are unchanged between devices; only the trigger\ngesture differs. Animations are handled by the respective effect CSS\n(tooltip-effects / popover-effects), so direction-aware scale-in/out works on\nboth branches.",
+    "props": [
+      {
+        "name": "content",
+        "type": "ReactNode",
+        "required": true,
+        "description": "Tooltip body — the same content is shown on desktop (hover) and touch (tap)."
+      },
+      {
+        "name": "children",
+        "type": "ReactNode",
+        "required": true,
+        "description": "The trigger element. Rendered with `asChild`, so pass a single element."
+      },
+      {
+        "name": "side",
+        "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
+        "values": [
+          "top",
+          "right",
+          "bottom",
+          "left"
+        ],
+        "defaultValue": "top",
+        "required": false,
+        "description": "Preferred placement of the floating content."
+      },
+      {
+        "name": "align",
+        "type": "\"start\" | \"center\" | \"end\"",
+        "values": [
+          "start",
+          "center",
+          "end"
+        ],
+        "defaultValue": "center",
+        "required": false,
+        "description": "Cross-axis alignment relative to the trigger."
+      },
+      {
+        "name": "sideOffset",
+        "type": "number",
+        "defaultValue": "4",
+        "required": false,
+        "description": "Gap between trigger and content, in px."
+      },
+      {
+        "name": "collisionPadding",
+        "type": "number",
+        "defaultValue": "8",
+        "required": false,
+        "description": "Distance from viewport edges before collision flipping, in px."
+      },
+      {
+        "name": "showArrow",
+        "type": "boolean",
+        "defaultValue": "true",
+        "required": false,
+        "description": "Show the caret arrow pointing at the trigger."
+      },
+      {
+        "name": "level",
+        "type": "\"caption\" | \"text\"",
+        "values": [
+          "caption",
+          "text"
+        ],
+        "defaultValue": "caption",
+        "required": false,
+        "description": "Typography level for the content surface (default `caption`)."
+      },
+      {
+        "name": "delayDuration",
+        "type": "number",
+        "defaultValue": "300",
+        "required": false,
+        "description": "Hover open delay on desktop, in ms (ignored on touch).\nDefaults to 300 (`TOOLTIP_DELAY_DURATION`). Pass `0` for instant open on hover.\nRequires a TooltipProvider ancestor for shared delay context."
+      },
+      {
+        "name": "open",
+        "type": "boolean",
+        "required": false,
+        "description": "Controlled open state."
+      },
+      {
+        "name": "defaultOpen",
+        "type": "boolean",
+        "required": false,
+        "description": "Uncontrolled initial open state."
+      },
+      {
+        "name": "onOpenChange",
+        "type": "(open: boolean) => void",
+        "required": false,
+        "description": "Open-state change callback."
+      },
+      {
+        "name": "contentClassName",
+        "type": "string",
+        "required": false,
+        "description": "Extra class on the inner content surface."
       }
     ]
   },
@@ -4300,6 +4475,19 @@
         "defaultValue": "default",
         "required": false,
         "description": "Figma `Type` — single thumb vs range (two thumbs)"
+      },
+      {
+        "name": "showValueTooltip",
+        "type": "boolean",
+        "defaultValue": "false",
+        "required": false,
+        "description": "When true, hovering a thumb (and while dragging it) shows a value\ntooltip bound to that thumb."
+      },
+      {
+        "name": "formatValueTooltip",
+        "type": "(value: number, index: number) => ReactNode",
+        "required": false,
+        "description": "Format the value tooltip label. Defaults to `String(value)`."
       }
     ]
   },
@@ -4947,7 +5135,7 @@
           },
           {
             "name": "checkboxProps",
-            "type": "Omit<Omit<CheckboxProps & RefAttributes<HTMLButtonElement>, \"ref\"> & { round?: boolean; } & RefAttributes<HTMLButtonElement>, \"ref\">",
+            "type": "Omit<Omit<CheckboxProps & RefAttributes<HTMLButtonElement>, \"ref\"> & { round?: boolean; size?: CheckboxSize; } & RefAttributes<...>, \"ref\">",
             "required": false,
             "description": ""
           }

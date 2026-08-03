@@ -9,8 +9,8 @@ export function NumberInputDocPage() {
       scope={{ NumberInput }}
       fallback={{
         title: "NumberInput 数字输入",
-        description: "Figma Information Collect → NumberInput。用于采集数值，可选步进控件。",
-        prose: "复用 Input 外壳（尺寸、圆角、图标、error / disabled），并提供上下步进按钮、 <code>min</code> / <code>max</code> / <code>step</code> 约束。样式可选 Default 与 Monospaced（等宽数字排版）。",
+        description: "用于填写或微调数值。",
+        prose: "适合数量、金额、比例等需要数字输入或步进调整的场景。",
         liveCode: numberInputLiveCode,
         knobs: numberInputKnobs,
         buildCode: buildNumberInputCode,

@@ -3,8 +3,8 @@ import type { ComponentDocRevision } from "../types";
 const revision: ComponentDocRevision = {
   revision: "2.0.0",
   title: "Typeface 字体组合",
-  description: "Figma System Composition → Typeface。用于多行文字层级组合。",
-  prose: "通过 content 预设控制主 / 副 / 辅助文字组合，也可使用 TypefacePair 快捷封装。",
+  description: "用于把主标题与辅助说明排成一组文字。",
+  prose: "适合卡片标题区、列表主副文案等需要固定层级搭配出现的场景。",
 };
 
 export default revision;

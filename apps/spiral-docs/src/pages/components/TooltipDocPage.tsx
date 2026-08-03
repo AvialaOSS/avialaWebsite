@@ -30,8 +30,9 @@ export function TooltipDocPage() {
       }}
       fallback={{
         title: "Tooltip 工具提示",
-        description: "Figma System Composition → Tooltip。用于悬停时的轻量说明。",
-        prose: "需在 TooltipProvider 内使用，支持四向 placement 与可选箭头。",
+        description: "用于在悬停或聚焦时补充简短说明。",
+          prose:
+          "适合图标按钮、缩略文案等界面空间不够写全、又需要一点提示的场景。",
         liveCode: tooltipLiveCode,
         knobs: tooltipKnobs,
         buildCode: buildTooltipCode,
