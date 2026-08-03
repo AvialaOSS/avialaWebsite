@@ -19,8 +19,8 @@ export function ColorPickerDocPage() {
       }}
       fallback={{
         title: "ColorPicker 颜色选择",
-        description: "Figma Information Collect → ColorPicker。用于颜色选取与预设管理。",
-        prose: "组合式 API：ColorPicker + Trigger + Content。支持透明度、预设色板与 allRound 外观。",
+        description: "用于让用户挑选或调整颜色。",
+        prose: "适合主题定制、标注颜色、设计类设置等需要精确选色的场景。",
         liveCode: colorPickerLiveCode,
         knobs: colorPickerKnobs,
         buildCode: buildColorPickerCode,

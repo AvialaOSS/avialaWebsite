@@ -29,6 +29,7 @@ function ChangelogReleaseHeader({
 }) {
   const [copied, setCopied] = useState(false);
   const [menuKey, setMenuKey] = useState(0);
+  const isUnreleased = version === "Unreleased";
 
   const copyInstall = async (manager: SpiralPackageManager) => {
     try {
@@ -52,42 +53,44 @@ function ChangelogReleaseHeader({
             {formatReleaseDate(publishedAt)}
           </Typography>
         ) : null}
-        <div className="docs-changelog-use-version">
-          <Select
-            key={menuKey}
-            onValueChange={(value) => {
-              if (PACKAGE_MANAGERS.includes(value as SpiralPackageManager)) {
-                void copyInstall(value as SpiralPackageManager);
-              }
-            }}
-          >
-            <div className="docs-changelog-use-version__anchor">
-              <SelectTrigger
-                className="docs-changelog-use-version__trigger"
-                aria-label="使用该版本"
-                title="复制该版本的安装命令"
-              />
-              <Button
-                mode="defaultCustom"
-                size="small"
-                className="docs-changelog-use-version__button"
-                tabIndex={-1}
-                aria-hidden
-              >
-                {copied ? "已复制" : "使用该版本"}
-              </Button>
-            </div>
-            <SelectContent align="end">
-              <SelectItemGroup>
-                {PACKAGE_MANAGERS.map((manager) => (
-                  <SelectItem key={manager} value={manager} showFunctionIcon={false}>
-                    {manager}
-                  </SelectItem>
-                ))}
-              </SelectItemGroup>
-            </SelectContent>
-          </Select>
-        </div>
+        {isUnreleased ? null : (
+          <div className="docs-changelog-use-version">
+            <Select
+              key={menuKey}
+              onValueChange={(value) => {
+                if (PACKAGE_MANAGERS.includes(value as SpiralPackageManager)) {
+                  void copyInstall(value as SpiralPackageManager);
+                }
+              }}
+            >
+              <div className="docs-changelog-use-version__anchor">
+                <SelectTrigger
+                  className="docs-changelog-use-version__trigger"
+                  aria-label="使用该版本"
+                  title="复制该版本的安装命令"
+                />
+                <Button
+                  mode="defaultCustom"
+                  size="small"
+                  className="docs-changelog-use-version__button"
+                  tabIndex={-1}
+                  aria-hidden
+                >
+                  {copied ? "已复制" : "使用该版本"}
+                </Button>
+              </div>
+              <SelectContent align="end">
+                <SelectItemGroup>
+                  {PACKAGE_MANAGERS.map((manager) => (
+                    <SelectItem key={manager} value={manager} showFunctionIcon={false}>
+                      {manager}
+                    </SelectItem>
+                  ))}
+                </SelectItemGroup>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
       </div>
     </div>
   );

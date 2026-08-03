@@ -117,8 +117,8 @@ export function BadgeDocPage() {
   return (
     <DocShell
       title="Badge 徽章"
-      description="Figma Information Display → Badge。"
-      prose="支持 Style / Level / Primary / LineHeightFix 变体。"
+      description="用于在名称旁标注数量、状态或类别。"
+      prose="适合未读数、新消息、状态角标等需要一眼扫到的轻量标记。"
       componentKey="Badge"
       scope={{ Badge }}
       knobs={badgeKnobs}
@@ -132,8 +132,8 @@ export function AvatarDocPage() {
   return (
     <DocShell
       title="Avatar 头像"
-      description="Figma Information Display → Avata。"
-      prose="支持 Text / Picture / Icon，以及与 Typography 对齐的 Level。"
+      description="用于展示用户或对象的身份形象。"
+      prose="适合列表、评论、个人资料等需要快速辨认是谁的场景。"
       componentKey="Avatar"
       scope={{ Avatar, UsersUserCircle }}
       knobs={avatarKnobs}
@@ -147,8 +147,8 @@ export function TagDocPage() {
   return (
     <DocShell
       title="Tag 标签"
-      description="Figma Information Display → Tag。"
-      prose="支持 Text / People 内容与 closable / disabled。"
+      description="用于标记分类、属性或可移除的关键词。"
+      prose="适合筛选标签、人物标签、已选条件等需要成组展示并可去掉的场景。"
       componentKey="Tag"
       scope={{ Tag }}
       knobs={tagKnobs}
@@ -162,8 +162,8 @@ export function ProgressDocPage() {
   return (
     <DocShell
       title="Progress 进度"
-      description="Figma Response And Feedback → Progress。"
-      prose="支持 Bar / Ring，Default / Success / Fail，以及百分比标签。"
+      description="用于展示任务或流程完成到哪一步。"
+      prose="适合上传进度、加载百分比、流程完成度等需要看得见进展的场景。"
       componentKey="Progress"
       scope={{ Progress }}
       knobs={progressKnobs}
@@ -177,8 +177,8 @@ export function ScrollDocPage() {
   return (
     <DocShell
       title="Scroll 滚动条"
-      description="Figma System Composition → Scroll。"
-      prose="自定义滚动条外观，支持 default / small 与垂直 / 水平。"
+      description="用于在有限区域内滚动查看溢出内容。"
+      prose="适合侧栏、面板、长列表等容器高度固定但仍有更多内容的场景。"
       componentKey="Scroll"
       scope={{ Scroll }}
       knobs={scrollKnobs}
@@ -192,8 +192,8 @@ export function SliderDocPage() {
   return (
     <DocShell
       title="Slider 滑块"
-      description="Figma Information Collect → Slider。"
-      prose="支持 Default / Range 类型与 Default / Big 尺寸。"
+      description="用于在连续范围内拖动选定数值。"
+      prose="适合音量、亮度、价格区间等用拖动比键盘输入更直观的调节场景。"
       componentKey="Slider"
       scope={{ Slider }}
       knobs={sliderKnobs}
@@ -207,8 +207,8 @@ export function UploadDocPage() {
   return (
     <DocShell
       title="Upload 上传"
-      description="Figma Information Collect → Upload。"
-      prose="Default / Large 触发区，支持 multiple 与 disabled。"
+      description="用于选择并上传本地文件。"
+      prose="适合头像、附件、导入数据等需要把文件交给系统的场景。"
       componentKey="Upload"
       scope={{ Upload }}
       knobs={uploadKnobs}
@@ -222,8 +222,8 @@ export function ScrollPickerDocPage() {
   return (
     <DocShell
       title="ScrollPicker 滚轮选择"
-      description="Figma Information Collect → ScrollPicker。"
-      prose="多列滚轮选择器，可开关 loop 循环滚动。拖拽或鼠标滚轮停止后会吸附到最近选项；开启 loop 时可无缝绕回首尾。"
+      description="用于通过滚轮点选离散选项。"
+      prose="适合时间、地区代码等选项较多、用滚轮比点选列表更顺手的场景。"
       componentKey="ScrollPicker"
       scope={{ ScrollPicker, ScrollPickerColumn, useState }}
       knobs={scrollPickerKnobs}
@@ -237,8 +237,8 @@ export function BreadcrumbDocPage() {
   return (
     <DocShell
       title="Breadcrumb 面包屑"
-      description="Figma Structure Navigation → Breadcrumb。"
-      prose="支持 default / small；中间省略为 Storage item button，可用 activated 展开 Select Menu。"
+      description="用于展示当前位置，并支持回到上级路径。"
+      prose="适合多层页面结构，帮助用户理解自己在哪、如何返回。"
       componentKey="Breadcrumb"
       scope={{
         Breadcrumb,
@@ -259,8 +259,8 @@ export function PageheadDocPage() {
   return (
     <DocShell
       title="Pagehead 页头"
-      description="Figma Structure Navigation → Pagehead。"
-      prose="组合标题、描述、面包屑与操作区。"
+      description="用于页面顶部交代标题、上下文与主要操作。"
+      prose="适合详情页、列表页开头，把面包屑、说明和关键按钮收在页眉区域。"
       componentKey="Pagehead"
       scope={{
         Pagehead,
@@ -281,8 +281,8 @@ export function StepsDocPage() {
   return (
     <DocShell
       title="Steps 步骤条"
-      description="Figma Structure Navigation → Steps。"
-      prose="支持水平 / 垂直方向，以及 done / fail / warning / waiting / inProgress / default 状态。"
+      description="用于展示多步骤流程当前走到哪。"
+      prose="适合注册向导、结账流程、配置向导等需要按阶段推进的场景。"
       componentKey="Steps"
       scope={{ Steps, StepsItem }}
       knobs={stepsKnobs}
@@ -296,8 +296,8 @@ export function PaginationDocPage() {
   return (
     <DocShell
       title="Pagination 分页"
-      description="Figma Structure Navigation → Pagination。"
-      prose="受控页码切换，可选跳转输入。总页数较多时点击省略号可打开页码跳转 Popover。"
+      description="用于在大量数据中翻页浏览。"
+      prose="适合表格、搜索结果、内容列表等一屏装不下、需要按页查看的场景。"
       componentKey="Pagination"
       scope={{ Pagination, useState }}
       knobs={paginationKnobs}
@@ -311,8 +311,8 @@ export function CardDocPage() {
   return (
     <DocShell
       title="Card 卡片"
-      description="Figma Structure Navigation → Card。"
-      prose="Head / Body / Bottom 组合。演示对齐 Figma Card 整卡：标题区 + 内容区 + 底部操作；Head 单项也可单独用 action / switch / select。"
+      description="用于把一组相关内容收成可浏览的信息块。"
+      prose="适合首页模块、设置分组、内容摘要等需要标题、正文与操作落在同一视觉区块的场景。"
       componentKey="Card"
       scope={{ Card, CardHead, CardBody, CardBottom }}
       knobs={cardKnobs}
@@ -326,8 +326,8 @@ export function TableDocPage() {
   return (
     <DocShell
       title="Table 表格"
-      description="Figma Information Display → Table。"
-      prose="组合式表头与单元格，支持 checkbox / people / badge 等内容类型。"
+      description="用于行列对照地浏览结构化数据。"
+      prose="适合订单、成员、日志等需要多字段对齐比较的数据场景。"
       componentKey="Table"
       scope={{ Table, TableRow, TableHead, TableCell, Avatar }}
       knobs={tableKnobs}

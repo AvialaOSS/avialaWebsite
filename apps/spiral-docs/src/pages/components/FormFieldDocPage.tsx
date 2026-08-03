@@ -9,8 +9,8 @@ export function FormFieldDocPage() {
       scope={{ FormField, Input }}
       fallback={{
         title: "FormField 表单字段",
-        description: "Figma System Composition → FormField。用于标签、描述与控件组合。",
-        prose: "将 label、description 与任意输入控件组合，配合 Stack / Fieldset 构建表单布局。",
+        description: "用于把标签、说明与输入控件排成完整表单项。",
+        prose: "适合设置页、注册登录、资料编辑等需要字段语义与控件一起出现的场景。",
         liveCode: formFieldLiveCode,
         knobs: formFieldKnobs,
         buildCode: buildFormFieldCode,

@@ -1,4 +1,3 @@
-@import "@aviala-design/tokens/styles.css";
 @import "tailwindcss";
 
 @source "../../../node_modules/@aviala-design/spiral/dist";

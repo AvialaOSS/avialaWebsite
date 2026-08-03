@@ -67,6 +67,10 @@ function hasIconKnobs(knobs: KnobDef[]): boolean {
 /** Stable fallback — inline `[]` defaults recreate every render and retrigger sync effects. */
 const EMPTY_KNOBS: KnobDef[] = [];
 
+function normalizeLiveCode(code: string) {
+  return code.replace(/\r\n/g, "\n");
+}
+
 type LiveDemoProps = {
   initialCode: string;
   scope: Record<string, unknown>;
@@ -108,8 +112,11 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
   const editorRef = useRef<MonacoStandaloneEditor | null>(null);
   const gateRef = useRef<HTMLButtonElement>(null);
   const isEditingRef = useRef(false);
+  /** Last code pushed by knobs / reset / initial — Monaco onChange echoes must not desync. */
+  const lastPushedCodeRef = useRef(initialCode);
   const monacoTheme = spiralMonacoThemeId(mode);
   const hasKnobs = knobs.length > 0;
+  const knobsCanSync = Boolean(buildCode && hasKnobs);
   const usesIconKnobs = hasIconKnobs(knobs);
   const knobDefaults = useMemo(() => defaultKnobValues(knobs), [knobs]);
   const [knobValues, setKnobValues] = useState<KnobValues>(knobDefaults);
@@ -117,17 +124,18 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
   const [knobsPanelOpen, setKnobsPanelOpen] = useState(true);
   const [code, setCode] = useState(initialCode);
   const [editorCode, setEditorCode] = useState(initialCode);
-  const [knobsSynced, setKnobsSynced] = useState(Boolean(buildCode && hasKnobs));
+  const [knobsSynced, setKnobsSynced] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   /** Defer Monaco until after first paint — init is a major route-change cost. */
   const [monacoReady, setMonacoReady] = useState(false);
   const debounceRef = useRef<number | null>(null);
 
   useEffect(() => {
+    lastPushedCodeRef.current = initialCode;
     setCode(initialCode);
     setEditorCode(initialCode);
     setKnobValues(defaultKnobValues(knobs));
-    setKnobsSynced(Boolean(buildCode && knobs.length > 0));
+    setKnobsSynced(true);
     setKnobsPanelOpen(true);
     setIsEditing(false);
     isEditingRef.current = false;
@@ -175,6 +183,7 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
       setKnobValues(values);
       if (buildCode) {
         const next = buildCode(values);
+        lastPushedCodeRef.current = next;
         setCode(next);
         setEditorCode(next);
         setKnobsSynced(true);
@@ -186,11 +195,19 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
   const handleEditorChange = (value: string | undefined) => {
     const next = value ?? "";
     setEditorCode(next);
-    setKnobsSynced(false);
     if (debounceRef.current) window.clearTimeout(debounceRef.current);
     debounceRef.current = window.setTimeout(() => {
       setCode(next);
     }, 180);
+
+    // Monaco fires onChange on mount and when the controlled `value` is updated from
+    // knobs — especially visible with multiple LiveDemos. Only mark desynced for real edits.
+    if (normalizeLiveCode(next) === normalizeLiveCode(lastPushedCodeRef.current)) {
+      setKnobsSynced(true);
+      return;
+    }
+    // Only meaningful when knobs drive the editor; bare demos have nothing to desync.
+    if (knobsCanSync) setKnobsSynced(false);
   };
 
   useEffect(
@@ -203,10 +220,11 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
   const { element, error } = useMemo(() => evaluateLiveCode(code, mergedScope), [code, mergedScope]);
 
   const reset = () => {
+    lastPushedCodeRef.current = initialCode;
     setKnobValues(knobDefaults);
     setCode(initialCode);
     setEditorCode(initialCode);
-    setKnobsSynced(Boolean(buildCode && hasKnobs));
+    setKnobsSynced(true);
   };
 
   const setEditorTabbable = useCallback((tabbable: boolean) => {
@@ -313,13 +331,18 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
           className={`docs-live-stage${hasKnobs && knobsPanelOpen ? " has-knobs-open" : ""}${hasKnobs && !knobsPanelOpen ? " has-knobs-collapsed" : ""}`}
         >
           <div className="docs-live-preview docs-demo-surface">
-            <LivePreviewErrorBoundary resetKey={code}>{element}</LivePreviewErrorBoundary>
+            <LivePreviewErrorBoundary resetKey={code}>
+              {/* Remount preview when live code changes so uncontrolled defaults (e.g. Slider type) apply */}
+              <div key={code} className="docs-live-preview-host">
+                {element}
+              </div>
+            </LivePreviewErrorBoundary>
           </div>
 
           {hasKnobs && knobsPanelOpen ? (
             <aside className="docs-live-knobs-panel" aria-label="API 调参">
               <div className="docs-live-knobs-header">
-                <Typography level="subtitle" as="h3">
+                <Typography level="subtitle" as="p" className="docs-live-knobs-title">
                   API 调参
                 </Typography>
                 <Button
@@ -353,14 +376,14 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
           ) : null}
         </div>
 
-        {(error || !knobsSynced) && (
+        {(error || (knobsCanSync && !knobsSynced)) && (
           <div className="docs-live-meta">
             {error ? (
               <Typography level="caption" className="docs-live-error">
                 {error}
               </Typography>
             ) : null}
-            {!knobsSynced ? (
+            {knobsCanSync && !knobsSynced ? (
               <Typography level="caption" className="docs-live-hint">
                 已手动编辑代码，API 调参与编辑器内容可能不同步。
               </Typography>

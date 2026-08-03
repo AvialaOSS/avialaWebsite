@@ -3,8 +3,8 @@ import type { ComponentDocRevision } from "../types";
 const revision: ComponentDocRevision = {
   revision: "2.0.0",
   title: "List 列表",
-  description: "Figma Structure Navigation → List。用于设置项或表单分组列表。",
-  prose: "支持 select / action / switch 尾部类型，以及 shaped / default / none 前置图标样式。",
+  description: "用于展示可点选或可配置的条目列表。",
+  prose: "适合设置项、菜单列表、账户选项等一行一项、可继续操作的场景。",
 };
 
 export default revision;

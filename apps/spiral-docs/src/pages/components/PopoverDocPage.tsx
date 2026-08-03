@@ -24,9 +24,9 @@ export function PopoverDocPage() {
       scope={{ Popover, PopoverTrigger, PopoverContent, Button }}
       fallback={{
         title: "Popover 弹出层",
-        description: "Figma System Composition → Popover。用于富内容浮层面板。",
+        description: "用于在触发点旁展开一段临时面板。",
         prose:
-          "基于 Radix Popover，支持四向 placement、箭头与自定义 anchor。`appearance` 可选 default / tooltip / primary；`flush` 去掉默认内边距。悬停富内容见下方 HoverPopover。",
+          "适合筛选浮层、快捷菜单、补充说明等不必占满整页的内容。",
         liveCode: popoverLiveCode,
         knobs: popoverKnobs,
         buildCode: buildPopoverCode,

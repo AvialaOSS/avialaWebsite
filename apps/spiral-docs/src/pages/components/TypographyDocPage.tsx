@@ -9,8 +9,8 @@ export function TypographyDocPage() {
       scope={{ Typography }}
       fallback={{
         title: "Typography 排版",
-        description: "Figma System Composition → Typography。用于语义化文字层级。",
-        prose: "提供 display 至 caption 共 7 级文字样式，支持 text / number 内容与 default / white 色调。",
+        description: "用于按语义层级展示标题与正文。",
+        prose: "适合页面标题、段落、说明文字等需要统一阅读层级的排版场景。",
         liveCode: typographyLiveCode,
         knobs: typographyKnobs,
         buildCode: buildTypographyCode,

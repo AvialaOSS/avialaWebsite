@@ -3,9 +3,9 @@ import type { ComponentDocRevision } from "../types";
 const revision: ComponentDocRevision = {
   revision: "2.0.0",
   title: "Alert 提示",
-  description: "Figma Response And Feedback → Alert。用于页面级或区块级状态提示。",
+  description: "用于在页面或区块内提示重要状态，需要用户留意时。",
   prose:
-    `支持 info、warning、error、success、neutral 等类型，以及 default / light 外观与可选操作区。`,
+    "适合成功、警告、错误等结果提示，以及需要附带简短说明或后续操作的场景。",
 };
 
 export default revision;

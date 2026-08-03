@@ -25,7 +25,7 @@ const DOCS_CONTRIB_HREF =
 
 type DocsNavDirection = "forward" | "back";
 
-const HEAVY_DOC_PATHS = new Set(["/reference/icons", "/reference/icons/playground"]);
+const HEAVY_DOC_PATHS = new Set(["/reference/icons"]);
 
 function prefersReducedMotion() {
   return (
@@ -103,8 +103,7 @@ export function DocLayout() {
 
   const pathname = location.pathname;
   const isContentPending = isOutletPending || eagerPath !== displayedPath;
-  const hideToc =
-    displayedPath === "/reference/icons" || displayedPath === "/reference/icons/playground";
+  const hideToc = displayedPath === "/reference/icons";
   const pageLabel = getNavItemByPath(displayedPath)?.label;
   const { prev, next } = getAdjacentPages(
     getNavPathIndex(pathname) >= 0 ? pathname : "/start/introduction"

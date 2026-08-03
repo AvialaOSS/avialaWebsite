@@ -46,10 +46,7 @@ import { InstallationPage } from "./pages/guides/InstallationPage";
 import { IntroductionPage } from "./pages/guides/IntroductionPage";
 import { ThemePage } from "./pages/guides/ThemePage";
 import { ChangelogPage } from "./pages/guides/ChangelogPage";
-import { DebuggerPage } from "./pages/reference/DebuggerPage";
 import { IconsDocPage } from "./pages/reference/IconsDocPage";
-import { IconsPlaygroundPage } from "./pages/reference/IconsPlaygroundPage";
-import { RemScalePage } from "./pages/reference/RemScalePage";
 
 export function AppRoutes() {
   return (
@@ -61,9 +58,6 @@ export function AppRoutes() {
         <Route path="start/theme" element={<ThemePage />} />
         <Route path="start/changelog" element={<ChangelogPage />} />
         <Route path="reference/icons" element={<IconsDocPage />} />
-        <Route path="reference/icons/playground" element={<IconsPlaygroundPage />} />
-        <Route path="reference/debugger" element={<DebuggerPage />} />
-        <Route path="reference/rem-scale" element={<RemScalePage />} />
         <Route path="components/basic-input/button" element={<ButtonDocPage />} />
         <Route path="components/basic-input/input" element={<InputDocPage />} />
         <Route path="components/basic-input/segmentator" element={<SegmentatorDocPage />} />

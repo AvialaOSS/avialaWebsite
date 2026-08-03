@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { createRequire } from "node:module";
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import mdx from "@mdx-js/rollup";
@@ -155,6 +155,23 @@ function localSpiralResolvePlugin(local: LocalSpiralPaths): Plugin {
     "@aviala-design/icons": local.icons,
   };
 
+  /** Prefer ESM/dist — `createRequire().resolve` picks the `require` export (CJS). */
+  function resolvePackageEntry(pkgDir: string, kind: "spiral" | "icons" | "tokens") {
+    if (kind === "spiral") return local.spiralEntry;
+
+    const distJs = path.join(pkgDir, "dist/index.js");
+    const srcTs = path.join(pkgDir, "src/index.ts");
+    if (kind === "icons") {
+      // Icons are codegen'd into src; prefer src for HMR, else built ESM.
+      if (process.env.DOCS_SPIRAL_LOCAL_DIST !== "1" && existsSync(srcTs)) {
+        return srcTs;
+      }
+      return existsSync(distJs) ? distJs : null;
+    }
+    // tokens root is CSS-first; only resolve if an ESM entry exists.
+    return existsSync(distJs) ? distJs : null;
+  }
+
   return {
     name: "docs-local-spiral-resolve",
     enforce: "pre",
@@ -165,16 +182,42 @@ function localSpiralResolvePlugin(local: LocalSpiralPaths): Plugin {
         if (source === "@aviala-design/spiral") {
           return local.spiralEntry;
         }
+        if (source === "@aviala-design/icons") {
+          return resolvePackageEntry(pkgDir, "icons");
+        }
+        if (source === "@aviala-design/tokens") {
+          return resolvePackageEntry(pkgDir, "tokens");
+        }
         if (source === "@aviala-design/spiral/styles.css") {
           const css = path.join(pkgDir, "dist/styles.css");
           return existsSync(css) ? css : null;
         }
 
+        // Subpaths (e.g. tokens/*.css). Prefer package exports → local dist so we
+        // never accidentally resolve a second copy from the docs node_modules.
+        const subpath = `./${source.slice(name.length + 1)}`;
+        try {
+          const pkgJson = JSON.parse(
+            readFileSync(path.join(pkgDir, "package.json"), "utf8"),
+          ) as { exports?: Record<string, string | Record<string, string>> };
+          const exp = pkgJson.exports?.[subpath];
+          const rel =
+            typeof exp === "string"
+              ? exp
+              : exp && typeof exp === "object"
+                ? exp.default || exp.import || exp.require
+                : undefined;
+          if (typeof rel === "string") {
+            const resolved = path.resolve(pkgDir, rel);
+            if (existsSync(resolved)) return resolved;
+          }
+        } catch {
+          /* fall through */
+        }
         const requireFromPkg = createRequire(path.join(pkgDir, "package.json"));
         try {
           return requireFromPkg.resolve(source);
         } catch {
-          // Fall through — some subpaths may only exist after a tokens/icons build.
           return null;
         }
       }
@@ -267,16 +310,15 @@ export default defineConfig(({ mode }) => {
       host: true,
       port: 5175,
       cors: true,
-      origin: "http://localhost:5175",
       fs: {
         allow: [
           path.resolve(dirname, "../.."),
           ...(localSpiral ? [localSpiral.root] : []),
         ],
       },
+      // Do not hardcode hmr.host=localhost — breaks Network IP preview and
+      // some embedded browsers. Client uses the page's current host:port.
       hmr: {
-        host: "localhost",
-        protocol: "ws",
         clientPort: 5175,
       },
     },

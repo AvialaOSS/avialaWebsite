@@ -9,8 +9,8 @@ export function LinkDocPage() {
       scope={{ Link }}
       fallback={{
         title: "Link 链接",
-        description: "Figma Basic Input → Link。用于导航或内联操作链接。",
-        prose: "支持 caption / text 层级、noBackground 模式，以及左右图标与 iconOnly 变体。",
+        description: "用于跳转页面或触发内联操作。",
+        prose: "适合正文中的导航、次要操作入口等文字链接触达的场景。",
         liveCode: linkLiveCode,
         knobs: linkKnobs,
         buildCode: buildLinkCode,

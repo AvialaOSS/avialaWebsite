@@ -9,8 +9,8 @@ export function LoadingDocPage() {
       scope={{ Loading }}
       fallback={{
         title: "Loading 加载",
-        description: "Figma System Composition → Loading Icon。用于加载状态指示。",
-        prose: "提供 7 级尺寸与 theme / themeText / black / white 模式，可选 lineHeightFix 对齐修正。",
+        description: "用于表示内容或操作仍在进行中。",
+        prose: "适合按钮提交中、区块加载中等需要让用户等待的短暂状态。",
         liveCode: loadingLiveCode,
         knobs: loadingKnobs,
         buildCode: buildLoadingCode,

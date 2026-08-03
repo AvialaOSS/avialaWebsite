@@ -1,9 +1,10 @@
-import { GeneralHistory, GeneralTodoList } from "@aviala-design/icons";
+import { GeneralHistory, GeneralShare, GeneralTodoList, SymbolRight } from "@aviala-design/icons";
 import {
   Alert,
   Anchor,
   AnchorItem,
   Button,
+  Feedback,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -13,7 +14,7 @@ import {
   TooltipTrigger,
   Typography,
 } from "@aviala-design/spiral";
-import { useEffect, useState, type RefObject } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import { useLocation } from "react-router-dom";
 import { useDocsStaleInfo } from "../lib/docs-stale";
 import { getNavItemByPath } from "../nav";
@@ -59,8 +60,18 @@ function usePageHeadings(containerRef: RefObject<HTMLElement | null>) {
           .toLowerCase()
           .replace(/\s+/g, "-")
           .replace(/[^\w\u4e00-\u9fff-]+/g, "");
-        node.id = id;
+        id = id || `heading-${next.length}`;
       }
+
+      const base = id;
+      let unique = base;
+      let suffix = 2;
+      while (next.some((heading) => heading.id === unique)) {
+        unique = `${base}-${suffix}`;
+        suffix += 1;
+      }
+      id = unique;
+      if (node.id !== id) node.id = id;
 
       next.push({ id, text, level });
     });
@@ -194,9 +205,61 @@ export function DocPageHeader({
   showVersionControls = false,
 }: DocPageHeaderProps) {
   const [updatesOpen, setUpdatesOpen] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
+  const [copyToast, setCopyToast] = useState<{
+    key: number;
+    title: string;
+    type: "success" | "wrong";
+  } | null>(null);
+  const copyResetRef = useRef<number | null>(null);
+  const toastResetRef = useRef<number | null>(null);
   const { pathname } = useLocation();
   const component = getNavItemByPath(pathname)?.component;
   const stale = useDocsStaleInfo(component, showVersionControls);
+
+  useEffect(
+    () => () => {
+      if (copyResetRef.current != null) window.clearTimeout(copyResetRef.current);
+      if (toastResetRef.current != null) window.clearTimeout(toastResetRef.current);
+    },
+    [],
+  );
+
+  const showCopyToast = (title: string, type: "success" | "wrong") => {
+    setCopyToast({ key: Date.now(), title, type });
+    if (toastResetRef.current != null) window.clearTimeout(toastResetRef.current);
+    toastResetRef.current = window.setTimeout(() => setCopyToast(null), 2000);
+  };
+
+  const copyPageLink = async () => {
+    const url = window.location.href;
+    try {
+      await navigator.clipboard.writeText(url);
+      setLinkCopied(true);
+      showCopyToast("链接已复制", "success");
+      if (copyResetRef.current != null) window.clearTimeout(copyResetRef.current);
+      copyResetRef.current = window.setTimeout(() => setLinkCopied(false), 2000);
+    } catch {
+      try {
+        const input = document.createElement("textarea");
+        input.value = url;
+        input.setAttribute("readonly", "");
+        input.style.position = "fixed";
+        input.style.opacity = "0";
+        document.body.appendChild(input);
+        input.select();
+        const ok = document.execCommand("copy");
+        document.body.removeChild(input);
+        if (!ok) throw new Error("copy failed");
+        setLinkCopied(true);
+        showCopyToast("链接已复制", "success");
+        if (copyResetRef.current != null) window.clearTimeout(copyResetRef.current);
+        copyResetRef.current = window.setTimeout(() => setLinkCopied(false), 2000);
+      } catch {
+        showCopyToast("复制失败，请手动复制地址栏链接", "wrong");
+      }
+    }
+  };
 
   return (
     <header className="docs-page-header">
@@ -208,6 +271,31 @@ export function DocPageHeader({
           <div className="docs-page-header__actions">
             <DocsVersionSwitcher variant="header" />
             <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    type="button"
+                    mode="defaultCustom"
+                    size="regular"
+                    iconOnly
+                    className="docs-page-header__share-btn"
+                    aria-label={linkCopied ? "链接已复制" : "复制页面链接"}
+                    leftIcon={
+                      linkCopied ? (
+                        <SymbolRight aria-hidden />
+                      ) : (
+                        <GeneralShare aria-hidden />
+                      )
+                    }
+                    onClick={() => {
+                      void copyPageLink();
+                    }}
+                  />
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  {linkCopied ? "已复制" : "复制链接"}
+                </TooltipContent>
+              </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
@@ -250,6 +338,17 @@ export function DocPageHeader({
       ) : null}
       {showVersionControls ? (
         <DocsUpdatesModal open={updatesOpen} onOpenChange={setUpdatesOpen} />
+      ) : null}
+      {copyToast ? (
+        <Feedback
+          key={copyToast.key}
+          className="docs-copy-toast"
+          type={copyToast.type}
+          size="small"
+          mode="primary"
+          title={copyToast.title}
+          showClose={false}
+        />
       ) : null}
     </header>
   );

@@ -8,9 +8,9 @@ import {
 const revision: ComponentDocRevision = {
   revision: "2.2.0",
   title: "Tooltip 工具提示",
-  description: "Figma System Composition → Tooltip。用于悬停时的轻量说明。",
+  description: "用于在悬停或聚焦时补充简短说明。",
   prose:
-    "需在 TooltipProvider 内使用，支持四向 placement 与可选箭头。跨端场景请用 `ResponsiveTooltip`：桌面为悬停/焦点 Tooltip；触摸为点按，并自 2.2.0 起保持 tooltip 外观（反色皮肤），不再切换成浅色 popover 面板。",
+    "适合图标按钮、缩略文案等界面空间不够写全、又需要一点提示的场景。",
   liveCode: tooltipLiveCode,
   knobs: tooltipKnobs,
   buildCode: buildTooltipCode,

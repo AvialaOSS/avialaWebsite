@@ -14,126 +14,46 @@
       "icons": "2.0.2",
       "status": "ready",
       "components": {
-        "Alert": {
-          "rev": "2.0.0"
-        },
-        "Anchor": {
-          "rev": "2.0.0"
-        },
-        "Avatar": {
-          "rev": "2.0.0"
-        },
-        "Badge": {
-          "rev": "2.0.0"
-        },
-        "Breadcrumb": {
-          "rev": "2.0.0"
-        },
-        "Button": {
-          "rev": "2.0.0"
-        },
-        "Card": {
-          "rev": "2.0.0"
-        },
-        "CascaderField": {
-          "rev": "2.0.0"
-        },
-        "Checkbox": {
-          "rev": "2.0.0"
-        },
-        "ColorPicker": {
-          "rev": "2.0.0"
-        },
-        "DatePickerField": {
-          "rev": "2.0.0"
-        },
-        "Feedback": {
-          "rev": "2.0.0"
-        },
-        "FormField": {
-          "rev": "2.0.0"
-        },
-        "Input": {
-          "rev": "2.0.0"
-        },
-        "Link": {
-          "rev": "2.0.0"
-        },
-        "List": {
-          "rev": "2.0.0"
-        },
-        "Loading": {
-          "rev": "2.0.0"
-        },
-        "Modal": {
-          "rev": "2.0.0"
-        },
-        "Navigation": {
-          "rev": "2.0.0"
-        },
-        "NumberInput": {
-          "rev": "2.0.0"
-        },
-        "Pagehead": {
-          "rev": "2.0.0"
-        },
-        "Pagination": {
-          "rev": "2.0.0"
-        },
-        "Popover": {
-          "rev": "2.0.0"
-        },
-        "Progress": {
-          "rev": "2.0.0"
-        },
-        "RadioGroup": {
-          "rev": "2.0.0"
-        },
-        "Scroll": {
-          "rev": "2.0.0"
-        },
-        "ScrollPicker": {
-          "rev": "2.0.0"
-        },
-        "SegmentatorGroup": {
-          "rev": "2.0.0"
-        },
-        "Select": {
-          "rev": "2.0.0"
-        },
-        "Slider": {
-          "rev": "2.0.0"
-        },
-        "Steps": {
-          "rev": "2.0.0"
-        },
-        "Switch": {
-          "rev": "2.0.0"
-        },
-        "Table": {
-          "rev": "2.0.0"
-        },
-        "Tag": {
-          "rev": "2.0.0"
-        },
-        "Textarea": {
-          "rev": "2.0.0"
-        },
-        "TimePickerField": {
-          "rev": "2.0.0"
-        },
-        "Tooltip": {
-          "rev": "2.0.0"
-        },
-        "Typeface": {
-          "rev": "2.0.0"
-        },
-        "Typography": {
-          "rev": "2.0.0"
-        },
-        "Upload": {
-          "rev": "2.0.0"
-        }
+        "Alert": { "rev": "2.0.0" },
+        "Anchor": { "rev": "2.0.0" },
+        "Avatar": { "rev": "2.0.0" },
+        "Badge": { "rev": "2.0.0" },
+        "Breadcrumb": { "rev": "2.0.0" },
+        "Button": { "rev": "2.0.0" },
+        "Card": { "rev": "2.0.0" },
+        "CascaderField": { "rev": "2.0.0" },
+        "Checkbox": { "rev": "2.0.0" },
+        "ColorPicker": { "rev": "2.0.0" },
+        "DatePickerField": { "rev": "2.0.0" },
+        "Feedback": { "rev": "2.0.0" },
+        "FormField": { "rev": "2.0.0" },
+        "Input": { "rev": "2.0.0" },
+        "Link": { "rev": "2.0.0" },
+        "List": { "rev": "2.0.0" },
+        "Loading": { "rev": "2.0.0" },
+        "Modal": { "rev": "2.0.0" },
+        "Navigation": { "rev": "2.0.0" },
+        "NumberInput": { "rev": "2.0.0" },
+        "Pagehead": { "rev": "2.0.0" },
+        "Pagination": { "rev": "2.0.0" },
+        "Popover": { "rev": "2.0.0" },
+        "Progress": { "rev": "2.0.0" },
+        "RadioGroup": { "rev": "2.0.0" },
+        "Scroll": { "rev": "2.0.0" },
+        "ScrollPicker": { "rev": "2.0.0" },
+        "SegmentatorGroup": { "rev": "2.0.0" },
+        "Select": { "rev": "2.0.0" },
+        "Slider": { "rev": "2.0.0" },
+        "Steps": { "rev": "2.0.0" },
+        "Switch": { "rev": "2.0.0" },
+        "Table": { "rev": "2.0.0" },
+        "Tag": { "rev": "2.0.0" },
+        "Textarea": { "rev": "2.0.0" },
+        "TimePickerField": { "rev": "2.0.0" },
+        "Tooltip": { "rev": "2.0.0" },
+        "Typeface": { "rev": "2.0.0" },
+        "Typography": { "rev": "2.0.0" },
+        "Upload": { "rev": "2.0.0" }
       }
     },
     "2.1.0": {
@@ -142,24 +62,12 @@
       "icons": "2.0.2",
       "status": "ready",
       "components": {
-        "Button": {
-          "rev": "2.1.0"
-        },
-        "Popover": {
-          "rev": "2.1.0"
-        },
-        "Tooltip": {
-          "rev": "2.1.0"
-        },
-        "Pagination": {
-          "rev": "2.1.0"
-        },
-        "Navigation": {
-          "rev": "2.1.0"
-        },
-        "SegmentatorGroup": {
-          "rev": "2.1.0"
-        }
+        "Button": { "rev": "2.1.0" },
+        "Popover": { "rev": "2.1.0" },
+        "Tooltip": { "rev": "2.1.0" },
+        "Pagination": { "rev": "2.1.0" },
+        "Navigation": { "rev": "2.1.0" },
+        "SegmentatorGroup": { "rev": "2.1.0" }
       }
     },
     "2.2.0": {
@@ -168,12 +76,8 @@
       "icons": "2.0.2",
       "status": "ready",
       "components": {
-        "Popover": {
-          "rev": "2.2.0"
-        },
-        "Tooltip": {
-          "rev": "2.2.0"
-        }
+        "Popover": { "rev": "2.2.0" },
+        "Tooltip": { "rev": "2.2.0" }
       }
     },
     "2.4.1": {
@@ -182,36 +86,17 @@
       "icons": "2.2.0",
       "status": "ready",
       "components": {
-        "Button": {
-          "inherits": "2.2.0"
-        },
-        "Popover": {
-          "inherits": "2.2.0"
-        },
-        "Tooltip": {
-          "inherits": "2.2.0"
-        },
-        "Pagination": {
-          "inherits": "2.2.0"
-        },
-        "Navigation": {
-          "inherits": "2.2.0"
-        },
-        "SegmentatorGroup": {
-          "inherits": "2.2.0"
-        },
-        "CascaderField": {
-          "inherits": "2.2.0"
-        },
-        "Modal": {
-          "inherits": "2.2.0"
-        },
-        "DatePickerField": {
-          "inherits": "2.2.0"
-        },
-        "Typeface": {
-          "inherits": "2.2.0"
-        }
+        "Button": { "inherits": "2.2.0" },
+        "Popover": { "inherits": "2.2.0" },
+        "Tooltip": { "rev": "2.4.1" },
+        "Slider": { "rev": "2.4.1" },
+        "Pagination": { "inherits": "2.2.0" },
+        "Navigation": { "inherits": "2.2.0" },
+        "SegmentatorGroup": { "inherits": "2.2.0" },
+        "CascaderField": { "inherits": "2.2.0" },
+        "Modal": { "inherits": "2.2.0" },
+        "DatePickerField": { "inherits": "2.2.0" },
+        "Typeface": { "inherits": "2.2.0" }
       }
     },
     "2.5.0": {
@@ -220,42 +105,18 @@
       "icons": "2.2.0",
       "status": "draft",
       "components": {
-        "Button": {
-          "inherits": "2.4.1"
-        },
-        "Popover": {
-          "rev": "2.5.0"
-        },
-        "Tooltip": {
-          "rev": "2.5.0"
-        },
-        "Pagination": {
-          "inherits": "2.4.1"
-        },
-        "Navigation": {
-          "rev": "2.5.0"
-        },
-        "SegmentatorGroup": {
-          "rev": "2.5.0"
-        },
-        "CascaderField": {
-          "inherits": "2.4.1"
-        },
-        "Modal": {
-          "inherits": "2.4.1"
-        },
-        "DatePickerField": {
-          "inherits": "2.4.1"
-        },
-        "Typeface": {
-          "inherits": "2.4.1"
-        },
-        "Checkbox": {
-          "rev": "2.5.0"
-        },
-        "Slider": {
-          "rev": "2.5.0"
-        }
+        "Button": { "inherits": "2.4.1" },
+        "Popover": { "rev": "2.5.0" },
+        "Tooltip": { "rev": "2.5.0" },
+        "Pagination": { "inherits": "2.4.1" },
+        "Navigation": { "rev": "2.5.0" },
+        "SegmentatorGroup": { "rev": "2.5.0" },
+        "CascaderField": { "inherits": "2.4.1" },
+        "Modal": { "inherits": "2.4.1" },
+        "DatePickerField": { "inherits": "2.4.1" },
+        "Typeface": { "inherits": "2.4.1" },
+        "Checkbox": { "rev": "2.5.0" },
+        "Slider": { "rev": "2.5.0" }
       }
     }
   },
