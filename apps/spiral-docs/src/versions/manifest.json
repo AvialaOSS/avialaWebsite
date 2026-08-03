@@ -1,5 +1,11 @@
 {
-  "covered": ["2.0.0", "2.1.0", "2.2.0", "2.4.1"],
+  "covered": [
+    "2.0.0",
+    "2.1.0",
+    "2.2.0",
+    "2.4.1",
+    "2.5.0"
+  ],
   "default": "2.4.1",
   "versions": {
     "2.0.0": {
@@ -91,6 +97,26 @@
         "Modal": { "inherits": "2.2.0" },
         "DatePickerField": { "inherits": "2.2.0" },
         "Typeface": { "inherits": "2.2.0" }
+      }
+    },
+    "2.5.0": {
+      "spiral": "2.5.0",
+      "tokens": "2.3.0",
+      "icons": "2.2.0",
+      "status": "draft",
+      "components": {
+        "Button": { "inherits": "2.4.1" },
+        "Popover": { "rev": "2.5.0" },
+        "Tooltip": { "rev": "2.5.0" },
+        "Pagination": { "inherits": "2.4.1" },
+        "Navigation": { "rev": "2.5.0" },
+        "SegmentatorGroup": { "rev": "2.5.0" },
+        "CascaderField": { "inherits": "2.4.1" },
+        "Modal": { "inherits": "2.4.1" },
+        "DatePickerField": { "inherits": "2.4.1" },
+        "Typeface": { "inherits": "2.4.1" },
+        "Checkbox": { "rev": "2.5.0" },
+        "Slider": { "rev": "2.5.0" }
       }
     }
   },
