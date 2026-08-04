@@ -6,7 +6,7 @@
     "2.4.1",
     "2.5.0"
   ],
-  "default": "2.4.1",
+  "default": "2.5.0",
   "versions": {
     "2.0.0": {
       "spiral": "2.0.0",
@@ -103,7 +103,7 @@
       "spiral": "2.5.0",
       "tokens": "2.3.0",
       "icons": "2.2.0",
-      "status": "draft",
+      "status": "ready",
       "components": {
         "Button": { "inherits": "2.4.1" },
         "Popover": { "rev": "2.5.0" },

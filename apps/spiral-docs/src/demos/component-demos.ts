@@ -1105,6 +1105,13 @@ export const popoverKnobs: KnobDef[] = [
     options: ["default", "tooltip", "primary"],
     defaultValue: "default",
   },
+  {
+    kind: "select",
+    name: "level",
+    label: "level",
+    options: ["caption", "text"],
+    defaultValue: "text",
+  },
   { kind: "boolean", name: "showArrow", label: "showArrow", defaultValue: false },
   { kind: "boolean", name: "flush", label: "flush", defaultValue: false },
 ];
@@ -1112,18 +1119,24 @@ export const popoverKnobs: KnobDef[] = [
 export function buildPopoverCode(values: KnobValues): string {
   const side = String(values.side ?? "bottom");
   const appearance = String(values.appearance ?? "default");
+  const level = String(values.level ?? "text");
   const showArrow = Boolean(values.showArrow);
   const flush = Boolean(values.flush);
   const appearanceProp =
     appearance === "default" ? "" : `\n      appearance=${JSON.stringify(appearance)}`;
+  const levelProp =
+    (appearance === "tooltip" && level === "caption") ||
+    (appearance !== "tooltip" && level === "text")
+      ? ""
+      : `\n      level=${JSON.stringify(level)}`;
 
   return `render(
   <Popover>
     <PopoverTrigger asChild>
       <Button mode="default">Open popover</Button>
     </PopoverTrigger>
-    <PopoverContent side=${JSON.stringify(side)}${appearanceProp}${jsxBool(showArrow, "showArrow")}${jsxBool(flush, "flush")}>
-      Popover content with text typography.
+    <PopoverContent side=${JSON.stringify(side)}${appearanceProp}${levelProp}${jsxBool(showArrow, "showArrow")}${jsxBool(flush, "flush")}>
+      Popover content with ${level} typography.
     </PopoverContent>
   </Popover>
 );`;
