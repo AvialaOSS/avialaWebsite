@@ -8,10 +8,8 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Tooltip,
-  TooltipContent,
+  ResponsiveTooltip,
   TooltipProvider,
-  TooltipTrigger,
   Typography,
 } from "@aviala-design/spiral";
 import { useEffect, useRef, useState, type RefObject } from "react";
@@ -271,46 +269,41 @@ export function DocPageHeader({
           <div className="docs-page-header__actions">
             <DocsVersionSwitcher variant="header" />
             <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    type="button"
-                    mode="defaultCustom"
-                    size="regular"
-                    iconOnly
-                    className="docs-page-header__share-btn"
-                    aria-label={linkCopied ? "链接已复制" : "复制页面链接"}
-                    leftIcon={
-                      linkCopied ? (
-                        <SymbolRight aria-hidden />
-                      ) : (
-                        <GeneralShare aria-hidden />
-                      )
-                    }
-                    onClick={() => {
-                      void copyPageLink();
-                    }}
-                  />
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  {linkCopied ? "已复制" : "复制链接"}
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    type="button"
-                    mode="defaultCustom"
-                    size="regular"
-                    iconOnly
-                    className="docs-page-header__updates-btn"
-                    aria-label="更新历史记录"
-                    leftIcon={<GeneralHistory aria-hidden />}
-                    onClick={() => setUpdatesOpen(true)}
-                  />
-                </TooltipTrigger>
-                <TooltipContent side="bottom">更新历史记录</TooltipContent>
-              </Tooltip>
+              <ResponsiveTooltip
+                side="bottom"
+                content={linkCopied ? "已复制" : "复制链接"}
+              >
+                <Button
+                  type="button"
+                  mode="defaultCustom"
+                  size="regular"
+                  iconOnly
+                  className="docs-page-header__share-btn"
+                  aria-label={linkCopied ? "链接已复制" : "复制页面链接"}
+                  leftIcon={
+                    linkCopied ? (
+                      <SymbolRight aria-hidden />
+                    ) : (
+                      <GeneralShare aria-hidden />
+                    )
+                  }
+                  onClick={() => {
+                    void copyPageLink();
+                  }}
+                />
+              </ResponsiveTooltip>
+              <ResponsiveTooltip side="bottom" content="更新历史记录">
+                <Button
+                  type="button"
+                  mode="defaultCustom"
+                  size="regular"
+                  iconOnly
+                  className="docs-page-header__updates-btn"
+                  aria-label="更新历史记录"
+                  leftIcon={<GeneralHistory aria-hidden />}
+                  onClick={() => setUpdatesOpen(true)}
+                />
+              </ResponsiveTooltip>
             </TooltipProvider>
           </div>
         ) : null}

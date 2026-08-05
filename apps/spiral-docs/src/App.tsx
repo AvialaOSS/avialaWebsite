@@ -16,6 +16,7 @@ import { ListDocPage } from "./pages/components/ListDocPage";
 import { LoadingDocPage } from "./pages/components/LoadingDocPage";
 import { ModalDocPage } from "./pages/components/ModalDocPage";
 import { NavigationDocPage } from "./pages/components/NavigationDocPage";
+import { TabDocPage } from "./pages/components/TabDocPage";
 import { PopoverDocPage } from "./pages/components/PopoverDocPage";
 import { RadioDocPage } from "./pages/components/RadioDocPage";
 import { SegmentatorDocPage } from "./pages/components/SegmentatorDocPage";
@@ -45,6 +46,7 @@ import {
 import { InstallationPage } from "./pages/guides/InstallationPage";
 import { IntroductionPage } from "./pages/guides/IntroductionPage";
 import { ThemePage } from "./pages/guides/ThemePage";
+import { LocalePage } from "./pages/guides/LocalePage";
 import { ChangelogPage } from "./pages/guides/ChangelogPage";
 import { IconsDocPage } from "./pages/reference/IconsDocPage";
 
@@ -56,6 +58,7 @@ export function AppRoutes() {
         <Route path="start/introduction" element={<IntroductionPage />} />
         <Route path="start/installation" element={<InstallationPage />} />
         <Route path="start/theme" element={<ThemePage />} />
+        <Route path="start/locale" element={<LocalePage />} />
         <Route path="start/changelog" element={<ChangelogPage />} />
         <Route path="reference/icons" element={<IconsDocPage />} />
         <Route path="components/basic-input/button" element={<ButtonDocPage />} />
@@ -76,6 +79,7 @@ export function AppRoutes() {
         <Route path="components/information-collect/upload" element={<UploadDocPage />} />
         <Route path="components/information-collect/scroll-picker" element={<ScrollPickerDocPage />} />
         <Route path="components/structure-navigation/navigation" element={<NavigationDocPage />} />
+        <Route path="components/structure-navigation/tab" element={<TabDocPage />} />
         <Route path="components/structure-navigation/list" element={<ListDocPage />} />
         <Route path="components/structure-navigation/breadcrumb" element={<BreadcrumbDocPage />} />
         <Route path="components/structure-navigation/pagehead" element={<PageheadDocPage />} />

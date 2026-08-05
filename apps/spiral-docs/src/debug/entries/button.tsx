@@ -176,6 +176,8 @@ export const buttonEntry: DebugComponentEntry<ButtonDebugState> = {
             "second",
             "default",
             "defaultCustom",
+            "outline",
+            "outlineCustom",
             "noBackground",
             "noBackgroundCustom",
             "destructive",

@@ -31,15 +31,15 @@ export function TooltipDocPage() {
       fallback={{
         title: "Tooltip 工具提示",
         description: "用于在悬停或聚焦时补充简短说明。",
-          prose:
-          "适合图标按钮、缩略文案等界面空间不够写全、又需要一点提示的场景。",
+        prose:
+          "适合图标按钮、缩略文案等空间不够写全的场景。2.6.0 起 `ResponsiveTooltip` 触摸端改为长按打开（`longPressMs`，默认 500ms）。",
         liveCode: tooltipLiveCode,
         knobs: tooltipKnobs,
         buildCode: buildTooltipCode,
       }}
     >
       <DemoBlock
-        title="ResponsiveTooltip（跨端，触摸保持 tooltip 外观）"
+        title="ResponsiveTooltip（跨端，触摸长按，同款 tooltip 外观）"
         initialCode={responsiveTooltipLiveCode}
         scope={{ ResponsiveTooltip, TooltipProvider, Button }}
         knobs={responsiveTooltipKnobs}

@@ -28,6 +28,8 @@ type SidebarProps = {
   /** Eager highlight path (updates on click before route content commits). */
   activePath?: string;
   onPathPreview?: (path: string) => void;
+  /** Vertical edge divider — off for mobile reveal so it doesn't sit under the page card. */
+  dividingLine?: boolean;
 };
 
 type SectionConfig = {
@@ -110,7 +112,13 @@ function DocsNavSection({
   );
 }
 
-export function Sidebar({ onNavigate, onCollapse, activePath, onPathPreview }: SidebarProps) {
+export function Sidebar({
+  onNavigate,
+  onCollapse,
+  activePath,
+  onPathPreview,
+  dividingLine = true,
+}: SidebarProps) {
   const location = useLocation();
   const pathname = activePath ?? location.pathname;
   const [expandedSections, setExpandedSections] = useState(() =>
@@ -144,7 +152,7 @@ export function Sidebar({ onNavigate, onCollapse, activePath, onPathPreview }: S
       <Navigation
         direction="vertical"
         background="default"
-        dividingLine
+        dividingLine={dividingLine}
         className="docs-sidebar-nav"
         aria-label="文档导航"
       >
