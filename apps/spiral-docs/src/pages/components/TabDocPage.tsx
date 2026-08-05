@@ -3,12 +3,21 @@ import {
   DirectionArrowRight,
   GeneralSetting,
 } from "@aviala-design/icons";
-import { Button, Tab, TabItem } from "@aviala-design/spiral";
+import { Button, Typography } from "@aviala-design/spiral";
 import { useState } from "react";
 import { ComponentDocView } from "../../components/ComponentDocView";
 import { buildTabCode, tabKnobs, tabLiveCode } from "../../demos/component-demos";
+import { Tab, TabItem, spiralHasTab } from "../../lib/spiral-optional";
 
 export function TabDocPage() {
+  if (!spiralHasTab || !Tab || !TabItem) {
+    return (
+      <Typography level="text" as="p">
+        Tab 自 Spiral 2.6.0 起提供。请切换到 2.6.0 或更新的文档版本查看。
+      </Typography>
+    );
+  }
+
   return (
     <ComponentDocView
       component="Tab"
