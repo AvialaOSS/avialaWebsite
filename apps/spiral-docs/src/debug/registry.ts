@@ -56,7 +56,7 @@ export const componentDebugRegistry: DebugComponentEntry[] = [
   linkEntry,
   cascaderEntry,
   segmentatorEntry,
-  tabEntry,
+  ...(tabEntry ? [tabEntry] : []),
   navigationEntry,
   textareaEntry,
   datePickerEntry,

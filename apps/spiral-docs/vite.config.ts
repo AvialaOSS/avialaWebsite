@@ -48,6 +48,7 @@ function docsBaseRedirectPlugin(docsBasePath: string): Plugin {
 /** Resolve @aviala-design/* (incl. subpath CSS) from a versioned npm cache install. */
 function docsPkgResolvePlugin(pkgRoot: string): Plugin {
   const requireFromCache = createRequire(path.join(pkgRoot, "package.json"));
+  const EMPTY_CSS_PREFIX = "\0aviala-empty-css:";
   return {
     name: "docs-pkg-resolve",
     enforce: "pre",
@@ -56,8 +57,17 @@ function docsPkgResolvePlugin(pkgRoot: string): Plugin {
       try {
         return requireFromCache.resolve(source);
       } catch {
+        // Older token packages omit exports added in later minors (e.g. tab-effects.css).
+        // Stub empty CSS so one docs SPA source tree can build against every covered pin.
+        if (source.startsWith("@aviala-design/tokens/") && source.endsWith(".css")) {
+          return `${EMPTY_CSS_PREFIX}${source}`;
+        }
         return null;
       }
+    },
+    load(id) {
+      if (!id.startsWith(EMPTY_CSS_PREFIX)) return null;
+      return `/* ${id.slice(EMPTY_CSS_PREFIX.length)} unavailable in this docs package pin */\n`;
     },
   };
 }

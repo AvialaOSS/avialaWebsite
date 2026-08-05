@@ -7,11 +7,8 @@ import {
 import Editor, { type Monaco, type OnMount } from "@monaco-editor/react";
 import {
   Button,
-  ConfigProvider,
-  enUS,
   FormField,
   Loading,
-  LocaleProvider,
   SegmentatorGroup,
   SegmentatorItem,
   Select,
@@ -26,8 +23,6 @@ import {
   TooltipTrigger,
   Typography,
   useTheme,
-  zhCN,
-  type Direction,
 } from "@aviala-design/spiral";
 import {
   Component,
@@ -44,6 +39,14 @@ import {
 } from "react";
 import { applySpiralMonacoThemes, spiralMonacoThemeId } from "../lib/monaco-spiral-theme";
 import { evaluateLiveCode } from "../lib/live-eval";
+import {
+  ConfigProvider,
+  LocaleProvider,
+  enUS,
+  spiralHasLocaleRuntime,
+  zhCN,
+  type Direction,
+} from "../lib/spiral-optional";
 import { buildDemoIconScope, isIconCatalogLoaded, loadIconCatalog } from "../demos/demo-icons";
 import {
   DemoKnobs,
@@ -459,11 +462,12 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
             {hasKnobs ? (
               <div className="docs-live-stage-tools">
                 <SegmentatorGroup
-                  direction="vertical"
+                  {...(spiralHasLocaleRuntime ? { direction: "vertical" as const } : {})}
                   mode="nested"
                   value={toolsMode}
                   onValueChange={(next) => {
                     if (next === "preview" || next === "knobs" || next === "locale") {
+                      if (next === "locale" && !spiralHasLocaleRuntime) return;
                       setToolsMode(next);
                     }
                   }}
@@ -481,12 +485,14 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
                     leftIcon={<EditAdjust aria-hidden />}
                     aria-label="API 调参"
                   />
-                  <SegmentatorItem
-                    value="locale"
-                    iconOnly
-                    leftIcon={<GeneralTranslate aria-hidden />}
-                    aria-label="本地化调试"
-                  />
+                  {spiralHasLocaleRuntime ? (
+                    <SegmentatorItem
+                      value="locale"
+                      iconOnly
+                      leftIcon={<GeneralTranslate aria-hidden />}
+                      aria-label="本地化调试"
+                    />
+                  ) : null}
                 </SegmentatorGroup>
               </div>
             ) : null}
