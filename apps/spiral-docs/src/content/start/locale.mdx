@@ -1,0 +1,80 @@
+# 国际化
+
+Spiral 用 Semi Design 同款的 **语言包 + `LocaleProvider`** 管组件内置文案（Pagination、DatePicker、Upload 等），用 **`ConfigProvider`** 管书写方向（`ltr` / `rtl`）。两者正交：**不**依赖 i18next；业务文案仍可用你们自己的 i18n 方案。
+
+默认语言是 **`zh-CN`**。未包 `LocaleProvider` 时也会回落到 `zhCN`。内置另提供 **`en-US`**。默认方向是 **`ltr`**。
+
+## 基本用法
+
+```tsx
+import {
+  ConfigProvider,
+  LocaleProvider,
+  ThemeProvider,
+  zhCN,
+  enUS,
+} from "@aviala-design/spiral";
+
+export function App() {
+  return (
+    <ThemeProvider defaultMode="light" defaultPresetId="ald">
+      <ConfigProvider direction="ltr">
+        <LocaleProvider locale={zhCN}>
+          {/* 或 locale={enUS} / direction="rtl" */}
+          {children}
+        </LocaleProvider>
+      </ConfigProvider>
+    </ThemeProvider>
+  );
+}
+```
+
+也可以把语言包直接传给 `ConfigProvider`（内部会嵌套 `LocaleProvider`）：
+
+```tsx
+<ConfigProvider direction="rtl" locale={enUS}>
+  {children}
+</ConfigProvider>
+```
+
+根级 `ConfigProvider` 默认会把 `document.documentElement.dir` 写成当前方向（`syncDocumentDir`），这样挂到 `body` 的 Popover / Select / Modal 等浮层也会继承 RTL。嵌套的 `ConfigProvider` 只改局部 `dir`，不会抢写 html。
+
+组件上已有的 `placeholder`、`closeLabel`、`jumpLabel` 等 props **优先级高于** 语言包，可按实例覆盖。
+
+## 与 i18next 同步
+
+业务侧用 i18next 管应用文案时，在切语言的同时换 Spiral 语言包，并按需同步方向：
+
+```tsx
+import { useTranslation } from "react-i18next";
+import { ConfigProvider, zhCN, enUS } from "@aviala-design/spiral";
+
+const localeMap = {
+  "zh-CN": zhCN,
+  "en-US": enUS,
+} as const;
+
+function Root({ children }: { children: React.ReactNode }) {
+  const { i18n } = useTranslation();
+  const locale = localeMap[i18n.language as keyof typeof localeMap] ?? zhCN;
+  const direction = i18n.dir(); // "ltr" | "rtl"
+
+  return (
+    <ConfigProvider direction={direction} locale={locale}>
+      {children}
+    </ConfigProvider>
+  );
+}
+```
+
+## Hooks
+
+- `useLocale()` — 当前完整语言包（含 `code`，供 `Intl.DateTimeFormat` 使用）
+- `useLocaleMessages("Pagination")` — 某一组件块的文案字典
+- `useDirection()` / `useRtl()` — 当前书写方向
+
+## 边界与扩展
+
+- 日期相关展示走浏览器 `Intl`（配合 `locale.code`），不依赖 `date-fns`。
+- 新增语言时，按同一 `Locale` 类型补语言包即可接入；RTL 布局由 `ConfigProvider` 的 `direction` 控制，不必绑死在某个语言包上。
+- `leftIcon` / `rightIcon` 仍为物理左右命名；导航语义箭头（上一页 / 展开等）会随方向镜像。

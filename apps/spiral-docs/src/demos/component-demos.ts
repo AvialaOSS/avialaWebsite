@@ -19,7 +19,17 @@ export const buttonKnobs: KnobDef[] = [
     kind: "select",
     name: "mode",
     label: "mode",
-    options: ["primary", "second", "default", "defaultCustom", "noBackground", "noBackgroundCustom", "destructive"],
+    options: [
+      "primary",
+      "second",
+      "default",
+      "defaultCustom",
+      "outline",
+      "outlineCustom",
+      "noBackground",
+      "noBackgroundCustom",
+      "destructive",
+    ],
     defaultValue: "primary",
   },
   {
@@ -157,6 +167,13 @@ export const segmentatorKnobs: KnobDef[] = [
     options: ["nested", "tiled"],
     defaultValue: "nested",
   },
+  {
+    kind: "select",
+    name: "direction",
+    label: "direction",
+    options: ["horizontal", "vertical"],
+    defaultValue: "horizontal",
+  },
   { kind: "boolean", name: "allRound", label: "allRound", defaultValue: false },
   { kind: "boolean", name: "equalWidth", label: "equalWidth", defaultValue: false },
   { kind: "boolean", name: "disabled", label: "disabled", defaultValue: false },
@@ -177,10 +194,17 @@ render(<Demo />);`;
 
 export function buildSegmentatorCode(values: KnobValues): string {
   const mode = String(values.mode ?? "nested");
+  const direction = String(values.direction ?? "horizontal");
   const allRound = Boolean(values.allRound);
   const equalWidth = Boolean(values.equalWidth);
   const disabled = Boolean(values.disabled);
-  const widthClass = equalWidth ? `\n      className="w-full max-w-md"` : "";
+  const widthClass = equalWidth
+    ? direction === "vertical"
+      ? `\n      className="h-48"`
+      : `\n      className="w-full max-w-md"`
+    : "";
+  const directionProp =
+    direction === "vertical" ? `\n      direction="vertical"` : "";
 
   return `function Demo() {
   const [value, setValue] = useState("a");
@@ -188,7 +212,7 @@ export function buildSegmentatorCode(values: KnobValues): string {
     <SegmentatorGroup
       value={value}
       onValueChange={setValue}
-      mode=${JSON.stringify(mode)}${jsxBool(allRound, "allRound")}${jsxBool(equalWidth, "equalWidth")}${jsxBool(disabled, "disabled")}${widthClass}
+      mode=${JSON.stringify(mode)}${directionProp}${jsxBool(allRound, "allRound")}${jsxBool(equalWidth, "equalWidth")}${jsxBool(disabled, "disabled")}${widthClass}
     >
       <SegmentatorItem value="a">选项 A</SegmentatorItem>
       <SegmentatorItem value="b">选项 B</SegmentatorItem>
@@ -1319,7 +1343,7 @@ export function buildResponsiveTooltipCode(values: KnobValues): string {
     <ResponsiveTooltip
       side=${JSON.stringify(side)}
       level=${JSON.stringify(level)}${showArrowProp}${delayProp}
-      content="Desktop: hover tooltip · Touch: tap, same tooltip skin"
+      content="Desktop: hover tooltip · Touch: long-press, same tooltip skin"
     >
       <Button mode="default">Save</Button>
     </ResponsiveTooltip>
@@ -1477,6 +1501,136 @@ export const timePickerCompoundCode = `function Demo() {
 }
 
 render(<Demo />);`;
+
+export const tabKnobs: KnobDef[] = [
+  {
+    kind: "select",
+    name: "style",
+    label: "style",
+    options: ["default", "card", "tiled"],
+    defaultValue: "default",
+  },
+  {
+    kind: "select",
+    name: "background",
+    label: "background",
+    options: ["none", "default"],
+    defaultValue: "none",
+  },
+  { kind: "boolean", name: "withSlots", label: "slots", defaultValue: true },
+  { kind: "boolean", name: "disabled", label: "disabled", defaultValue: false },
+];
+
+export const tabLiveCode = `function Demo() {
+  const [value, setValue] = useState("a");
+  return (
+    <Tab
+      style="default"
+      value={value}
+      onValueChange={setValue}
+      startSlot={
+        <Button
+          mode="outlineCustom"
+          size="regular"
+          allRound
+          iconOnly
+          leftIcon={<DirectionArrowLeft aria-hidden />}
+          aria-label="Previous"
+        />
+      }
+      endSlot={
+        <Button
+          mode="outlineCustom"
+          size="regular"
+          allRound
+          iconOnly
+          leftIcon={<DirectionArrowRight aria-hidden />}
+          aria-label="Next"
+        />
+      }
+    >
+      <TabItem value="a" leftIcon={<GeneralSetting aria-hidden />}>
+        Text
+      </TabItem>
+      <TabItem value="b" leftIcon={<GeneralSetting aria-hidden />}>
+        Text
+      </TabItem>
+      <TabItem value="c" leftIcon={<GeneralSetting aria-hidden />}>
+        Text
+      </TabItem>
+      <TabItem value="d" leftIcon={<GeneralSetting aria-hidden />}>
+        Text
+      </TabItem>
+    </Tab>
+  );
+}
+
+render(<Demo />);`;
+
+export function buildTabCode(values: KnobValues): string {
+  const style = String(values.style ?? "default");
+  const background = String(values.background ?? "none");
+  const withSlots = values.withSlots !== false;
+  const disabled = Boolean(values.disabled);
+  const backgroundProp =
+    background !== "none" ? `\n      background=${JSON.stringify(background)}` : "";
+  const disabledProp = disabled ? `\n      disabled` : "";
+  const slotsProp = withSlots
+    ? `
+      startSlot={
+        <Button
+          mode="outlineCustom"
+          size="regular"
+          allRound
+          iconOnly
+          leftIcon={<DirectionArrowLeft aria-hidden />}
+          aria-label="Previous"
+        />
+      }
+      endSlot={
+        <Button
+          mode="outlineCustom"
+          size="regular"
+          allRound
+          iconOnly
+          leftIcon={<DirectionArrowRight aria-hidden />}
+          aria-label="Next"
+        />
+      }`
+    : "";
+
+  const cardWrapOpen =
+    style === "card" && background === "none"
+      ? `\n    <div style={{ background: "var(--box-box-theme-secondarybackground, #ffe9e5)", padding: 12, borderRadius: 8 }}>`
+      : "";
+  const cardWrapClose = style === "card" && background === "none" ? `\n    </div>` : "";
+
+  return `function Demo() {
+  const [value, setValue] = useState("a");
+  return (${cardWrapOpen}
+    <Tab
+      style=${JSON.stringify(style)}${backgroundProp}${disabledProp}${slotsProp}
+      value={value}
+      onValueChange={setValue}
+    >
+      <TabItem value="a" leftIcon={<GeneralSetting aria-hidden />}>
+        Text
+      </TabItem>
+      <TabItem value="b" leftIcon={<GeneralSetting aria-hidden />}>
+        Text
+      </TabItem>
+      <TabItem value="c" leftIcon={<GeneralSetting aria-hidden />}>
+        Text
+      </TabItem>
+      <TabItem value="d" leftIcon={<GeneralSetting aria-hidden />}>
+        Text
+      </TabItem>
+    </Tab>${cardWrapClose}
+  );
+}
+
+render(<Demo />);`;
+}
 
 export const navigationKnobs: KnobDef[] = [
   {

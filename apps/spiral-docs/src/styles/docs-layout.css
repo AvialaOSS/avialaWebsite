@@ -514,6 +514,7 @@ header.docs-page-header {
 }
 
 .docs-live-preview {
+  position: relative;
   flex: 1 1 auto;
   min-width: 0;
   min-height: 120px;
@@ -522,13 +523,63 @@ header.docs-page-header {
   overflow: visible;
 }
 
-.docs-live-stage.has-knobs-open .docs-live-preview {
+.docs-live-stage.has-panel-open .docs-live-preview {
   border-start-end-radius: 0;
   border-end-end-radius: 0;
 }
 
 .docs-live-preview-host {
   overflow: visible;
+}
+
+.docs-live-stage-tools {
+  position: absolute;
+  top: var(--gap-component-space, 8px);
+  right: var(--gap-component-space, 8px);
+  z-index: 2;
+}
+
+/* Icon-only tools: square hit targets (override vertical stretch + group min-width). */
+.docs-live-stage-tools .aviala-segmentator-group {
+  min-width: 0;
+  width: max-content;
+  align-items: center;
+}
+
+.docs-live-stage-tools .aviala-segmentator-group[data-direction="vertical"] .aviala-segmentator-item,
+.docs-live-stage-tools .aviala-segmentator-item[data-mode="nested"] {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  aspect-ratio: 1 / 1;
+  width: calc(
+    var(--segmentator-icon-slot-height, 1.125rem) + 2 * var(--padding-tiny, 4px)
+  );
+  height: calc(
+    var(--segmentator-icon-slot-height, 1.125rem) + 2 * var(--padding-tiny, 4px)
+  );
+  padding: var(--padding-tiny, 4px);
+}
+
+.docs-live-locale-badge {
+  position: absolute;
+  bottom: var(--gap-component-space, 8px);
+  left: var(--gap-component-space, 8px);
+  z-index: 2;
+  margin: 0;
+  padding: 2px 8px;
+  border-radius: var(--border-radius-extra-small-2, 6px);
+  background: color-mix(in srgb, var(--muted) 55%, var(--background));
+  color: var(--text-text-normal-text-black, var(--foreground));
+  pointer-events: none;
+}
+
+.docs-live-locale-hint {
+  margin: var(--gap-component-space, 8px) 0 0;
+  color: var(--text-text-normal-text-secondary, var(--muted-foreground));
+}
+
+.docs-live-locale-hint code {
+  font-size: 0.92em;
 }
 
 [data-mode="light"] .docs-demo-surface,
@@ -543,16 +594,48 @@ header.docs-page-header {
   background: #000;
 }
 
-.docs-live-knobs-panel {
+/* Width animation: outer rail collapses; inner keeps panel at target width. */
+.docs-live-knobs-rail {
+  flex-shrink: 0;
+  width: 0;
+  min-width: 0;
+  overflow: hidden;
+  transition: width 0.32s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.docs-live-stage.has-panel-open .docs-live-knobs-rail {
+  width: min(300px, 38vw);
+}
+
+.docs-live-knobs-rail-inner {
   display: flex;
   flex-direction: column;
   width: min(300px, 38vw);
-  flex-shrink: 0;
+  height: 100%;
+  min-height: 100%;
+}
+
+.docs-live-knobs-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  flex: 1 1 auto;
+  height: 100%;
   border-left: 1px solid var(--border);
   border-start-end-radius: var(--border-radius-big, 12px);
   border-end-end-radius: var(--border-radius-big, 12px);
   background: color-mix(in srgb, var(--muted) 28%, var(--background));
   overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease 0.05s;
+}
+
+.docs-live-stage.has-panel-open .docs-live-knobs-panel {
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 0.08s;
 }
 
 .docs-live-knobs-header {
@@ -574,11 +657,11 @@ header.docs-page-header {
   padding: var(--gap-block-space, 14px);
 }
 
-.docs-live-knobs-expand {
-  position: absolute;
-  top: var(--gap-component-space, 8px);
-  right: var(--gap-component-space, 8px);
-  z-index: 1;
+@media (prefers-reduced-motion: reduce) {
+  .docs-live-knobs-rail,
+  .docs-live-knobs-panel {
+    transition: none;
+  }
 }
 
 .docs-demo-knobs-fields {
@@ -831,21 +914,16 @@ header.docs-page-header {
   min-height: 220px;
 }
 
-.docs-monaco-placeholder {
-  margin: 0;
+.docs-monaco-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-height: 220px;
   box-sizing: border-box;
-  padding: 8px 12px;
-  overflow: auto;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 13px;
-  line-height: 1.45;
-  white-space: pre;
-  color: var(--foreground);
   background: var(--docs-surface, #fff);
 }
 
-[data-mode="dark"] .docs-monaco-placeholder {
+[data-mode="dark"] .docs-monaco-loading {
   background: #000;
 }
 
@@ -955,14 +1033,31 @@ header.docs-page-header {
 }
 
 @media (max-width: 760px) {
-  .docs-live-stage.has-knobs-open {
+  .docs-live-stage.has-panel-open {
     flex-direction: column;
   }
 
-  .docs-live-stage.has-knobs-open .docs-live-preview {
+  .docs-live-stage.has-panel-open .docs-live-preview {
     border-start-end-radius: var(--border-radius-big, 12px);
     border-end-start-radius: 0;
     border-end-end-radius: 0;
+  }
+
+  .docs-live-knobs-rail {
+    width: 100%;
+    max-height: 0;
+    transition:
+      max-height 0.32s cubic-bezier(0.33, 1, 0.68, 1),
+      width 0.32s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  .docs-live-stage.has-panel-open .docs-live-knobs-rail {
+    width: 100%;
+    max-height: 70vh;
+  }
+
+  .docs-live-knobs-rail-inner {
+    width: 100%;
   }
 
   .docs-live-knobs-panel {
@@ -1242,8 +1337,7 @@ header.docs-page-header {
 
 /* Beat Button `inline-flex` utility so desktop never shows the mobile menu control. */
 .docs-mobile-menu-btn.aviala-button,
-.docs-mobile-drawer,
-.docs-mobile-backdrop {
+.docs-mobile-drawer {
   display: none !important;
 }
 
@@ -1578,7 +1672,27 @@ header.docs-page-header {
 
 @media (max-width: 900px) {
   .docs-shell {
+    --docs-mobile-reveal-shift: min(74vw, 300px);
+    --docs-mobile-reveal-scale: 0.78;
+    --docs-mobile-reveal-radius: 18px;
+    --docs-mobile-reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --docs-mobile-reveal-duration: 0.42s;
+    /* Constant stage tint (previous muted mix) — always on, no open/close cross-fade. */
+    --docs-mobile-stage-bg: color-mix(
+      in srgb,
+      var(--muted, #f5f3f3) 55%,
+      var(--docs-surface, #fff)
+    );
     grid-template-columns: minmax(0, 1fr);
+    background-color: var(--docs-mobile-stage-bg);
+  }
+
+  [data-mode="dark"] .docs-shell {
+    --docs-mobile-stage-bg: color-mix(
+      in srgb,
+      var(--muted, #1a1a1a) 45%,
+      var(--docs-surface, #000)
+    );
   }
 
   .docs-shell > .docs-sidebar {
@@ -1596,37 +1710,129 @@ header.docs-page-header {
     display: inline-flex !important;
   }
 
+  /*
+   * Mobile reveal: sidebar becomes a full-bleed background;
+   * the page card scales down and slides right over it.
+   * Enter + exit both use transitions so close can fade the stage and items out.
+   */
   .docs-mobile-drawer {
     display: block !important;
-    /* Contain within .docs-shell (not the viewport / Hugo chrome). */
     position: absolute;
-    inset: 0 auto 0 0;
-    width: min(86%, 320px);
-    max-width: 100%;
+    inset: 0;
+    /* Stay under the page card for the whole close fade (not only while open). */
+    z-index: 1;
+    width: 100%;
+    max-width: none;
     height: 100%;
-    z-index: 40;
-    transform: translateX(-100%);
-    transition: transform 0.2s ease;
+    overflow: hidden;
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+    transform: none;
+    /* Exit: stay visible while fading under the returning page card. */
+    transition:
+      opacity 0.34s ease,
+      visibility 0s linear 0.34s;
   }
 
   .docs-mobile-drawer.is-open {
-    transform: translateX(0);
+    pointer-events: auto;
+    visibility: visible;
+    opacity: 1;
+    transition:
+      opacity 0.28s ease,
+      visibility 0s linear 0s;
   }
 
   .docs-mobile-drawer .docs-sidebar {
     display: block;
-    width: 100%;
+    width: min(82%, calc(100% - 56px));
+    max-width: 340px;
     height: 100%;
+    padding-top: calc(var(--docs-float-clearance) + 8px);
+    padding-bottom: 24px;
+    padding-inline: 12px 8px;
+    box-sizing: border-box;
+    /* Float the whole nav (items + indicator) as one layer so the rail
+     * never remasures against mid-animation item transforms. */
+    transform: translateX(-18px);
+    transition: transform 0.32s var(--docs-mobile-reveal-ease);
   }
 
-  .docs-mobile-backdrop {
-    display: block !important;
-    position: absolute;
-    inset: 0;
-    z-index: 30;
-    border: 0;
-    background: rgba(0, 0, 0, 0.35);
+  .docs-mobile-drawer.is-open .docs-sidebar {
+    transform: translateX(0);
+  }
+
+  .docs-mobile-drawer .docs-sidebar-nav {
+    background-color: transparent;
+    --navigation-bg: transparent;
+  }
+
+  /* Reveal mode: no vertical divider beside the floating page card. */
+  .docs-mobile-drawer .docs-sidebar-nav.aviala-navigation[data-dividing-line="true"] {
+    border-right: 0;
+  }
+
+  .docs-shell--mobile-nav-open .docs-main {
+    height: calc(100% - 28px);
+    margin-block: 14px;
+    overflow: hidden;
     cursor: pointer;
+    border-radius: var(--docs-mobile-reveal-radius);
+    box-shadow:
+      0 18px 48px rgba(0, 0, 0, 0.16),
+      0 0 0 1px color-mix(in srgb, var(--border) 70%, transparent);
+    transform: translate3d(var(--docs-mobile-reveal-shift), 0, 0)
+      scale(var(--docs-mobile-reveal-scale));
+    transform-origin: center center;
+    transition:
+      transform var(--docs-mobile-reveal-duration) var(--docs-mobile-reveal-ease),
+      border-radius var(--docs-mobile-reveal-duration) var(--docs-mobile-reveal-ease),
+      box-shadow var(--docs-mobile-reveal-duration) var(--docs-mobile-reveal-ease),
+      height var(--docs-mobile-reveal-duration) var(--docs-mobile-reveal-ease),
+      margin var(--docs-mobile-reveal-duration) var(--docs-mobile-reveal-ease);
+    will-change: transform;
+  }
+
+  .docs-main {
+    /* Keep the card above the drawer for open AND close, otherwise the
+     * fading nav paints over the expanding page once --mobile-nav-open drops. */
+    position: relative;
+    z-index: 5;
+    border-radius: 0;
+    box-shadow: none;
+    margin-block: 0;
+    transform: translate3d(0, 0, 0) scale(1);
+    transform-origin: center center;
+    transition:
+      transform var(--docs-mobile-reveal-duration) var(--docs-mobile-reveal-ease),
+      border-radius var(--docs-mobile-reveal-duration) var(--docs-mobile-reveal-ease),
+      box-shadow var(--docs-mobile-reveal-duration) var(--docs-mobile-reveal-ease),
+      height var(--docs-mobile-reveal-duration) var(--docs-mobile-reveal-ease),
+      margin var(--docs-mobile-reveal-duration) var(--docs-mobile-reveal-ease);
+  }
+
+  /* Let the card itself receive the close click; ignore nested scroll/content. */
+  .docs-shell--mobile-nav-open .docs-main > * {
+    pointer-events: none;
+  }
+
+  .docs-shell--mobile-nav-open .docs-mobile-menu-btn.aviala-button {
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .docs-main,
+    .docs-shell--mobile-nav-open .docs-main,
+    .docs-mobile-drawer,
+    .docs-mobile-drawer .docs-sidebar {
+      transition: none;
+    }
+
+    .docs-mobile-drawer .docs-sidebar,
+    .docs-mobile-drawer.is-open .docs-sidebar {
+      transform: none;
+    }
   }
 }
 

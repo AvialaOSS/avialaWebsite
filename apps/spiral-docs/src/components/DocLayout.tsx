@@ -157,31 +157,46 @@ export function DocLayout() {
     });
   };
 
+  const mobileNavOpen = isMobileNav && mobileOpen;
+  const shellClassName = [
+    "docs-shell",
+    sidebarCollapsed ? "docs-shell--sidebar-collapsed" : "",
+    mobileNavOpen ? "docs-shell--mobile-nav-open" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div className={`docs-shell${sidebarCollapsed ? " docs-shell--sidebar-collapsed" : ""}`}>
+    <div className={shellClassName}>
       <Sidebar
         activePath={eagerPath}
         onPathPreview={previewPath}
         onNavigate={() => setMobileOpen(false)}
         onCollapse={() => setSidebarCollapsed(true)}
       />
-      <div className={`docs-mobile-drawer${mobileOpen ? " is-open" : ""}`}>
+      <div
+        className={`docs-mobile-drawer${mobileNavOpen ? " is-open" : ""}`}
+        aria-hidden={!mobileNavOpen}
+      >
         <Sidebar
           activePath={eagerPath}
           onPathPreview={previewPath}
           onNavigate={() => setMobileOpen(false)}
+          dividingLine={false}
         />
       </div>
-      {mobileOpen ? (
-        <button
-          type="button"
-          className="docs-mobile-backdrop"
-          aria-label="关闭导航"
-          onClick={() => setMobileOpen(false)}
-        />
-      ) : null}
 
-      <div ref={mainRef} className="docs-main">
+      <div
+        ref={mainRef}
+        className="docs-main"
+        onClick={
+          mobileNavOpen
+            ? () => {
+                setMobileOpen(false);
+              }
+            : undefined
+        }
+      >
         <div className="docs-floating-controls">
           <div className="docs-floating-controls__left">
             {sidebarCollapsed && !isMobileNav ? (
@@ -203,9 +218,13 @@ export function DocLayout() {
                 size="regular"
                 iconOnly
                 className="docs-float-btn docs-mobile-menu-btn"
-                aria-label="打开导航"
+                aria-label={mobileNavOpen ? "关闭导航" : "打开导航"}
+                aria-expanded={mobileNavOpen}
                 leftIcon={<GeneralMenu aria-hidden />}
-                onClick={() => setMobileOpen(true)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setMobileOpen((open) => !open);
+                }}
               />
             ) : null}
           </div>

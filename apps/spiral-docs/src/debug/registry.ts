@@ -42,6 +42,7 @@ import { navigationEntry } from "./entries/navigation";
 import { numberInputEntry } from "./entries/number-input";
 import { segmentatorEntry } from "./entries/segmentator";
 import { selectEntry } from "./entries/select";
+import { tabEntry } from "./entries/tab";
 import { textareaEntry } from "./entries/textarea";
 
 import type { DebugComponentEntry } from "./types";
@@ -55,6 +56,7 @@ export const componentDebugRegistry: DebugComponentEntry[] = [
   linkEntry,
   cascaderEntry,
   segmentatorEntry,
+  tabEntry,
   navigationEntry,
   textareaEntry,
   datePickerEntry,

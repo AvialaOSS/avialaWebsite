@@ -18,12 +18,14 @@
       },
       {
         "name": "mode",
-        "type": "\"default\" | \"primary\" | \"second\" | \"defaultCustom\" | \"noBackground\" | \"noBackgroundCustom\" | \"destructive\"",
+        "type": "\"default\" | \"primary\" | \"second\" | \"defaultCustom\" | \"outline\" | \"outlineCustom\" | \"noBackground\" | \"noBackgroundCustom\" | \"destructive\"",
         "values": [
           "default",
           "primary",
           "second",
           "defaultCustom",
+          "outline",
+          "outlineCustom",
           "noBackground",
           "noBackgroundCustom",
           "destructive"
@@ -709,6 +711,17 @@
         "description": ""
       },
       {
+        "name": "direction",
+        "type": "\"horizontal\" | \"vertical\"",
+        "values": [
+          "horizontal",
+          "vertical"
+        ],
+        "defaultValue": "horizontal",
+        "required": false,
+        "description": "Figma `direction` — horizontal (default) or vertical stack."
+      },
+      {
         "name": "allRound",
         "type": "boolean",
         "defaultValue": "false",
@@ -720,7 +733,7 @@
         "type": "boolean",
         "defaultValue": "false",
         "required": false,
-        "description": "When true, the group fills its container and items split the width equally."
+        "description": "When true, the group fills its container and items split the main axis equally."
       },
       {
         "name": "disabled",
@@ -814,6 +827,60 @@
       }
     ]
   },
+  "LocaleProvider": {
+    "displayName": "LocaleProvider",
+    "description": "",
+    "props": [
+      {
+        "name": "locale",
+        "type": "Locale",
+        "required": false,
+        "description": "Locale pack. Defaults to `zhCN`."
+      }
+    ]
+  },
+  "ConfigProvider": {
+    "displayName": "ConfigProvider",
+    "description": "",
+    "props": [
+      {
+        "name": "direction",
+        "type": "\"ltr\" | \"rtl\"",
+        "values": [
+          "ltr",
+          "rtl"
+        ],
+        "defaultValue": "ltr",
+        "required": false,
+        "description": "Writing direction. Defaults to `ltr`."
+      },
+      {
+        "name": "syncDocumentDir",
+        "type": "boolean",
+        "defaultValue": "true",
+        "required": false,
+        "description": "When true (default), the outermost ConfigProvider that opts in writes\n`document.documentElement.dir` so portalled overlays inherit direction.\nNested providers only set `dir` on their local wrapper."
+      },
+      {
+        "name": "locale",
+        "type": "Locale",
+        "required": false,
+        "description": "Optional locale pack — nests `LocaleProvider` when provided."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "style",
+        "type": "CSSProperties",
+        "required": false,
+        "description": ""
+      }
+    ]
+  },
   "Alert": {
     "displayName": "Alert",
     "description": "",
@@ -889,7 +956,6 @@
       {
         "name": "closeLabel",
         "type": "string",
-        "defaultValue": "Dismiss alert",
         "required": false,
         "description": ""
       },
@@ -1006,7 +1072,6 @@
       {
         "name": "closeLabel",
         "type": "string",
-        "defaultValue": "Dismiss",
         "required": false,
         "description": ""
       },
@@ -1061,7 +1126,6 @@
       {
         "name": "rangePlaceholder",
         "type": "string",
-        "defaultValue": "Start date - End date",
         "required": false,
         "description": ""
       },
@@ -1324,7 +1388,6 @@
           {
             "name": "rangePlaceholder",
             "type": "string",
-            "defaultValue": "Start date - End date",
             "required": false,
             "description": ""
           },
@@ -1427,7 +1490,6 @@
       {
         "name": "placeholder",
         "type": "string",
-        "defaultValue": "HH:mm",
         "required": false,
         "description": ""
       },
@@ -1586,7 +1648,6 @@
           {
             "name": "placeholder",
             "type": "string",
-            "defaultValue": "HH:mm",
             "required": false,
             "description": ""
           },
@@ -2066,7 +2127,6 @@
       {
         "name": "placeholder",
         "type": "string",
-        "defaultValue": "Text",
         "required": false,
         "description": ""
       },
@@ -2220,7 +2280,6 @@
           {
             "name": "placeholder",
             "type": "string",
-            "defaultValue": "Text",
             "required": false,
             "description": ""
           },
@@ -2597,7 +2656,6 @@
           {
             "name": "placeholder",
             "type": "string",
-            "defaultValue": "Select color",
             "required": false,
             "description": ""
           }
@@ -3104,7 +3162,7 @@
       },
       {
         "displayName": "NavigationItemMenuContent",
-        "description": "Flyout surface — right of the item in vertical, below it in horizontal.",
+        "description": "Flyout surface — forward of the item in vertical (LTR right / RTL left), below it in horizontal.",
         "props": [
           {
             "name": "asChild",
@@ -3829,7 +3887,6 @@
           {
             "name": "closeLabel",
             "type": "string",
-            "defaultValue": "Close dialog",
             "required": false,
             "description": ""
           }
@@ -3862,7 +3919,6 @@
           {
             "name": "closeLabel",
             "type": "string",
-            "defaultValue": "Close dialog",
             "required": false,
             "description": ""
           },
@@ -4012,13 +4068,13 @@
   },
   "ResponsiveTooltip": {
     "displayName": "ResponsiveTooltip",
-    "description": "Tooltip with a mobile-friendly trigger.\n\nRadix Tooltip is hover/focus only and deliberately ignores touch, so it has\nno trigger on phones. `ResponsiveTooltip` renders the SAME content through the\nright primitive for the device:\n- Desktop (`pointer: fine`): Radix Tooltip — opens on hover and keyboard focus.\n- Touch (`pointer: coarse`): Radix Popover with `appearance=\"tooltip\"` — opens on\n  tap, dismisses on outside tap / Escape, but keeps the tooltip visual skin\n  (dark surface, caption text, solid caret) so it looks identical to desktop.\n\nThe consumer API and the look are unchanged between devices; only the trigger\ngesture differs. Animations are handled by the respective effect CSS\n(tooltip-effects / popover-effects), so direction-aware scale-in/out works on\nboth branches.",
+    "description": "Tooltip with a mobile-friendly trigger.\n\nRadix Tooltip is hover/focus only and deliberately ignores touch, so it has\nno trigger on phones. `ResponsiveTooltip` renders the SAME content through the\nright primitive for the device:\n- Desktop (`pointer: fine`): Radix Tooltip — opens on hover and keyboard focus.\n- Touch (`pointer: coarse`): Radix Popover with `appearance=\"tooltip\"` — opens on\n  **long-press** (short tap still reaches the trigger’s own `onClick`), dismisses\n  on outside tap / Escape, and keeps the tooltip visual skin (dark surface,\n  caption text, solid caret) so it looks identical to desktop.\n\nThe consumer API and the look are unchanged between devices; only the trigger\ngesture differs. Animations are handled by the respective effect CSS\n(tooltip-effects / popover-effects), so direction-aware scale-in/out works on\nboth branches.",
     "props": [
       {
         "name": "content",
         "type": "ReactNode",
         "required": true,
-        "description": "Tooltip body — the same content is shown on desktop (hover) and touch (tap)."
+        "description": "Tooltip body — the same content is shown on desktop (hover) and touch\n(long-press)."
       },
       {
         "name": "children",
@@ -4091,6 +4147,13 @@
         "description": "Hover open delay on desktop, in ms (ignored on touch).\nDefaults to 300 (`TOOLTIP_DELAY_DURATION`). Pass `0` for instant open on hover.\nRequires a TooltipProvider ancestor for shared delay context."
       },
       {
+        "name": "longPressMs",
+        "type": "number",
+        "defaultValue": "500",
+        "required": false,
+        "description": "Hold duration on touch before the tip opens, in ms.\nDefaults to 500 (`RESPONSIVE_TOOLTIP_LONG_PRESS_MS`)."
+      },
+      {
         "name": "open",
         "type": "boolean",
         "required": false,
@@ -4099,6 +4162,7 @@
       {
         "name": "defaultOpen",
         "type": "boolean",
+        "defaultValue": "false",
         "required": false,
         "description": "Uncontrolled initial open state."
       },
@@ -4160,7 +4224,6 @@
       {
         "name": "label",
         "type": "string",
-        "defaultValue": "Loading",
         "required": false,
         "description": "Accessible name; omit when decorative (`aria-hidden`)."
       }
@@ -4344,7 +4407,6 @@
       {
         "name": "closeLabel",
         "type": "string",
-        "defaultValue": "Remove",
         "required": false,
         "description": ""
       },
@@ -4509,14 +4571,12 @@
       {
         "name": "description",
         "type": "ReactNode",
-        "defaultValue": "Or click here to upload",
         "required": false,
         "description": "Secondary line — Large style"
       },
       {
         "name": "label",
         "type": "ReactNode",
-        "defaultValue": "Upload",
         "required": false,
         "description": "Default style button label"
       },
@@ -4920,21 +4980,18 @@
       {
         "name": "jumpLabel",
         "type": "ReactNode",
-        "defaultValue": "跳转至",
         "required": false,
         "description": ""
       },
       {
         "name": "sizeLabel",
         "type": "ReactNode",
-        "defaultValue": "每页",
         "required": false,
         "description": ""
       },
       {
         "name": "sizeOptionLabel",
         "type": "(size: number) => ReactNode",
-        "defaultValue": "(size) => `${size} 项`",
         "required": false,
         "description": ""
       }
@@ -5062,6 +5119,90 @@
           {
             "name": "trailing",
             "type": "ReactNode",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ]
+  },
+  "Tab": {
+    "displayName": "Tab",
+    "description": "Figma Components → Structure Navigation → Tab",
+    "props": [
+      {
+        "name": "style",
+        "type": "\"default\" | \"card\" | \"tiled\"",
+        "values": ["default", "card", "tiled"],
+        "defaultValue": "default",
+        "required": false,
+        "description": "Figma `Style`"
+      },
+      {
+        "name": "background",
+        "type": "\"none\" | \"default\"",
+        "values": ["none", "default"],
+        "defaultValue": "none",
+        "required": false,
+        "description": "Figma `Background`"
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "defaultValue",
+        "type": "string",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "onValueChange",
+        "type": "(value: string) => void",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "startSlot",
+        "type": "ReactNode",
+        "required": false,
+        "description": "Leading accessory (Figma SoltRight — visual start)."
+      },
+      {
+        "name": "endSlot",
+        "type": "ReactNode",
+        "required": false,
+        "description": "Trailing accessory (Figma SoltLeft / SoltLeft2 — visual end)."
+      }
+    ],
+    "parts": [
+      {
+        "displayName": "TabItem",
+        "description": "Figma Components → Structure Navigation → TabItem",
+        "props": [
+          {
+            "name": "value",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "leftIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
             "required": false,
             "description": ""
           }

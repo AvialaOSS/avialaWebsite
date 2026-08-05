@@ -1,19 +1,40 @@
-import { GeneralCollapseSidebar, GeneralExpandSidebar, SymbolInformationCircle } from "@aviala-design/icons";
+import {
+  EditAdjust,
+  GeneralTranslate,
+  SymbolEyeSlash,
+  SymbolInformationCircle,
+} from "@aviala-design/icons";
 import Editor, { type Monaco, type OnMount } from "@monaco-editor/react";
 import {
   Button,
+  ConfigProvider,
+  enUS,
+  FormField,
+  Loading,
+  LocaleProvider,
+  SegmentatorGroup,
+  SegmentatorItem,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectItemGroup,
+  SelectTrigger,
+  SelectValue,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
   Typography,
   useTheme,
+  zhCN,
+  type Direction,
 } from "@aviala-design/spiral";
 import {
   Component,
   startTransition,
   useCallback,
   useEffect,
+  useId,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -32,6 +53,83 @@ import {
 } from "./DemoKnobs";
 
 type MonacoStandaloneEditor = Parameters<OnMount>[0];
+
+/** Live demo stage tools: preview / API knobs / locale + direction smoke test. */
+type DemoToolsMode = "preview" | "knobs" | "locale";
+type DemoLocaleCode = "zh-CN" | "en-US";
+
+const DEMO_LOCALES = {
+  "zh-CN": zhCN,
+  "en-US": enUS,
+} as const;
+
+function DemoLocalePanel({
+  localeCode,
+  direction,
+  onLocaleChange,
+  onDirectionChange,
+}: {
+  localeCode: DemoLocaleCode;
+  direction: Direction;
+  onLocaleChange: (next: DemoLocaleCode) => void;
+  onDirectionChange: (next: Direction) => void;
+}) {
+  const localeFieldId = useId();
+  const directionFieldId = useId();
+
+  return (
+    <div className="docs-demo-knobs-fields">
+      <FormField label="locale" htmlFor={localeFieldId}>
+        <Select
+          value={localeCode}
+          onValueChange={(next) => {
+            if (next === "zh-CN" || next === "en-US") onLocaleChange(next);
+          }}
+        >
+          <SelectTrigger id={localeFieldId} className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItemGroup>
+              <SelectItem value="zh-CN" itemFunction="radio">
+                zh-CN
+              </SelectItem>
+              <SelectItem value="en-US" itemFunction="radio">
+                en-US
+              </SelectItem>
+            </SelectItemGroup>
+          </SelectContent>
+        </Select>
+      </FormField>
+      <FormField label="direction" htmlFor={directionFieldId}>
+        <Select
+          value={direction}
+          onValueChange={(next) => {
+            if (next === "ltr" || next === "rtl") onDirectionChange(next);
+          }}
+        >
+          <SelectTrigger id={directionFieldId} className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItemGroup>
+              <SelectItem value="ltr" itemFunction="radio">
+                ltr
+              </SelectItem>
+              <SelectItem value="rtl" itemFunction="radio">
+                rtl
+              </SelectItem>
+            </SelectItemGroup>
+          </SelectContent>
+        </Select>
+      </FormField>
+      <Typography level="caption" as="p" className="docs-live-locale-hint">
+        <code>LocaleProvider</code> 切换内置文案；<code>ConfigProvider</code> 的{" "}
+        <code>direction</code> 控制 LTR/RTL 布局镜像。
+      </Typography>
+    </div>
+  );
+}
 
 function collectIconKnobNames(knobs: KnobDef[], values: KnobValues): string[] {
   const names: string[] = [];
@@ -121,7 +219,11 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
   const knobDefaults = useMemo(() => defaultKnobValues(knobs), [knobs]);
   const [knobValues, setKnobValues] = useState<KnobValues>(knobDefaults);
   const [catalogReady, setCatalogReady] = useState(isIconCatalogLoaded());
-  const [knobsPanelOpen, setKnobsPanelOpen] = useState(true);
+  const [toolsMode, setToolsMode] = useState<DemoToolsMode>("preview");
+  const [localeCode, setLocaleCode] = useState<DemoLocaleCode>("zh-CN");
+  const [demoDirection, setDemoDirection] = useState<Direction>("ltr");
+  const sidePanelOpen = toolsMode === "knobs" || toolsMode === "locale";
+  const demoLocale = DEMO_LOCALES[localeCode];
   const [code, setCode] = useState(initialCode);
   const [editorCode, setEditorCode] = useState(initialCode);
   const [knobsSynced, setKnobsSynced] = useState(true);
@@ -136,7 +238,9 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
     setEditorCode(initialCode);
     setKnobValues(defaultKnobValues(knobs));
     setKnobsSynced(true);
-    setKnobsPanelOpen(true);
+    setToolsMode("preview");
+    setLocaleCode("zh-CN");
+    setDemoDirection("ltr");
     setIsEditing(false);
     isEditingRef.current = false;
   }, [initialCode, knobs, buildCode]);
@@ -328,51 +432,97 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
     <TooltipProvider>
       <div className="docs-live-demo">
         <div
-          className={`docs-live-stage${hasKnobs && knobsPanelOpen ? " has-knobs-open" : ""}${hasKnobs && !knobsPanelOpen ? " has-knobs-collapsed" : ""}`}
+          className={`docs-live-stage${hasKnobs ? " has-knobs" : ""}${hasKnobs && sidePanelOpen ? " has-panel-open" : ""}`}
         >
           <div className="docs-live-preview docs-demo-surface">
-            <LivePreviewErrorBoundary resetKey={code}>
-              {/* Remount preview when live code changes so uncontrolled defaults (e.g. Slider type) apply */}
-              <div key={code} className="docs-live-preview-host">
-                {element}
-              </div>
+            <LivePreviewErrorBoundary resetKey={`${code}:${demoLocale.code}:${demoDirection}`}>
+              {/* Remount preview when live code / locale / direction changes */}
+              <ConfigProvider direction={demoDirection} syncDocumentDir={false}>
+                <LocaleProvider locale={demoLocale}>
+                  <div
+                    key={`${code}:${demoLocale.code}:${demoDirection}`}
+                    className="docs-live-preview-host"
+                  >
+                    {element}
+                  </div>
+                </LocaleProvider>
+              </ConfigProvider>
             </LivePreviewErrorBoundary>
+
+            {(localeCode !== "zh-CN" || demoDirection !== "ltr") && toolsMode !== "locale" ? (
+              <Typography level="caption" as="p" className="docs-live-locale-badge" aria-live="polite">
+                {demoLocale.code}
+                {demoDirection === "rtl" ? " · rtl" : ""}
+              </Typography>
+            ) : null}
+
+            {hasKnobs ? (
+              <div className="docs-live-stage-tools">
+                <SegmentatorGroup
+                  direction="vertical"
+                  mode="nested"
+                  value={toolsMode}
+                  onValueChange={(next) => {
+                    if (next === "preview" || next === "knobs" || next === "locale") {
+                      setToolsMode(next);
+                    }
+                  }}
+                  aria-label="演示工具"
+                >
+                  <SegmentatorItem
+                    value="preview"
+                    iconOnly
+                    leftIcon={<SymbolEyeSlash aria-hidden />}
+                    aria-label="仅预览"
+                  />
+                  <SegmentatorItem
+                    value="knobs"
+                    iconOnly
+                    leftIcon={<EditAdjust aria-hidden />}
+                    aria-label="API 调参"
+                  />
+                  <SegmentatorItem
+                    value="locale"
+                    iconOnly
+                    leftIcon={<GeneralTranslate aria-hidden />}
+                    aria-label="本地化调试"
+                  />
+                </SegmentatorGroup>
+              </div>
+            ) : null}
           </div>
 
-          {hasKnobs && knobsPanelOpen ? (
-            <aside className="docs-live-knobs-panel" aria-label="API 调参">
-              <div className="docs-live-knobs-header">
-                <Typography level="subtitle" as="p" className="docs-live-knobs-title">
-                  API 调参
-                </Typography>
-                <Button
-                  type="button"
-                  mode="noBackground"
-                  size="small"
-                  iconOnly
-                  aria-label="隐藏调参面板"
-                  onClick={() => setKnobsPanelOpen(false)}
-                  leftIcon={<GeneralCollapseSidebar aria-hidden />}
-                />
-              </div>
-              <div className="docs-live-knobs-body">
-                <DemoKnobs knobs={knobs} values={knobValues} onChange={applyKnobs} />
-              </div>
-            </aside>
-          ) : null}
-
-          {hasKnobs && !knobsPanelOpen ? (
-            <Button
-              type="button"
-              mode="default"
-              size="small"
-              className="docs-live-knobs-expand"
-              aria-label="显示 API 调参"
-              onClick={() => setKnobsPanelOpen(true)}
-              leftIcon={<GeneralExpandSidebar aria-hidden />}
+          {hasKnobs ? (
+            <div
+              className="docs-live-knobs-rail"
+              aria-hidden={!sidePanelOpen}
+              inert={!sidePanelOpen ? true : undefined}
             >
-              API
-            </Button>
+              <div className="docs-live-knobs-rail-inner">
+                <aside
+                  className="docs-live-knobs-panel"
+                  aria-label={toolsMode === "locale" ? "本地化调试" : "API 调参"}
+                >
+                  <div className="docs-live-knobs-header">
+                    <Typography level="subtitle" as="p" className="docs-live-knobs-title">
+                      {toolsMode === "locale" ? "本地化调试" : "API 调参"}
+                    </Typography>
+                  </div>
+                  <div className="docs-live-knobs-body">
+                    {toolsMode === "locale" ? (
+                      <DemoLocalePanel
+                        localeCode={localeCode}
+                        direction={demoDirection}
+                        onLocaleChange={setLocaleCode}
+                        onDirectionChange={setDemoDirection}
+                      />
+                    ) : (
+                      <DemoKnobs knobs={knobs} values={knobValues} onChange={applyKnobs} />
+                    )}
+                  </div>
+                </aside>
+              </div>
+            </div>
           ) : null}
         </div>
 
@@ -431,6 +581,11 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
                   onChange={handleEditorChange}
                   beforeMount={handleMonacoBeforeMount}
                   onMount={handleMonacoMount}
+                  loading={
+                    <div className="docs-monaco-loading" role="status">
+                      <Loading level="text" mode="theme" label="加载编辑器" />
+                    </div>
+                  }
                   options={{
                     minimap: { enabled: false },
                     fontSize: 13,
@@ -444,7 +599,9 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
                   }}
                 />
               ) : (
-                <pre className="docs-monaco-placeholder">{editorCode}</pre>
+                <div className="docs-monaco-loading" role="status">
+                  <Loading level="text" mode="theme" label="加载编辑器" />
+                </div>
               )}
             </div>
             {!isEditing ? (

@@ -17,6 +17,7 @@ export const nav: NavSection[] = [
       { label: "介绍", path: "/start/introduction" },
       { label: "安装", path: "/start/installation" },
       { label: "主题", path: "/start/theme" },
+      { label: "国际化", path: "/start/locale" },
       { label: "更新记录", path: "/start/changelog" },
     ],
   },
@@ -100,6 +101,11 @@ export const nav: NavSection[] = [
         label: "Navigation 导航",
         path: "/components/structure-navigation/navigation",
         component: "Navigation",
+      },
+      {
+        label: "Tab 标签页",
+        path: "/components/structure-navigation/tab",
+        component: "Tab",
       },
       { label: "List 列表", path: "/components/structure-navigation/list", component: "List" },
       {
