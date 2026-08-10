@@ -10,6 +10,9 @@
  *
  * Set OPEN_PR=1 only for local experiments that push + `gh pr create` themselves.
  * CI commits/pushes in the workflow instead (OPEN_PR=0).
+ *
+ * Set BUMP_DEPS=1 (CI default) to pin workspace deps to the published spiral /
+ * tokens / icons versions and refresh package-lock.json.
  */
 import { readFileSync, existsSync, writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
@@ -18,7 +21,9 @@ import { spawnSync } from "node:child_process";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const appRoot = path.resolve(dirname, "..");
+const siteRoot = path.resolve(appRoot, "../..");
 const manifestPath = path.join(appRoot, "src/versions/manifest.json");
+const resultPath = path.join(appRoot, ".tmp/scaffold-result.json");
 
 const spiralVersion = process.env.SPIRAL_VERSION;
 if (!spiralVersion) {
@@ -28,10 +33,16 @@ if (!spiralVersion) {
 
 const changelogsPath = process.env.COMPONENT_CHANGELOGS
   ?? path.resolve(appRoot, "../../../Spiral2/packages/ui/dist/component-changelogs.json");
+const bumpDeps = process.env.BUMP_DEPS === "1";
 
 const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
 if (manifest.covered.includes(spiralVersion)) {
   console.log(`Manifest already covers ${spiralVersion}; nothing to scaffold.`);
+  mkdirSync(path.dirname(resultPath), { recursive: true });
+  writeFileSync(
+    resultPath,
+    `${JSON.stringify({ skipped: true, version: spiralVersion }, null, 2)}\n`,
+  );
   process.exit(0);
 }
 
@@ -63,7 +74,12 @@ function resolveCompanionVersions(version) {
       const deps = JSON.parse(result.stdout);
       const tokens = deps["@aviala-design/tokens"];
       const icons = deps["@aviala-design/icons"];
-      if (tokens && icons) return { tokens, icons };
+      if (tokens && icons) {
+        return {
+          tokens: String(tokens).replace(/^[\^~]/, ""),
+          icons: String(icons).replace(/^[\^~]/, ""),
+        };
+      }
     } catch {
       // fall through
     }
@@ -75,6 +91,42 @@ function resolveCompanionVersions(version) {
     tokens: previousEntry?.tokens ?? version,
     icons: previousEntry?.icons ?? "2.0.2",
   };
+}
+
+function npmCmd() {
+  return process.platform === "win32" ? "npm.cmd" : "npm";
+}
+
+function runNpm(args) {
+  const result = spawnSync(npmCmd(), args, {
+    cwd: siteRoot,
+    stdio: "inherit",
+    shell: process.platform === "win32",
+  });
+  if (result.status !== 0) {
+    throw new Error(`npm ${args.join(" ")} failed with ${result.status}`);
+  }
+}
+
+function bumpWorkspaceDeps(companions) {
+  console.log(
+    `Bumping workspace deps → spiral@${spiralVersion} tokens@${companions.tokens} icons@${companions.icons}`,
+  );
+  runNpm([
+    "install",
+    `@aviala-design/spiral@${spiralVersion}`,
+    `@aviala-design/tokens@${companions.tokens}`,
+    `@aviala-design/icons@${companions.icons}`,
+    "-w",
+    "@aviala/spiral-docs",
+  ]);
+  runNpm([
+    "install",
+    `@aviala-design/spiral@${spiralVersion}`,
+    `@aviala-design/icons@${companions.icons}`,
+    "-w",
+    "@aviala/colorcat",
+  ]);
 }
 
 const companions = resolveCompanionVersions(spiralVersion);
@@ -128,14 +180,37 @@ export default revision;
   stubPaths.push(path.relative(appRoot, file));
 }
 
-const changedList = [...changedComponents].sort().join(", ") || "(none detected)";
+if (bumpDeps) {
+  bumpWorkspaceDeps(companions);
+}
+
+const changedList = [...changedComponents].sort();
+const changedListText = changedList.join(", ") || "(none detected)";
 console.log(`Scaffolded draft docs version ${spiralVersion}`);
-console.log(`  changed components: ${changedList}`);
+console.log(`  changed components: ${changedListText}`);
 console.log(`  inherits from: ${previous}`);
 console.log(`  default remains: ${manifest.default}`);
 if (stubPaths.length) {
   console.log(`  revision stubs:\n    - ${stubPaths.join("\n    - ")}`);
 }
+
+mkdirSync(path.dirname(resultPath), { recursive: true });
+writeFileSync(
+  resultPath,
+  `${JSON.stringify(
+    {
+      skipped: false,
+      version: spiralVersion,
+      previous,
+      companions,
+      changedComponents: changedList,
+      stubPaths,
+      bumpedDeps: bumpDeps,
+    },
+    null,
+    2,
+  )}\n`,
+);
 
 if (process.env.OPEN_PR === "1") {
   const branch = `docs/spiral-${spiralVersion}`;
@@ -143,28 +218,60 @@ if (process.env.OPEN_PR === "1") {
   const body = [
     `## Summary`,
     `- Scaffold docs manifest entry for \`@aviala-design/spiral@${spiralVersion}\` (status: draft).`,
-    `- Components with changelog entries: ${changedList}`,
+    `- Components with changelog entries: ${changedListText}`,
     `- Other components inherit from \`${previous}\`.`,
+    bumpDeps
+      ? `- Bumped \`@aviala-design/spiral@${spiralVersion}\`, tokens@${companions.tokens}, icons@${companions.icons} (+ lockfile).`
+      : "",
     stubPaths.length ? `- Created revision stubs:\n  - ${stubPaths.join("\n  - ")}` : "",
     ``,
-    `## Checklist`,
-    `- [ ] Update doc revisions / demos for changed components`,
-    `- [ ] Set manifest status to \`ready\``,
-    `- [ ] Point \`default\` to \`${spiralVersion}\``,
-    `- [ ] Verify stale banner clears after merge`,
+    `Checklist is posted as a follow-up bot comment after the PR opens.`,
   ]
     .filter(Boolean)
     .join("\n");
 
   spawnSync("git", ["checkout", "-b", branch], { stdio: "inherit" });
-  spawnSync("git", ["add", manifestPath, ...stubPaths.map((p) => path.join(appRoot, p))], {
-    stdio: "inherit",
-  });
+  const addPaths = [
+    manifestPath,
+    ...stubPaths.map((p) => path.join(appRoot, p)),
+  ];
+  if (bumpDeps) {
+    addPaths.push(
+      path.join(appRoot, "package.json"),
+      path.join(siteRoot, "apps/colorcat/package.json"),
+      path.join(siteRoot, "package-lock.json"),
+    );
+  }
+  spawnSync("git", ["add", ...addPaths], { stdio: "inherit" });
   spawnSync("git", ["commit", "-m", title], { stdio: "inherit" });
   spawnSync("git", ["push", "-u", "origin", branch], { stdio: "inherit" });
-  spawnSync(
+  const create = spawnSync(
     "gh",
     ["pr", "create", "--title", title, "--body", body],
-    { stdio: "inherit" },
+    { encoding: "utf8", shell: process.platform === "win32" },
   );
+  if (create.status !== 0) {
+    console.error(create.stderr || create.stdout);
+    process.exit(create.status ?? 1);
+  }
+  const checklist = [
+    `<!-- spiral-docs-scaffold-checklist -->`,
+    `## Docs coverage checklist (\`${spiralVersion}\`)`,
+    ``,
+    `- [ ] Update doc revisions / demos for changed components${
+      changedList.length ? ` (${changedList.join(", ")})` : ""
+    }`,
+    `- [ ] Set manifest \`status\` to \`ready\``,
+    `- [ ] Point \`default\` to \`${spiralVersion}\``,
+    `- [ ] Verify stale banner clears after merge`,
+    bumpDeps
+      ? `- [ ] Confirm lockfile installs (\`npm ci\`) and docs build against spiral@${spiralVersion}`
+      : null,
+  ]
+    .filter(Boolean)
+    .join("\n");
+  spawnSync("gh", ["pr", "comment", "--body", checklist], {
+    stdio: "inherit",
+    shell: process.platform === "win32",
+  });
 }

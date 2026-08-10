@@ -28,6 +28,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
 
       - name: Resolve Spiral version
         id: ver
@@ -56,31 +57,52 @@ jobs:
             echo '{}' > .tmp/component-changelogs.json
           fi
 
-      - name: Scaffold manifest + revision stubs
+      - name: Scaffold manifest + revision stubs + dep bump
         working-directory: apps/spiral-docs
         env:
           SPIRAL_VERSION: ${{ steps.ver.outputs.version }}
           COMPONENT_CHANGELOGS: ${{ github.workspace }}/apps/spiral-docs/.tmp/component-changelogs.json
           OPEN_PR: "0"
+          BUMP_DEPS: "1"
         run: node ./scripts/scaffold-docs-version-pr.mjs
 
-      - name: Create pull request
+      - name: Create pull request + checklist comment
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.ver.outputs.version }}
         run: |
-          VERSION="${{ steps.ver.outputs.version }}"
-          BRANCH="docs/spiral-${VERSION}"
-          TITLE="docs(spiral): scaffold coverage for ${VERSION}"
+          RESULT="apps/spiral-docs/.tmp/scaffold-result.json"
+          if [ -f "$RESULT" ] && jq -e '.skipped == true' "$RESULT" >/dev/null 2>&1; then
+            echo "Scaffold skipped (already covered); no PR."
+            exit 0
+          fi
 
           if git diff --quiet && git diff --cached --quiet; then
             echo "No file changes; skip PR."
             exit 0
           fi
 
+          BRANCH="docs/spiral-${VERSION}"
+          TITLE="docs(spiral): scaffold coverage for ${VERSION}"
+
+          CHANGED="$(jq -r '.changedComponents | join(", ")' "$RESULT" 2>/dev/null || true)"
+          if [ -z "$CHANGED" ]; then
+            CHANGED="(none detected)"
+          fi
+          TOKENS="$(jq -r '.companions.tokens' "$RESULT")"
+          ICONS="$(jq -r '.companions.icons' "$RESULT")"
+          PREV="$(jq -r '.previous' "$RESULT")"
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "$BRANCH"
-          git add apps/spiral-docs/src/versions/manifest.json apps/spiral-docs/src/doc-revisions || true
+          git add \
+            apps/spiral-docs/src/versions/manifest.json \
+            apps/spiral-docs/src/doc-revisions \
+            apps/spiral-docs/package.json \
+            apps/colorcat/package.json \
+            package-lock.json \
+            || true
           git status
           git commit -m "$TITLE" || { echo "Nothing to commit"; exit 0; }
           git push -u origin "$BRANCH"
@@ -88,15 +110,33 @@ jobs:
           BODY=$(cat <<EOF
           ## Summary
           - Scaffold docs manifest entry for \`@aviala-design/spiral@${VERSION}\` (status: draft).
-          - Changed components get \`rev\` + \`doc-revisions/{Name}/${VERSION}.ts\` stubs.
-          - Unchanged components \`inherits\` the previous covered version.
+          - Changed components: ${CHANGED}
+          - Unchanged components \`inherits\` from \`${PREV}\`.
+          - Bumped workspace deps: spiral@${VERSION}, tokens@${TOKENS}, icons@${ICONS} (lockfile included).
 
-          ## Checklist
-          - [ ] Update doc revisions / demos for changed components
-          - [ ] Set manifest \`status\` to \`ready\`
-          - [ ] Point \`default\` to \`${VERSION}\`
-          - [ ] Verify stale banner clears after merge
+          A bot comment below has the coverage checklist.
           EOF
           )
 
-          gh pr create --title "$TITLE" --body "$BODY" || gh pr view --json url -q .url
+          if ! gh pr create --title "$TITLE" --body "$BODY"; then
+            gh pr view "$BRANCH" --json url -q .url || true
+          fi
+
+          CHECKLIST=$(cat <<EOF
+          <!-- spiral-docs-scaffold-checklist -->
+          ## Docs coverage checklist (\`${VERSION}\`)
+
+          - [ ] Update doc revisions / demos for changed components (${CHANGED})
+          - [ ] Set manifest \`status\` to \`ready\`
+          - [ ] Point \`default\` to \`${VERSION}\`
+          - [ ] Verify stale banner clears after merge
+          - [ ] Confirm lockfile installs (\`npm ci\`) and docs build against spiral@${VERSION}
+          EOF
+          )
+
+          # Prefer commenting on the branch PR; fall back to number from create output.
+          if gh pr comment "$BRANCH" --body "$CHECKLIST"; then
+            echo "Posted checklist comment on PR for ${BRANCH}"
+          else
+            echo "::warning::Could not post checklist comment"
+          fi
