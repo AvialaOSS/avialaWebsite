@@ -18,14 +18,12 @@
       },
       {
         "name": "mode",
-        "type": "\"default\" | \"primary\" | \"second\" | \"defaultCustom\" | \"outline\" | \"outlineCustom\" | \"noBackground\" | \"noBackgroundCustom\" | \"destructive\"",
+        "type": "\"default\" | \"primary\" | \"second\" | \"defaultCustom\" | \"noBackground\" | \"noBackgroundCustom\" | \"destructive\"",
         "values": [
           "default",
           "primary",
           "second",
           "defaultCustom",
-          "outline",
-          "outlineCustom",
           "noBackground",
           "noBackgroundCustom",
           "destructive"
@@ -5119,90 +5117,6 @@
           {
             "name": "trailing",
             "type": "ReactNode",
-            "required": false,
-            "description": ""
-          }
-        ]
-      }
-    ]
-  },
-  "Tab": {
-    "displayName": "Tab",
-    "description": "Figma Components → Structure Navigation → Tab",
-    "props": [
-      {
-        "name": "style",
-        "type": "\"default\" | \"card\" | \"tiled\"",
-        "values": ["default", "card", "tiled"],
-        "defaultValue": "default",
-        "required": false,
-        "description": "Figma `Style`"
-      },
-      {
-        "name": "background",
-        "type": "\"none\" | \"default\"",
-        "values": ["none", "default"],
-        "defaultValue": "none",
-        "required": false,
-        "description": "Figma `Background`"
-      },
-      {
-        "name": "value",
-        "type": "string",
-        "required": false,
-        "description": ""
-      },
-      {
-        "name": "defaultValue",
-        "type": "string",
-        "required": false,
-        "description": ""
-      },
-      {
-        "name": "onValueChange",
-        "type": "(value: string) => void",
-        "required": false,
-        "description": ""
-      },
-      {
-        "name": "disabled",
-        "type": "boolean",
-        "required": false,
-        "description": ""
-      },
-      {
-        "name": "startSlot",
-        "type": "ReactNode",
-        "required": false,
-        "description": "Leading accessory (Figma SoltRight — visual start)."
-      },
-      {
-        "name": "endSlot",
-        "type": "ReactNode",
-        "required": false,
-        "description": "Trailing accessory (Figma SoltLeft / SoltLeft2 — visual end)."
-      }
-    ],
-    "parts": [
-      {
-        "displayName": "TabItem",
-        "description": "Figma Components → Structure Navigation → TabItem",
-        "props": [
-          {
-            "name": "value",
-            "type": "string",
-            "required": true,
-            "description": ""
-          },
-          {
-            "name": "leftIcon",
-            "type": "ReactNode",
-            "required": false,
-            "description": ""
-          },
-          {
-            "name": "disabled",
-            "type": "boolean",
             "required": false,
             "description": ""
           }
