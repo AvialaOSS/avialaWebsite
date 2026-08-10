@@ -18,4 +18,6 @@ dist/
 /apps/spiral-docs/.tmp/
 /apps/spiral-docs/src/.generated/
 /.workbuddy
-/.cursor
+/.cursor/*
+!/.cursor/skills/
+!/.cursor/skills/**
