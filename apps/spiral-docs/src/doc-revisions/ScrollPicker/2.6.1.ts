@@ -1,0 +1,11 @@
+import previous from "./2.0.0";
+import type { ComponentDocRevision } from "../types";
+
+/** Scaffolded from 2.0.0 + component changelog. Review before marking ready. */
+const revision: ComponentDocRevision = {
+  ...previous,
+  revision: "2.6.1",
+  prose: previous.prose + " 2.6.1：滚轮列：鼠标滚轮步进更灵敏，可一次跨多格，并允许打断进行中的平滑滚动；loop 列按当前位置最短路径滚动；选中字色经固定高亮框裁切随列表滚动，停稳后对准居中。",
+};
+
+export default revision;
