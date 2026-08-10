@@ -83,12 +83,13 @@ npm run dev:site               # http://localhost:1313/docs/spiral/
 #   npm run dev:spiral-docs
 #   npm run dev:hugo
 
-# 临时用邻仓 Spiral2 源码/产物（未发 npm 也能验组件）
+# 临时用邻仓 Spiral2 源码（未发 npm 也能验组件）
 # 默认解析 `../Spiral2`；可用 DOCS_SPIRAL_ROOT 覆盖路径
-# tokens / icons 需在 Spiral2 里至少 build 过一次 dist
+# 日常：tokens 走 Spiral2 vite-plugin（无需 tokens build）；icons 用 packages/icons/src
+# 仅缺 icons 源码时才需在 Spiral2：pnpm --filter @aviala-design/icons build
 npm run dev:spiral-docs:local
 npm run dev:site:local
-# 强制用 Spiral2 packages/ui/dist（不要 src）：DOCS_SPIRAL_LOCAL_DIST=1
+# 强制用 Spiral2 packages/*/dist（不要 src / vite-plugin）：DOCS_SPIRAL_LOCAL_DIST=1
 
 # 生产形态（静态产物嵌入 Hugo，无 HMR）
 npm run build:colorcat
@@ -130,7 +131,8 @@ hugo server -D --bind 127.0.0.1 --port 1313
 | 现象 | 可能原因 | 处理 |
 |------|----------|------|
 | `Missing "./xxx-effects.css" specifier in "@aviala-design/tokens"` | 已发布的 tokens 版本还没有该导出 | 在 Spiral2 发版后 `npm update @aviala-design/tokens` |
-| `DOCS_SPIRAL_LOCAL` 启动后样式/组件不对 | 邻仓 tokens/icons 未 build，或路径不是 `../Spiral2` | 在 Spiral2 执行 `pnpm --filter @aviala-design/tokens build` 与 icons build；或设 `DOCS_SPIRAL_ROOT` |
+| `DOCS_SPIRAL_LOCAL` 启动失败 / 预检报错 | 邻仓路径不对，或缺 icons `src` | 确认 `../Spiral2` 或 `DOCS_SPIRAL_ROOT`；缺图标源码时在 Spiral2 跑 `pnpm --filter @aviala-design/icons build` |
+| `DOCS_SPIRAL_LOCAL` 样式不对（dist 模式） | `DOCS_SPIRAL_LOCAL_DIST=1` 但未 build tokens/spiral | 去掉该环境变量改用默认零构建，或在 Spiral2 build 对应包 |
 | 构建报 `Failed to resolve entry for package @aviala-design/spiral` | 命中了包里指向未发布 `src/` 的 `development` 导出条件 | 确认 `apps/spiral-docs/vite.config.ts` 的 `resolve.conditions` 未被改动 |
 | 本地 `/docs/spiral/` 空白 | 没跑过 `npm run build:spiral-docs` | 先构建再启动 Hugo |
 | API 表格缺列或过时 | 安装的 Spiral 版本无 `props.json`，回退到旧副本 | 发版后 `npm update`，构建日志会显示实际来源版本 |
