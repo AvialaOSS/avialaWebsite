@@ -41,7 +41,7 @@ Same App can stay; only rotate the private key when needed.
 ## What the scaffold PR includes
 
 - `apps/spiral-docs/src/versions/manifest.json` draft entry
-- `doc-revisions/{Name}/{version}.ts` stubs for changed components
+- `doc-revisions/{Name}/{version}.ts` stubs for changed components: prefer `import previous from "./{prevRev}"` and append a short note from `component-changelogs.json` (Added/Changed/Fixed/…); still requires human review before `ready`
 - `apps/spiral-docs/package.json`, `apps/colorcat/package.json`, `package-lock.json` pinned to the published spiral / tokens / icons versions
 - PR body: summary only
 - Bot PR comment (`<!-- spiral-docs-scaffold-checklist -->`): human checklist
