@@ -21,11 +21,13 @@ Public docs live in `apps/spiral-docs/`. They consume **published** `@aviala-des
 
 ## After a Spiral release (scaffold)
 
+Manifest path: `apps/spiral-docs/src/versions/manifest.json`.
+
 1. Prefer scaffolded stubs: `import previous from "./{prevRev}"` plus changelog appendix — **edit**, do not blank-rewrite.
 2. Manifest entry stays `status: "draft"` until reviewed.
-3. Checklist (bot PR comment): update revisions/demos → set `status` to `ready` → point `default` to the new version → confirm stale banner clears.
-4. Unchanged components should `inherits` the previous covered version.
-5. Bump of workspace deps + lockfile is part of the scaffold PR when the workflow is up to date.
+3. Checklist (bot PR comment): update revisions/demos → set `status` to `ready` → point `default` to the new version → confirm stale banner clears (npm latest vs docs `default`).
+4. Unchanged components should `inherits` the previous covered version (or omit and inherit from the previous covered docs version).
+5. Bump of workspace deps + lockfile (`apps/spiral-docs`, `apps/colorcat`, root lockfile) is part of the scaffold PR when the workflow is up to date.
 
 Canonical: `docs/SPIRAL_DOCS_DISPATCH.zh_cn.md` (EN: `docs/SPIRAL_DOCS_DISPATCH.md`). Deploy notes: `docs/GITHUB_DEPLOY.md`.
 

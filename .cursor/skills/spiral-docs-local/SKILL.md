@@ -20,7 +20,7 @@ Default sibling path: `../Spiral2`. Override with `DOCS_SPIRAL_ROOT`.
 
 ## Zero-build local (default)
 
-`with-local-spiral.mjs` sets `DOCS_SPIRAL_LOCAL=1` and **preflights** before Vite:
+`apps/spiral-docs/scripts/with-local-spiral.mjs` sets `DOCS_SPIRAL_LOCAL=1` and **preflights** before Vite:
 
 - Spiral2 checkout + `packages/{ui,tokens,icons}` present
 - Tokens CSS via Spiral2 `packages/tokens/vite-plugin.mjs` (same as playground) — **no** `tokens build` required
