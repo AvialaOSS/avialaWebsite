@@ -1,11 +1,12 @@
 import previous from "./2.0.0";
 import type { ComponentDocRevision } from "../types";
 
-/** Scaffolded from 2.0.0 + component changelog. Review before marking ready. */
 const revision: ComponentDocRevision = {
   ...previous,
   revision: "2.6.1",
-  prose: previous.prose + " 2.6.1：时分滚轮：鼠标滚轮步进更灵敏，可一次跨多格，并允许打断进行中的平滑滚动；loop 滚轮按当前位置最短路径滚动，跨 0/末项不再整段甩回；选中字色经固定高亮框裁切随列表滚动，停稳后对准居中。",
+  prose:
+    previous.prose +
+    " 2.6.1 时分滚轮支持更灵敏的跨格滚动与打断；loop 走最短路径，选中字色经高亮框裁切随滚轮对齐。",
 };
 
 export default revision;

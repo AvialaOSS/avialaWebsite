@@ -2800,8 +2800,7 @@ export const tableKnobs: KnobDef[] = [
 function buildTableCellCode(
   content: string,
   row: { name?: string | boolean; badge?: string | boolean; switchOn?: string | boolean },
-  showActions: boolean,
-  rowIndex: number
+  showActions: boolean
 ): string {
   const name = String(row.name ?? "Text");
   const badge = String(row.badge ?? "Active");
@@ -2899,7 +2898,7 @@ export function buildTableCode(values: KnobValues): string {
         />`
         : null;
       const dataCells = columns.map((column) =>
-        buildTableCellCode(String(column.content ?? "text"), row, showActions, index)
+        buildTableCellCode(String(column.content ?? "text"), row, showActions)
       );
       return `      <TableRow>
 ${[checkboxCell, ...dataCells].filter(Boolean).join("\n")}

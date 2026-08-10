@@ -1,6 +1,22 @@
 {
   "Button": [
     {
+      "version": "2.6.1",
+      "sections": {
+        "Changed": [
+          "Hover/Active 改为共享交互 token：Primary 悬停加深、按下变浅；Ghost 使用 neutral-3 → lightBackground-1；Default 使用 filled 1→2 阶"
+        ]
+      }
+    },
+    {
+      "version": "2.6.0",
+      "sections": {
+        "Added": [
+          "`outline` / `outlineCustom` 模式（Figma `Mode=Outline` / `Outline-Custom`）：透明底 + `border-normal-primary` 外描边；主题色 / 中性色文字"
+        ]
+      }
+    },
+    {
       "version": "2.1.0",
       "sections": {
         "Added": [
@@ -10,6 +26,17 @@
     }
   ],
   "CascaderField": [
+    {
+      "version": "2.6.0",
+      "sections": {
+        "Changed": [
+          "默认 placeholder 改由 `LocaleProvider` 提供"
+        ],
+        "Fixed": [
+          "展开箭头与键盘左右键在 RTL 下按阅读方向展开"
+        ]
+      }
+    },
     {
       "version": "2.0.0",
       "sections": {
@@ -22,7 +49,7 @@
   ],
   "Checkbox": [
     {
-      "version": "Unreleased",
+      "version": "2.5.0",
       "sections": {
         "Added": [
           "`size=\"huge\"`：对应 Figma Checkbox `Size=Huge`（26px / `--size-large`，圆角 `--border-radius-small`，勾选与半选标记 14px，勾选描边 2px）"
@@ -38,7 +65,56 @@
       }
     }
   ],
+  "ColorPicker": [
+    {
+      "version": "2.6.0",
+      "sections": {
+        "Changed": [
+          "色相 / 透明度轨道改为复用共享 `Slider`（新拇指视觉与交互），轨道仍为光谱 / 透明度渐变",
+          "ColorPicker 内轨道使用 `size=\"big\"`（16px，与拇指同高）+ inset ring；透明度渐变用同色 `rgba(…,0)` 避免脏插值，棋盘格与渐变均 `100%` 铺满",
+          "色相状态改为本地 HSVA 保真：拖到 360°（与 0° 同为红色）时拇指不再被 hex 往返弹回起点",
+          "占位与控件 aria 文案改由 `LocaleProvider` 提供"
+        ]
+      }
+    }
+  ],
+  "ConfigProvider": [
+    {
+      "version": "2.6.0",
+      "sections": {
+        "Added": [
+          "`ConfigProvider` with `direction` (`ltr` | `rtl`), optional `locale` (nests `LocaleProvider`), and `syncDocumentDir` for portalled overlays",
+          "`useDirection` / `useRtl` plus `mirrorSide` / `forwardChevronSide` / `backChevronSide` helpers"
+        ],
+        "Fixed": [
+          "Pagination / Breadcrumb / List / Card / Cascader / Select / Navigation / DatePicker 方向性箭头与侧向行为跟随 `direction`"
+        ]
+      }
+    }
+  ],
   "DatePickerField": [
+    {
+      "version": "2.6.1",
+      "sections": {
+        "Changed": [
+          "日历面板上一月 / 下一月导航图标改为 `direction/arrowLeftLight` 与 `direction/arrowRightLight`",
+          "导航箭头按压缩小，松开后沿翻页方向飞出并由对侧飞入",
+          "月/年与时间滚轮：鼠标滚轮步进更灵敏，可一次跨多格，并允许打断进行中的平滑滚动",
+          "loop 滚轮按当前位置最短路径滚动，跨 0/末项不再整段甩回；选中字色经固定高亮框裁切随列表滚动，停稳后对准居中"
+        ]
+      }
+    },
+    {
+      "version": "2.6.0",
+      "sections": {
+        "Changed": [
+          "周标题、页脚、导航 aria 与 `Intl` 格式化改读当前 locale（默认 zh-CN）"
+        ],
+        "Fixed": [
+          "月/年上一页、下一页箭头在 RTL 下随阅读方向翻转"
+        ]
+      }
+    },
     {
       "version": "2.0.0",
       "sections": {
@@ -49,6 +125,25 @@
     }
   ],
   "List": [
+    {
+      "version": "2.6.1",
+      "sections": {
+        "Changed": [
+          "可交互行 Hover/Active 对齐共享 filled 交互 token（lightBackground-2 / Background-3）"
+        ]
+      }
+    },
+    {
+      "version": "2.6.0",
+      "sections": {
+        "Changed": [
+          "默认「更多」aria 文案改由 `LocaleProvider` 提供"
+        ],
+        "Fixed": [
+          "`action` 类型尾部 chevron 在 RTL 下指向阅读方向前方"
+        ]
+      }
+    },
     {
       "version": "2.4.0",
       "sections": {
@@ -64,7 +159,26 @@
       }
     }
   ],
+  "LocaleProvider": [
+    {
+      "version": "2.6.0",
+      "sections": {
+        "Added": [
+          "Semi-style `LocaleProvider` with `zhCN` / `enUS` packs, `useLocale` / `useLocaleMessages`, and `${name}` interpolate",
+          "Built-in component copy (DatePicker, TimePicker, Pagination, Upload, Modal, Feedback, Alert, ColorPicker, Cascader, Loading, Tag, NumberInput, Textarea, Card, List, Breadcrumb) reads the active locale; existing label props still override"
+        ]
+      }
+    }
+  ],
   "Modal": [
+    {
+      "version": "2.6.0",
+      "sections": {
+        "Changed": [
+          "默认关闭按钮文案改由 `LocaleProvider` 提供（`closeLabel` 仍可覆盖）"
+        ]
+      }
+    },
     {
       "version": "2.0.0",
       "sections": {
@@ -77,7 +191,24 @@
   ],
   "Navigation": [
     {
-      "version": "Unreleased",
+      "version": "2.6.1",
+      "sections": {
+        "Changed": [
+          "激活项 second 面 Hover/Active 改为 token 换色（不再依赖 brightness）"
+        ]
+      }
+    },
+    {
+      "version": "2.6.0",
+      "sections": {
+        "Fixed": [
+          "垂直指示条读取 `--navigation-rail-inline-start`，RTL 下贴在 inline-start 侧",
+          "垂直 flyout 默认 `side` 随 `ConfigProvider` 方向翻转"
+        ]
+      }
+    },
+    {
+      "version": "2.5.0",
       "sections": {
         "Changed": [
           "激活指示条与展开 / 收拢动效改用更干脆的 ease-out（`--navigation-transition-easing`: `cubic-bezier(0.16, 1, 0.3, 1)`；指示条脚本插值同步）"
@@ -95,6 +226,17 @@
   ],
   "Pagination": [
     {
+      "version": "2.6.0",
+      "sections": {
+        "Changed": [
+          "默认文案改由 `LocaleProvider` 字典提供（`jumpLabel` / `sizeLabel` 等 props 仍可覆盖）"
+        ],
+        "Fixed": [
+          "上一页 / 下一页箭头在 RTL 下随阅读方向翻转"
+        ]
+      }
+    },
+    {
       "version": "2.1.0",
       "sections": {
         "Changed": [
@@ -105,7 +247,15 @@
   ],
   "Popover": [
     {
-      "version": "Unreleased",
+      "version": "2.6.1",
+      "sections": {
+        "Changed": [
+          "浮层阴影统一为 `BasicShadow-Level4WithLine`"
+        ]
+      }
+    },
+    {
+      "version": "2.5.0",
       "sections": {
         "Added": [
           "`PopoverContent` 支持 `level`（`\"caption\"` | `\"text\"`）；未传时：`appearance=\"tooltip\"` 默认为 `caption`，其余外观默认为 `text`"
@@ -137,9 +287,39 @@
       }
     }
   ],
+  "ScrollPicker": [
+    {
+      "version": "2.6.1",
+      "sections": {
+        "Changed": [
+          "滚轮列：鼠标滚轮步进更灵敏，可一次跨多格，并允许打断进行中的平滑滚动",
+          "loop 列按当前位置最短路径滚动；选中字色经固定高亮框裁切随列表滚动，停稳后对准居中"
+        ]
+      }
+    }
+  ],
   "SegmentatorGroup": [
     {
-      "version": "Unreleased",
+      "version": "2.6.1",
+      "sections": {
+        "Changed": [
+          "未选项 Hover/Active 使用共享 filled 交互 token"
+        ],
+        "Fixed": [
+          "nested 模式下未选项圆角改为与滑动指示器一致（`segmentator-item-nested-radius`），避免 hover / focus 填充与选中拇指圆角不一致"
+        ]
+      }
+    },
+    {
+      "version": "2.6.0",
+      "sections": {
+        "Added": [
+          "`direction`：`horizontal`（默认）/ `vertical`，对齐 Figma SegmentatorGroup；竖向布局下拇指与触控拖选沿主轴（Y）工作"
+        ]
+      }
+    },
+    {
+      "version": "2.5.0",
       "sections": {
         "Changed": [
           "内容超出容器时支持横向滚动（隐藏滚动条，触控板 / 触控仍可滑动）",
@@ -159,7 +339,15 @@
   ],
   "Slider": [
     {
-      "version": "Unreleased",
+      "version": "2.6.1",
+      "sections": {
+        "Changed": [
+          "拇指阴影统一为 `BasicShadow-Level4WithLine`"
+        ]
+      }
+    },
+    {
+      "version": "2.5.0",
       "sections": {
         "Added": [
           "`showValueTooltip`：悬停拇指、拖动或按住轨道调整时，在对应拇指上方显示数值提示",
@@ -179,9 +367,46 @@
       }
     }
   ],
+  "Tab": [
+    {
+      "version": "2.6.1",
+      "sections": {
+        "Changed": [
+          "Tiled active Hover/Active 改为 second 面 token 换色"
+        ]
+      }
+    },
+    {
+      "version": "2.6.0",
+      "sections": {
+        "Added": [
+          "`Tab` / `TabItem`（Figma Structure Navigation → Tab）"
+        ]
+      }
+    }
+  ],
+  "TimePickerField": [
+    {
+      "version": "2.6.1",
+      "sections": {
+        "Changed": [
+          "时分滚轮：鼠标滚轮步进更灵敏，可一次跨多格，并允许打断进行中的平滑滚动",
+          "loop 滚轮按当前位置最短路径滚动，跨 0/末项不再整段甩回；选中字色经固定高亮框裁切随列表滚动，停稳后对准居中"
+        ]
+      }
+    }
+  ],
   "Tooltip": [
     {
-      "version": "Unreleased",
+      "version": "2.6.0",
+      "sections": {
+        "Changed": [
+          "`ResponsiveTooltip` 触摸端改为**长按**打开（短按仍触发按钮自身点击）；可用 `longPressMs` 调整按住时长（默认 500ms）"
+        ]
+      }
+    },
+    {
+      "version": "2.5.0",
       "sections": {
         "Added": [
           "`TooltipContent` / `ResponsiveTooltip` 支持 `level`：`\"caption\"`（默认）或 `\"text\"`"

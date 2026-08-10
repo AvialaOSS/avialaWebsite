@@ -8,7 +8,7 @@
     "2.6.0",
     "2.6.1"
   ],
-  "default": "2.6.0",
+  "default": "2.6.1",
   "versions": {
     "2.0.0": {
       "spiral": "2.0.0",
@@ -317,7 +317,7 @@
       "spiral": "2.6.1",
       "tokens": "2.5.0",
       "icons": "2.2.0",
-      "status": "draft",
+      "status": "ready",
       "components": {
         "Button": {
           "rev": "2.6.1"
