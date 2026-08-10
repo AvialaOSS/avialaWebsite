@@ -1,4 +1,4 @@
-import { DirectionArrowLeft, UsersUserCircle } from "@aviala-design/icons";
+import { DirectionArrowLeft, GeneralSetting, SymbolMore, UsersUserCircle } from "@aviala-design/icons";
 import {
   Avatar,
   Badge,
@@ -329,7 +329,7 @@ export function TableDocPage() {
       description="用于行列对照地浏览结构化数据。"
       prose="适合订单、成员、日志等需要多字段对齐比较的数据场景。"
       componentKey="Table"
-      scope={{ Table, TableRow, TableHead, TableCell, Avatar }}
+      scope={{ Table, TableRow, TableHead, TableCell, Avatar, Button, GeneralSetting, SymbolMore }}
       knobs={tableKnobs}
       buildCode={buildTableCode}
       liveCode={tableLiveCode}

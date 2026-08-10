@@ -2741,6 +2741,8 @@ const TABLE_ROW_DEFAULTS = [
 
 export const tableKnobs: KnobDef[] = [
   { kind: "boolean", name: "showCheckbox", label: "showCheckbox", defaultValue: true },
+  { kind: "boolean", name: "stickyHeader", label: "stickyHeader", defaultValue: false },
+  { kind: "boolean", name: "showActions", label: "showActions", defaultValue: true },
   {
     kind: "items",
     name: "columns",
@@ -2760,7 +2762,7 @@ export const tableKnobs: KnobDef[] = [
         kind: "select",
         name: "content",
         label: "content",
-        options: ["people", "text", "badge", "switch", "icon+text"],
+        options: ["people", "text", "badge", "switch", "icon+text", "icon-place+text", "action"],
         defaultValue: "text",
       },
     ],
@@ -2797,78 +2799,147 @@ export const tableKnobs: KnobDef[] = [
 
 function buildTableCellCode(
   content: string,
-  row: { name?: string | boolean; badge?: string | boolean; switchOn?: string | boolean }
+  row: { name?: string | boolean; badge?: string | boolean; switchOn?: string | boolean },
+  showActions: boolean,
+  rowIndex: number
 ): string {
   const name = String(row.name ?? "Text");
   const badge = String(row.badge ?? "Active");
   const switchOn = Boolean(row.switchOn);
   const initial = (name.trim().charAt(0) || "A").toUpperCase();
+  const actionsAttr = showActions ? " actions={rowActions}" : "";
 
   if (content === "people") {
-    return `      <TableCell
-        content="people"
-        people={<Avatar content="text" level="text" lineHeightFix={false}>${initial}</Avatar>}
-        text=${jsxString(name)}
-      />`;
+    return `        <TableCell
+          content="people"
+          people={<Avatar content="text" level="text" lineHeightFix={false}>${initial}</Avatar>}
+          text=${jsxString(name)}
+          caption="Member"${actionsAttr}
+        />`;
   }
   if (content === "badge") {
-    return `      <TableCell content="badge" badgeLabel=${jsxString(badge)} />`;
+    return `        <TableCell content="badge" badgeLabel=${jsxString(badge)}${actionsAttr} />`;
   }
   if (content === "switch") {
     return switchOn
-      ? `      <TableCell content="switch" switchProps={{ defaultChecked: true }} />`
-      : `      <TableCell content="switch" />`;
+      ? `        <TableCell content="switch" switchProps={{ defaultChecked: true }} />`
+      : `        <TableCell content="switch" />`;
   }
   if (content === "icon+text") {
-    return `      <TableCell
-        content="icon+text"
-        icon={<${DEFAULT_ICON_NAME} aria-hidden />}
-        text=${jsxString(name)}
-      />`;
+    return `        <TableCell
+          content="icon+text"
+          icon={<${DEFAULT_ICON_NAME} aria-hidden />}
+          text=${jsxString(name)}${actionsAttr}
+        />`;
   }
-  return `      <TableCell content="text" text=${jsxString(name)} />`;
+  if (content === "icon-place+text") {
+    return `        <TableCell
+          content="icon-place+text"
+          iconPlace={<Avatar content="text" level="text" lineHeightFix={false}>${initial}</Avatar>}
+          text=${jsxString(name)}${actionsAttr}
+        />`;
+  }
+  if (content === "action") {
+    return showActions
+      ? `        <TableCell content="action" actions={rowActions} />`
+      : `        <TableCell content="action" />`;
+  }
+  return `        <TableCell content="text" text=${jsxString(name)}${actionsAttr} />`;
 }
 
 export function buildTableCode(values: KnobValues): string {
   const showCheckbox = Boolean(values.showCheckbox);
+  const stickyHeader = Boolean(values.stickyHeader);
+  const showActions = Boolean(values.showActions);
   const columns = getKnobItems(values, "columns", TABLE_COLUMN_DEFAULTS);
   const rows = getKnobItems(values, "rows", TABLE_ROW_DEFAULTS);
 
+  const initialSelected = rows
+    .map((row, index) => `${index}: ${Boolean(row.checked)}`)
+    .join(", ");
+
   const headCells = [
-    showCheckbox ? `      <TableHead content="checkbox" />` : null,
+    showCheckbox
+      ? `        <TableHead
+          content="checkbox"
+          checkboxProps={{
+            checked: allChecked ? true : someChecked ? "indeterminate" : false,
+            onCheckedChange: (value) => {
+              const next = value === true;
+              setSelected(Object.fromEntries(ids.map((id) => [id, next])));
+            },
+            "aria-label": "Select all rows",
+          }}
+        />`
+      : null,
     ...columns.map((column) => {
       const label = String(column.label ?? "Column");
-      return `      <TableHead>{${jsxString(label)}}</TableHead>`;
+      const content = String(column.content ?? "text");
+      const headActions =
+        showActions && content !== "switch" && content !== "action"
+          ? " actions={rowActions}"
+          : "";
+      return `        <TableHead${headActions}>{${jsxString(label)}}</TableHead>`;
     }),
   ]
     .filter(Boolean)
     .join("\n");
 
   const bodyRows = rows
-    .map((row) => {
-      const checked = Boolean(row.checked);
+    .map((row, index) => {
       const checkboxCell = showCheckbox
-        ? checked
-          ? `      <TableCell content="checkbox" checkboxProps={{ defaultChecked: true }} />`
-          : `      <TableCell content="checkbox" />`
+        ? `        <TableCell
+          content="checkbox"
+          checkboxProps={{
+            checked: Boolean(selected[${index}]),
+            onCheckedChange: (value) =>
+              setSelected((prev) => ({ ...prev, [${index}]: value === true })),
+            "aria-label": ${jsxString(`Select ${String(row.name ?? "row")}`)},
+          }}
+        />`
         : null;
       const dataCells = columns.map((column) =>
-        buildTableCellCode(String(column.content ?? "text"), row)
+        buildTableCellCode(String(column.content ?? "text"), row, showActions, index)
       );
-      return `    <TableRow>
+      return `      <TableRow>
 ${[checkboxCell, ...dataCells].filter(Boolean).join("\n")}
-    </TableRow>`;
+      </TableRow>`;
     })
     .join("\n");
 
-  return `render(
-  <Table style={{ width: "100%", minWidth: 480 }}>
-    <TableRow header>
+  const stickyAttr = stickyHeader ? " stickyHeader" : "";
+  const styleAttr = stickyHeader
+    ? ` style={{ width: "100%", minWidth: 480, maxHeight: 320 }}`
+    : ` style={{ width: "100%", minWidth: 480 }}`;
+
+  return `function Demo() {
+  const ids = [${rows.map((_, index) => index).join(", ")}];
+  const [selected, setSelected] = React.useState({ ${initialSelected} });
+  const selectedCount = ids.filter((id) => selected[id]).length;
+  const allChecked = selectedCount === ids.length;
+  const someChecked = selectedCount > 0 && !allChecked;
+  const rowActions = (
+    <>
+      <Button mode="noBackgroundCustom" size="small" iconOnly aria-label="Settings">
+        <GeneralSetting aria-hidden />
+      </Button>
+      <Button mode="noBackgroundCustom" size="small" iconOnly aria-label="More">
+        <SymbolMore thickness="Light" aria-hidden />
+      </Button>
+    </>
+  );
+
+  return (
+    <Table${stickyAttr}${styleAttr}>
+      <TableRow header>
 ${headCells}
-    </TableRow>
+      </TableRow>
 ${bodyRows}
-  </Table>
-);`;
+    </Table>
+  );
+}
+
+render(<Demo />);`;
 }
 
 export const tableLiveCode = buildTableCode(defaultKnobValues(tableKnobs));
