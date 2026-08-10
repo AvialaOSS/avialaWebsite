@@ -2,7 +2,7 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 import { createRequire } from "node:module";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import mdx from "@mdx-js/rollup";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
@@ -93,7 +93,13 @@ type LocalSpiralPaths = {
   tokens: string;
   icons: string;
   spiralEntry: string;
+  /** When true, leave tokens CSS / spiral styles.css to Spiral2 tokens vite-plugin. */
+  useTokensVitePlugin: boolean;
 };
+
+function preferLocalSrc(): boolean {
+  return process.env.DOCS_SPIRAL_LOCAL_DIST !== "1";
+}
 
 function resolveLocalSpiral(): LocalSpiralPaths | null {
   const flag = process.env.DOCS_SPIRAL_LOCAL;
@@ -127,34 +133,68 @@ function resolveLocalSpiral(): LocalSpiralPaths | null {
     }
   }
 
-  const preferSrc = process.env.DOCS_SPIRAL_LOCAL_DIST !== "1";
+  const useSrc = preferLocalSrc();
+  const tokensPluginPath = path.join(tokens, "vite-plugin.mjs");
+  const useTokensVitePlugin = useSrc && existsSync(tokensPluginPath);
+
   const srcEntry = path.join(ui, "src/index.ts");
   const distEntry = path.join(ui, "dist/index.js");
   const spiralEntry =
-    preferSrc && existsSync(srcEntry)
+    useSrc && existsSync(srcEntry)
       ? srcEntry
       : existsSync(distEntry)
         ? distEntry
         : srcEntry;
 
-  if (!existsSync(path.join(tokens, "dist/styles.css"))) {
+  if (useSrc) {
+    if (!useTokensVitePlugin) {
+      console.warn(
+        `[spiral-docs] tokens vite-plugin missing at ${tokensPluginPath}; CSS may need a tokens build`,
+      );
+    }
+    const iconsSrc = path.join(icons, "src/index.ts");
+    const iconsDist = path.join(icons, "dist/index.js");
+    if (!existsSync(iconsSrc) && !existsSync(iconsDist)) {
+      console.warn(
+        `[spiral-docs] icons src/dist missing — in Spiral2 run: pnpm --filter @aviala-design/icons build`,
+      );
+      console.warn(`  (in ${root})`);
+    }
+  } else if (!existsSync(path.join(tokens, "dist/styles.css"))) {
     console.warn(
       `[spiral-docs] local tokens dist missing — run: pnpm --filter @aviala-design/tokens build`,
     );
     console.warn(`  (in ${root})`);
   }
-  if (!existsSync(path.join(icons, "dist/index.js"))) {
-    console.warn(
-      `[spiral-docs] local icons dist missing — run: pnpm --filter @aviala-design/icons build`,
-    );
-    console.warn(`  (in ${root})`);
-  }
 
   console.log(
-    `[spiral-docs] DOCS_SPIRAL_LOCAL → ${root} (spiral: ${path.relative(root, spiralEntry)})`,
+    `[spiral-docs] DOCS_SPIRAL_LOCAL → ${root} (spiral: ${path.relative(root, spiralEntry)}${
+      useTokensVitePlugin ? ", tokens vite-plugin" : ""
+    })`,
   );
 
-  return { root, ui, tokens, icons, spiralEntry };
+  return { root, ui, tokens, icons, spiralEntry, useTokensVitePlugin };
+}
+
+async function loadLocalTokensVitePlugin(
+  local: LocalSpiralPaths,
+): Promise<Plugin | null> {
+  if (!local.useTokensVitePlugin) return null;
+  const pluginFile = path.join(local.tokens, "vite-plugin.mjs");
+  try {
+    const mod = (await import(pathToFileURL(pluginFile).href)) as {
+      default: (options?: { cacheDir?: string }) => Plugin;
+    };
+    return mod.default({
+      cacheDir: path.join(dirname, "node_modules/.cache/aviala-tokens-css"),
+    });
+  } catch (err) {
+    console.warn(
+      `[spiral-docs] failed to load tokens vite-plugin from ${pluginFile}:`,
+      err,
+    );
+    return null;
+  }
 }
 
 /** Resolve @aviala-design/{spiral,tokens,icons} from a local Spiral2 checkout. */
@@ -164,21 +204,22 @@ function localSpiralResolvePlugin(local: LocalSpiralPaths): Plugin {
     "@aviala-design/tokens": local.tokens,
     "@aviala-design/icons": local.icons,
   };
+  const useSrc = preferLocalSrc();
 
-  /** Prefer ESM/dist — `createRequire().resolve` picks the `require` export (CJS). */
   function resolvePackageEntry(pkgDir: string, kind: "spiral" | "icons" | "tokens") {
     if (kind === "spiral") return local.spiralEntry;
 
     const distJs = path.join(pkgDir, "dist/index.js");
     const srcTs = path.join(pkgDir, "src/index.ts");
     if (kind === "icons") {
-      // Icons are codegen'd into src; prefer src for HMR, else built ESM.
-      if (process.env.DOCS_SPIRAL_LOCAL_DIST !== "1" && existsSync(srcTs)) {
-        return srcTs;
-      }
+      if (useSrc && existsSync(srcTs)) return srcTs;
       return existsSync(distJs) ? distJs : null;
     }
-    // tokens root is CSS-first; only resolve if an ESM entry exists.
+    if (kind === "tokens") {
+      // Prefer src when the tokens vite-plugin is active; otherwise dist ESM.
+      if (local.useTokensVitePlugin && existsSync(srcTs)) return srcTs;
+      return existsSync(distJs) ? distJs : existsSync(srcTs) ? srcTs : null;
+    }
     return existsSync(distJs) ? distJs : null;
   }
 
@@ -188,6 +229,13 @@ function localSpiralResolvePlugin(local: LocalSpiralPaths): Plugin {
     resolveId(source) {
       for (const [name, pkgDir] of Object.entries(packageDirs)) {
         if (source !== name && !source.startsWith(`${name}/`)) continue;
+
+        // Defer tokens package + spiral/styles.css to Spiral2's tokens vite-plugin
+        // (same zero-build path as playground / Storybook).
+        if (local.useTokensVitePlugin) {
+          if (name === "@aviala-design/tokens") return null;
+          if (source === "@aviala-design/spiral/styles.css") return null;
+        }
 
         if (source === "@aviala-design/spiral") {
           return local.spiralEntry;
@@ -203,8 +251,8 @@ function localSpiralResolvePlugin(local: LocalSpiralPaths): Plugin {
           return existsSync(css) ? css : null;
         }
 
-        // Subpaths (e.g. tokens/*.css). Prefer package exports → local dist so we
-        // never accidentally resolve a second copy from the docs node_modules.
+        // Subpaths (e.g. tokens/*.css in dist mode). Prefer package exports →
+        // local dist so we never resolve a second copy from docs node_modules.
         const subpath = `./${source.slice(name.length + 1)}`;
         try {
           const pkgJson = JSON.parse(
@@ -252,7 +300,7 @@ function writeLocalSpiralTailwindSources(local: LocalSpiralPaths | null) {
   );
 }
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, dirname, "");
   const docsVersion = env.VITE_DOCS_VERSION || process.env.VITE_DOCS_VERSION || "";
   const docsBasePath =
@@ -266,6 +314,9 @@ export default defineConfig(({ mode }) => {
   const emptyOutDir = process.env.DOCS_EMPTY_OUT_DIR !== "0";
   const localSpiral = resolveLocalSpiral();
   writeLocalSpiralTailwindSources(localSpiral);
+  const tokensVitePlugin = localSpiral
+    ? await loadLocalTokensVitePlugin(localSpiral)
+    : null;
 
   const plugins = [
     {
@@ -281,6 +332,11 @@ export default defineConfig(({ mode }) => {
     plugins.unshift(localSpiralResolvePlugin(localSpiral));
   } else if (pkgRoot && existsSync(path.join(pkgRoot, "package.json"))) {
     plugins.unshift(docsPkgResolvePlugin(pkgRoot));
+  }
+  // Register tokens plugin first among `enforce: "pre"` so CSS interception
+  // wins (same ordering concern as playground aliases vs the plugin).
+  if (tokensVitePlugin) {
+    plugins.unshift(tokensVitePlugin);
   }
 
   const reactDedupeAlias =
