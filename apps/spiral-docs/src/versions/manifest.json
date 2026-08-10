@@ -10,7 +10,7 @@
     "2.6.2",
     "2.7.0"
   ],
-  "default": "2.6.2",
+  "default": "2.7.0",
   "versions": {
     "2.0.0": {
       "spiral": "2.0.0",
@@ -437,7 +437,7 @@
       "spiral": "2.7.0",
       "tokens": "2.5.2",
       "icons": "2.2.0",
-      "status": "draft",
+      "status": "ready",
       "components": {
         "Button": {
           "inherits": "2.6.2"
@@ -455,7 +455,7 @@
           "inherits": "2.6.2"
         },
         "SegmentatorGroup": {
-          "inherits": "2.6.2"
+          "rev": "2.7.0"
         },
         "CascaderField": {
           "inherits": "2.6.2"
@@ -470,7 +470,7 @@
           "inherits": "2.6.2"
         },
         "Checkbox": {
-          "inherits": "2.6.2"
+          "rev": "2.7.0"
         },
         "Slider": {
           "inherits": "2.6.2"
@@ -489,6 +489,12 @@
         },
         "TimePickerField": {
           "inherits": "2.6.2"
+        },
+        "Progress": {
+          "rev": "2.7.0"
+        },
+        "Table": {
+          "rev": "2.7.0"
         }
       }
     }
