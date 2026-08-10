@@ -1,4 +1,4 @@
-import { DirectionArrowLeft, UsersUserCircle } from "@aviala-design/icons";
+import { DirectionArrowLeft, GeneralSetting, SymbolMore, UsersUserCircle } from "@aviala-design/icons";
 import {
   Avatar,
   Badge,
@@ -12,6 +12,7 @@ import {
   CardBody,
   CardBottom,
   CardHead,
+  Checkbox,
   Pagehead,
   Pagination,
   Progress,
@@ -326,10 +327,20 @@ export function TableDocPage() {
   return (
     <DocShell
       title="Table 表格"
-      description="用于行列对照地浏览结构化数据。"
-      prose="适合订单、成员、日志等需要多字段对齐比较的数据场景。"
+      description="用于行列对照地浏览结构化数据，支持行选择与单元格操作区。"
+      prose={'适合订单、成员、日志等需要多字段对齐比较的数据场景。checkbox 列可做行选择（表头可放全选）；操作列使用 `content="action"` 与 `actions`。'}
       componentKey="Table"
-      scope={{ Table, TableRow, TableHead, TableCell, Avatar }}
+      scope={{
+        Table,
+        TableRow,
+        TableHead,
+        TableCell,
+        Avatar,
+        Button,
+        Checkbox,
+        GeneralSetting,
+        SymbolMore,
+      }}
       knobs={tableKnobs}
       buildCode={buildTableCode}
       liveCode={tableLiveCode}

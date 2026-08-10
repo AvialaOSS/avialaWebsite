@@ -18,16 +18,16 @@
       },
       {
         "name": "mode",
-        "type": "\"default\" | \"primary\" | \"second\" | \"defaultCustom\" | \"outline\" | \"outlineCustom\" | \"noBackground\" | \"noBackgroundCustom\" | \"destructive\"",
+        "type": "\"default\" | \"primary\" | \"second\" | \"defaultCustom\" | \"noBackground\" | \"noBackgroundCustom\" | \"outline\" | \"outlineCustom\" | \"destructive\"",
         "values": [
           "default",
           "primary",
           "second",
           "defaultCustom",
-          "outline",
-          "outlineCustom",
           "noBackground",
           "noBackgroundCustom",
+          "outline",
+          "outlineCustom",
           "destructive"
         ],
         "required": false,
@@ -57,12 +57,12 @@
       },
       {
         "name": "variant",
-        "type": "\"default\" | \"destructive\" | \"secondary\" | \"outline\" | \"ghost\" | \"link\"",
+        "type": "\"default\" | \"outline\" | \"destructive\" | \"secondary\" | \"ghost\" | \"link\"",
         "values": [
           "default",
+          "outline",
           "destructive",
           "secondary",
-          "outline",
           "ghost",
           "link"
         ],
@@ -3599,7 +3599,7 @@
   },
   "FormField": {
     "displayName": "FormField",
-    "description": "",
+    "description": "FormField — layout wrapper around a form control, or a react-hook-form\nbound field when given `name` + `render` (shadcn-style).",
     "props": [
       {
         "name": "label",
@@ -3623,7 +3623,7 @@
         "name": "error",
         "type": "ReactNode",
         "required": false,
-        "description": ""
+        "description": "Overrides the validation error message shown under the control"
       },
       {
         "name": "info",
@@ -3645,14 +3645,56 @@
       },
       {
         "name": "direction",
-        "type": "\"vertical\" | \"horizontal\"",
+        "type": "\"horizontal\" | \"vertical\"",
         "values": [
-          "vertical",
-          "horizontal"
+          "horizontal",
+          "vertical"
         ],
         "defaultValue": "vertical",
         "required": false,
         "description": "Figma `Direction` — vertical stacks label above control; horizontal places label beside"
+      },
+      {
+        "name": "ref",
+        "type": "Ref<HTMLDivElement>",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "rules",
+        "type": "Omit<RegisterOptions<TFieldValues, TName>, \"disabled\" | \"valueAsNumber\" | \"valueAsDate\" | \"setValueAs\">",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "shouldUnregister",
+        "type": "boolean",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "control",
+        "type": "Control<TFieldValues>",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "render",
+        "type": "(props: FormFieldRenderProps<TFieldValues, TName>) => ReactNode",
+        "required": true,
+        "description": ""
       }
     ]
   },
@@ -5119,90 +5161,6 @@
           {
             "name": "trailing",
             "type": "ReactNode",
-            "required": false,
-            "description": ""
-          }
-        ]
-      }
-    ]
-  },
-  "Tab": {
-    "displayName": "Tab",
-    "description": "Figma Components → Structure Navigation → Tab",
-    "props": [
-      {
-        "name": "style",
-        "type": "\"default\" | \"card\" | \"tiled\"",
-        "values": ["default", "card", "tiled"],
-        "defaultValue": "default",
-        "required": false,
-        "description": "Figma `Style`"
-      },
-      {
-        "name": "background",
-        "type": "\"none\" | \"default\"",
-        "values": ["none", "default"],
-        "defaultValue": "none",
-        "required": false,
-        "description": "Figma `Background`"
-      },
-      {
-        "name": "value",
-        "type": "string",
-        "required": false,
-        "description": ""
-      },
-      {
-        "name": "defaultValue",
-        "type": "string",
-        "required": false,
-        "description": ""
-      },
-      {
-        "name": "onValueChange",
-        "type": "(value: string) => void",
-        "required": false,
-        "description": ""
-      },
-      {
-        "name": "disabled",
-        "type": "boolean",
-        "required": false,
-        "description": ""
-      },
-      {
-        "name": "startSlot",
-        "type": "ReactNode",
-        "required": false,
-        "description": "Leading accessory (Figma SoltRight — visual start)."
-      },
-      {
-        "name": "endSlot",
-        "type": "ReactNode",
-        "required": false,
-        "description": "Trailing accessory (Figma SoltLeft / SoltLeft2 — visual end)."
-      }
-    ],
-    "parts": [
-      {
-        "displayName": "TabItem",
-        "description": "Figma Components → Structure Navigation → TabItem",
-        "props": [
-          {
-            "name": "value",
-            "type": "string",
-            "required": true,
-            "description": ""
-          },
-          {
-            "name": "leftIcon",
-            "type": "ReactNode",
-            "required": false,
-            "description": ""
-          },
-          {
-            "name": "disabled",
-            "type": "boolean",
             "required": false,
             "description": ""
           }

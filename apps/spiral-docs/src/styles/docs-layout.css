@@ -655,6 +655,7 @@ header.docs-page-header {
   flex: 1 1 auto;
   overflow: auto;
   padding: var(--gap-block-space, 14px);
+  background: var(--box-box-normal-lightbackground-white, #f9f8f8);
 }
 
 @media (prefers-reduced-motion: reduce) {
