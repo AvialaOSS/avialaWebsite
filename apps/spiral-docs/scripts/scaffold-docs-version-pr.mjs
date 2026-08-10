@@ -13,6 +13,9 @@
  *
  * Set BUMP_DEPS=1 (CI default) to pin workspace deps to the published spiral /
  * tokens / icons versions and refresh package-lock.json.
+ *
+ * Changed-component stubs prefer `import previous from "./{prevRev}"` and append
+ * a short prose note from component-changelogs.json (Added/Changed/Fixed/…).
  */
 import { readFileSync, existsSync, writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
@@ -49,9 +52,11 @@ if (manifest.covered.includes(spiralVersion)) {
 const previous = manifest.default;
 const previousEntry = manifest.versions[previous];
 const changedComponents = new Set();
+/** @type {Record<string, Array<{ version: string, sections?: Record<string, string[]> }>>} */
+let changelogs = {};
 
 if (existsSync(changelogsPath)) {
-  const changelogs = JSON.parse(readFileSync(changelogsPath, "utf8"));
+  changelogs = JSON.parse(readFileSync(changelogsPath, "utf8"));
   for (const [name, releases] of Object.entries(changelogs)) {
     if (releases.some((r) => r.version === spiralVersion)) {
       changedComponents.add(name);
@@ -129,6 +134,100 @@ function bumpWorkspaceDeps(companions) {
   ]);
 }
 
+/**
+ * Walk rev / inherits from a docs version (before the new draft entry matters).
+ * Mirrors apps/spiral-docs/src/versions-registry.ts resolveComponentRevision.
+ */
+function resolveContentRevision(docsVersion, component, seen = new Set()) {
+  if (!docsVersion || seen.has(docsVersion)) return undefined;
+  seen.add(docsVersion);
+
+  const entry = manifest.versions[docsVersion];
+  const pointer = entry?.components?.[component];
+  if (pointer?.rev) return pointer.rev;
+  if (pointer?.inherits) {
+    if (manifest.versions[pointer.inherits]) {
+      return resolveContentRevision(pointer.inherits, component, seen);
+    }
+    return pointer.inherits;
+  }
+
+  const coveredAsc = [...manifest.covered]
+    .filter((v) => v !== spiralVersion)
+    .sort((a, b) => {
+      const pa = a.split(".").map((n) => Number.parseInt(n, 10) || 0);
+      const pb = b.split(".").map((n) => Number.parseInt(n, 10) || 0);
+      for (let i = 0; i < 3; i++) {
+        if ((pa[i] || 0) !== (pb[i] || 0)) return (pa[i] || 0) - (pb[i] || 0);
+      }
+      return 0;
+    });
+  const idx = coveredAsc.indexOf(docsVersion);
+  if (idx > 0) {
+    return resolveContentRevision(coveredAsc[idx - 1], component, seen);
+  }
+  return undefined;
+}
+
+/** Build a short Chinese appendix from Added/Changed/(Fixed) bullets. */
+function formatChangelogAppendix(component) {
+  const releases = changelogs[component] ?? [];
+  const release = releases.find((r) => r.version === spiralVersion);
+  const sections = release?.sections ?? {};
+  const parts = [];
+  for (const key of ["Added", "Changed", "Fixed", "Removed", "Deprecated"]) {
+    const items = sections[key];
+    if (!Array.isArray(items) || items.length === 0) continue;
+    for (const item of items) {
+      const text = String(item).trim().replace(/[。；;]+$/u, "");
+      if (text) parts.push(text);
+    }
+  }
+  if (parts.length === 0) return "";
+  return `${spiralVersion}：${parts.join("；")}。`;
+}
+
+function buildRevisionStub(component, prevRevId, appendix) {
+  const prevFile =
+    prevRevId &&
+    path.join(revisionsRoot, component, `${prevRevId}.ts`);
+
+  if (prevRevId && prevFile && existsSync(prevFile)) {
+    const proseExpr = appendix
+      ? `previous.prose + ${JSON.stringify(` ${appendix}`)}`
+      : `previous.prose + ${JSON.stringify(` （待补：${spiralVersion} 变更说明）`)}`;
+    return `import previous from ${JSON.stringify(`./${prevRevId}`)};
+import type { ComponentDocRevision } from "../types";
+
+/** Scaffolded from ${prevRevId}${appendix ? " + component changelog" : ""}. Review before marking ready. */
+const revision: ComponentDocRevision = {
+  ...previous,
+  revision: ${JSON.stringify(spiralVersion)},
+  prose: ${proseExpr},
+};
+
+export default revision;
+`;
+  }
+
+  const prose = appendix || `TODO: update docs for ${component} @ ${spiralVersion}`;
+  const description = appendix
+    ? `${spiralVersion} 变更见下方说明；请补全组件简介。`
+    : `TODO: update description for ${spiralVersion}`;
+  return `import type { ComponentDocRevision } from "../types";
+
+/** Scaffolded without a prior revision file. Review before marking ready. */
+const revision: ComponentDocRevision = {
+  revision: ${JSON.stringify(spiralVersion)},
+  title: ${JSON.stringify(component)},
+  description: ${JSON.stringify(description)},
+  prose: ${JSON.stringify(prose)},
+};
+
+export default revision;
+`;
+}
+
 const companions = resolveCompanionVersions(spiralVersion);
 
 const components = {};
@@ -165,19 +264,14 @@ for (const name of [...changedComponents].sort()) {
   const file = path.join(dir, `${spiralVersion}.ts`);
   if (existsSync(file)) continue;
   mkdirSync(dir, { recursive: true });
-  const stub = `import type { ComponentDocRevision } from "../types";
-
-const revision: ComponentDocRevision = {
-  revision: ${JSON.stringify(spiralVersion)},
-  title: ${JSON.stringify(name)},
-  description: "TODO: update description for ${spiralVersion}",
-  prose: "TODO: update docs for ${name} @ ${spiralVersion}",
-};
-
-export default revision;
-`;
+  const prevRevId = resolveContentRevision(previous, name);
+  const appendix = formatChangelogAppendix(name);
+  const stub = buildRevisionStub(name, prevRevId, appendix);
   writeFileSync(file, stub);
   stubPaths.push(path.relative(appRoot, file));
+  console.log(
+    `  stub ${name}: prev=${prevRevId ?? "(none)"} appendix=${appendix ? "yes" : "no"}`,
+  );
 }
 
 if (bumpDeps) {

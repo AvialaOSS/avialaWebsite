@@ -32,7 +32,7 @@
 ## Scaffold PR 包含什么
 
 - `apps/spiral-docs/src/versions/manifest.json` 草稿条目
-- 变更组件的 `doc-revisions/{Name}/{version}.ts` stub
+- 变更组件的 `doc-revisions/{Name}/{version}.ts` stub：优先 `import previous from "./{上一版}"`，并追加本版 `component-changelogs.json`（Added/Changed/Fixed…）摘要；仍须人工审后再标 `ready`
 - `apps/spiral-docs/package.json`、`apps/colorcat/package.json`、`package-lock.json`（钉到本次发布的 spiral / tokens / icons）
 - PR 正文：摘要
 - Bot 评论（含 `<!-- spiral-docs-scaffold-checklist -->`）：人工 checklist
