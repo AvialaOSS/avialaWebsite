@@ -4,39 +4,47 @@
 
 After `@aviala-design/spiral` publishes, Spiral2 dispatches `spiral-released` to
 this repo. Workflow `.github/workflows/scaffold-spiral-docs.yml` scaffolds a
-draft docs version + opens a PR.
+draft docs version, bumps `@aviala-design/*` workspace deps + lockfile, opens a
+PR, and posts the coverage **checklist as a bot comment**.
 
-## Token you need to create
+## Credentials (GitHub App on Spiral2)
 
-**One secret, on the Spiral2 repository** (not on avialaWebsite):
+Configure these on the **Spiral2** repository (not avialaWebsite):
 
-| Secret name | Where |
-|-------------|--------|
-| `AVIALA_WEBSITE_TOKEN` | [Spiral2 → Settings → Secrets → Actions](https://github.com/AvialaOSS/spiral-2/settings/secrets/actions) |
+| Name | Type | Where |
+|------|------|--------|
+| `AVIALA_WEBSITE_APP_CLIENT_ID` | Repository **variable** | [Spiral2 → Settings → Variables → Actions](https://github.com/AvialaOSS/spiral-2/settings/variables/actions) |
+| `AVIALA_WEBSITE_APP_PRIVATE_KEY` | Repository **secret** | [Spiral2 → Settings → Secrets → Actions](https://github.com/AvialaOSS/spiral-2/settings/secrets/actions) |
 
-### Recommended: fine-grained personal access token
+### Create and install the App
 
-1. GitHub → **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate**
-2. **Resource owner**: `AvialaOSS` (or the org that owns avialaWebsite)
-3. **Repository access**: Only select **`avialaWebsite`**
-4. **Permissions** → Repository permissions:
-   - **Contents**: Read and write *(required for `repository_dispatch`)*
-5. Generate and copy the token into Spiral2 secret `AVIALA_WEBSITE_TOKEN`
+1. GitHub (AvialaOSS) → **Settings → Developer settings → GitHub Apps → New GitHub App**
+2. Suggested name: `Aviala Spiral Docs Dispatch`
+3. **Webhook**: disable Active (API-only)
+4. **Repository permissions** → **Contents**: Read and write (`repository_dispatch`)
+5. **Where can this app be installed?** → Only on this account
+6. After create: copy **Client ID** → Spiral2 variable `AVIALA_WEBSITE_APP_CLIENT_ID`
+7. **Generate a private key** → paste the `.pem` into Spiral2 secret `AVIALA_WEBSITE_APP_PRIVATE_KEY`
+8. **Install App** → AvialaOSS → **Only select repositories** → **`avialaWebsite` only**
 
 You do **not** need:
 
-- `NPM_TOKEN` (already using OIDC trusted publishing)
-- Extra secrets on avialaWebsite (PR uses the workflow’s built-in `GITHUB_TOKEN`)
-- A token with access to Spiral2 itself for this flow
+- `NPM_TOKEN` (OIDC trusted publishing)
+- Extra secrets on avialaWebsite (PR + comment use the workflow `GITHUB_TOKEN`)
+- The App installed on Spiral2 itself
+- Legacy `AVIALA_WEBSITE_TOKEN` PAT (delete after App dispatch works)
 
-### Alternative: classic PAT
+### Optional later: GitHub App for org reuse
 
-Classic token with `repo` scope also works, but is broader. Prefer fine-grained.
+Same App can stay; only rotate the private key when needed.
 
-### Optional later: GitHub App
+## What the scaffold PR includes
 
-A GitHub App installed on `avialaWebsite` with Contents R/W can replace the PAT;
-wire `actions/create-github-app-token` in Spiral2’s dispatch step if you go that route.
+- `apps/spiral-docs/src/versions/manifest.json` draft entry
+- `doc-revisions/{Name}/{version}.ts` stubs for changed components
+- `apps/spiral-docs/package.json`, `apps/colorcat/package.json`, `package-lock.json` pinned to the published spiral / tokens / icons versions
+- PR body: summary only
+- Bot PR comment (`<!-- spiral-docs-scaffold-checklist -->`): human checklist
 
 ## Manual test
 
@@ -53,4 +61,4 @@ gh api repos/AvialaOSS/avialaWebsite/dispatches \
 ## Notes
 
 - Until `@aviala-design/spiral` ships `component-changelogs.json` on npm, the scaffold may create a draft with **no** changed-component stubs (empty changelog download). After the next Spiral release that includes the export, stubs will populate automatically.
-- If `AVIALA_WEBSITE_TOKEN` is missing, publish still succeeds; Spiral2 logs a warning and skips dispatch.
+- If App credentials are missing on Spiral2, npm publish still succeeds; Release logs a warning and skips dispatch.

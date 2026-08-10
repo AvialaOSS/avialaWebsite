@@ -55,8 +55,8 @@ CI 会自行构建两个前端应用，无需本地构建。
 
 1. Spiral2：`pnpm changeset` 记录变更，合并到 `main`
 2. `release.yml` 通过 Changesets + npm Trusted Publishing（OIDC，无需 `NPM_TOKEN`）发布
-3. 本仓库：`npm update @aviala-design/spiral @aviala-design/tokens @aviala-design/icons`
-4. 提交更新后的 `package-lock.json` 并 push
+3. 发布成功后 Spiral2 用 **GitHub App** 向本仓派发 `spiral-released`；`scaffold-spiral-docs.yml` 自动开 PR（含 manifest / stubs **以及** workspace 依赖 + lockfile bump）
+4. 按 bot checklist 补文档 → 将 manifest `status` 设为 `ready` 并更新 `default` → merge
 
 > 组件 API 表格数据来自 `@aviala-design/spiral` 包内的 `props.json`。构建脚本 `apps/spiral-docs/scripts/sync-props.mjs` 会把它复制到 `src/generated/props.json`；若安装的版本尚未附带该文件，则回退到仓库里已提交的副本，并打印一条 warning。
 >
@@ -64,7 +64,7 @@ CI 会自行构建两个前端应用，无需本地构建。
 >
 > 文档覆盖版本见 `apps/spiral-docs/src/versions/manifest.json`。构建时会查询 npm latest；若最新包高于文档 `default`，站点顶栏显示过时提醒。
 >
-> 正式构建（`npm run build:spiral-docs`）会对每个 covered patch：从 npm 安装对应 `@aviala-design/spiral` → 打出 `static/docs/spiral/v/{version}/`，并额外打一份默认版到 `static/docs/spiral/assets/`。深链由 404 页就地挂载 SPA（保留顶栏；`head` 里会在首屏前改掉 404 标题并隐藏 404 占位）。本地 `dev` 仍是单份 Vite（当前 lockfile 包），页头版本 Select 会**软切换**文档修订（`doc-revisions` / prose）；正式环境在多份 `/v/{version}/` 构建之间整页跳转。发版后自动开文档 PR：见 [SPIRAL_DOCS_DISPATCH.zh_cn.md](./SPIRAL_DOCS_DISPATCH.zh_cn.md)（英文：[SPIRAL_DOCS_DISPATCH.md](./SPIRAL_DOCS_DISPATCH.md)；需在 Spiral2 配置 `AVIALA_WEBSITE_TOKEN`）。
+> 正式构建（`npm run build:spiral-docs`）会对每个 covered patch：从 npm 安装对应 `@aviala-design/spiral` → 打出 `static/docs/spiral/v/{version}/`，并额外打一份默认版到 `static/docs/spiral/assets/`。深链由 404 页就地挂载 SPA（保留顶栏；`head` 里会在首屏前改掉 404 标题并隐藏 404 占位）。本地 `dev` 仍是单份 Vite（当前 lockfile 包），页头版本 Select 会**软切换**文档修订（`doc-revisions` / prose）；正式环境在多份 `/v/{version}/` 构建之间整页跳转。发版后自动开文档 PR：见 [SPIRAL_DOCS_DISPATCH.zh_cn.md](./SPIRAL_DOCS_DISPATCH.zh_cn.md)（英文：[SPIRAL_DOCS_DISPATCH.md](./SPIRAL_DOCS_DISPATCH.md)；需在 Spiral2 配置 GitHub App Client ID + private key）。
 
 ---
 
