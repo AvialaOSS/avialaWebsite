@@ -12,8 +12,8 @@ type TypographyHtmlProps = Omit<
 >;
 
 function MdxLink({ href = "", children, ...props }: ComponentPropsWithoutRef<"a">) {
-  if (href.startsWith("/docs/spiral/")) {
-    const to = href.replace(/^\/docs\/spiral\/?/, "");
+  if (href.startsWith("/docs/")) {
+    const to = href.replace(/^\/docs(?:\/spiral)?\/?/, "");
     return <DocsLink to={to}>{children}</DocsLink>;
   }
   const externalProps =

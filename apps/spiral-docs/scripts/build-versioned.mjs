@@ -4,8 +4,8 @@
  * For each version:
  *   1. npm install pinned spiral/tokens/icons into .docs-pkg-cache/{version}
  *   2. sync props + changelogs from that install
- *   3. vite build → static/docs/spiral/v/{version}/
- * Then build the default version again at static/docs/spiral/ (basename /docs/spiral)
+ *   3. vite build → static/docs/v/{version}/
+ * Then build the default version again at static/docs/ (basename /docs)
  * so existing Hugo mounts keep working.
  *
  * Usage:
@@ -21,7 +21,7 @@ import { spawnSync } from "node:child_process";
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const appRoot = path.resolve(dirname, "..");
 const siteRoot = path.resolve(appRoot, "../..");
-const staticRoot = path.join(siteRoot, "static/docs/spiral");
+const staticRoot = path.join(siteRoot, "static/docs");
 const cacheRoot = path.join(appRoot, ".docs-pkg-cache");
 const dryRun = process.argv.includes("--dry-run");
 const onlyIdx = process.argv.indexOf("--only");
@@ -150,7 +150,7 @@ for (const version of versions) {
     version,
     entry,
     outDir: path.join(staticRoot, "v", version),
-    basename: `/docs/spiral/v/${version}`,
+    basename: `/docs/v/${version}`,
     emptyOutDir: false,
   });
 }
@@ -162,7 +162,7 @@ buildWithPkg({
   version: defaultVersion,
   entry: defaultEntry,
   outDir: staticRoot,
-  basename: "/docs/spiral",
+  basename: "/docs",
   emptyOutDir: false,
 });
 

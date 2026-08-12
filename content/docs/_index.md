@@ -1,5 +1,4 @@
 ---
-title: "文档"
+title: "Spiral 2"
+description: "React 组件库文档：快速上手、主题、Live Demo 与 API。"
 ---
-
-Aviala Design 的设计系统文档入口。从这里进入 Spiral 2 组件库，查阅安装、主题与各组件的演示与 API。

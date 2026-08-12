@@ -76,7 +76,7 @@ function usePageHeadings(containerRef: RefObject<HTMLElement | null>) {
 
     setHeadings(next);
     setActiveId(next[0]?.id ?? null);
-  }, [containerRef, location.pathname]);
+  }, [containerRef, location.pathname, location.search]);
 
   useEffect(() => {
     if (headings.length === 0) return;

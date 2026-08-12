@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const appRoot = path.resolve(dirname, "..");
 const srcRoot = path.join(appRoot, "src");
-const BASENAME = "/docs/spiral";
+const BASENAME = "/docs";
 
 /**
  * @typedef {{ label: string, path: string, component?: string, section: string }} NavEntry

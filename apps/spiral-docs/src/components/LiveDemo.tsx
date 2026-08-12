@@ -17,10 +17,8 @@ import {
   SelectItemGroup,
   SelectTrigger,
   SelectValue,
-  Tooltip,
-  TooltipContent,
+  ResponsiveTooltip,
   TooltipProvider,
-  TooltipTrigger,
   Typography,
   useTheme,
 } from "@aviala-design/spiral";
@@ -458,8 +456,40 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
                 {demoDirection === "rtl" ? " · rtl" : ""}
               </Typography>
             ) : null}
+          </div>
 
-            {hasKnobs ? (
+          {hasKnobs ? (
+            <div className={`docs-live-stage-dock${sidePanelOpen ? " is-open" : ""}`}>
+              <div
+                className="docs-live-knobs-rail"
+                aria-hidden={!sidePanelOpen}
+                inert={!sidePanelOpen ? true : undefined}
+              >
+                <div className="docs-live-knobs-rail-inner">
+                  <aside
+                    className="docs-live-knobs-panel"
+                    aria-label={toolsMode === "locale" ? "本地化调试" : "API 调参"}
+                  >
+                    <div className="docs-live-knobs-header">
+                      <Typography level="subtitle" as="p" className="docs-live-knobs-title">
+                        {toolsMode === "locale" ? "本地化调试" : "API 调参"}
+                      </Typography>
+                    </div>
+                    <div className="docs-live-knobs-body">
+                      {toolsMode === "locale" ? (
+                        <DemoLocalePanel
+                          localeCode={localeCode}
+                          direction={demoDirection}
+                          onLocaleChange={setLocaleCode}
+                          onDirectionChange={setDemoDirection}
+                        />
+                      ) : (
+                        <DemoKnobs knobs={knobs} values={knobValues} onChange={applyKnobs} />
+                      )}
+                    </div>
+                  </aside>
+                </div>
+              </div>
               <div className="docs-live-stage-tools">
                 <SegmentatorGroup
                   {...(spiralHasLocaleRuntime ? { direction: "vertical" as const } : {})}
@@ -495,39 +525,6 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
                   ) : null}
                 </SegmentatorGroup>
               </div>
-            ) : null}
-          </div>
-
-          {hasKnobs ? (
-            <div
-              className="docs-live-knobs-rail"
-              aria-hidden={!sidePanelOpen}
-              inert={!sidePanelOpen ? true : undefined}
-            >
-              <div className="docs-live-knobs-rail-inner">
-                <aside
-                  className="docs-live-knobs-panel"
-                  aria-label={toolsMode === "locale" ? "本地化调试" : "API 调参"}
-                >
-                  <div className="docs-live-knobs-header">
-                    <Typography level="subtitle" as="p" className="docs-live-knobs-title">
-                      {toolsMode === "locale" ? "本地化调试" : "API 调参"}
-                    </Typography>
-                  </div>
-                  <div className="docs-live-knobs-body">
-                    {toolsMode === "locale" ? (
-                      <DemoLocalePanel
-                        localeCode={localeCode}
-                        direction={demoDirection}
-                        onLocaleChange={setLocaleCode}
-                        onDirectionChange={setDemoDirection}
-                      />
-                    ) : (
-                      <DemoKnobs knobs={knobs} values={knobValues} onChange={applyKnobs} />
-                    )}
-                  </div>
-                </aside>
-              </div>
             </div>
           ) : null}
         </div>
@@ -551,21 +548,19 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
           <div className="docs-live-editor-toolbar">
             <div className="docs-live-editor-label">
               <Typography level="caption">代码</Typography>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    className="docs-live-info-trigger"
-                    aria-label="代码编辑说明"
-                  >
-                    <SymbolInformationCircle width={16} height={16} aria-hidden />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="top" className="docs-live-info-tooltip">
-                  在 Monaco 编辑器中编写 JSX，通过 render(...) 输出预览。需要 state 时可定义组件后
-                  render(&lt;Demo /&gt;)。
-                </TooltipContent>
-              </Tooltip>
+              <ResponsiveTooltip
+                side="top"
+                contentClassName="docs-live-info-tooltip"
+                content="在 Monaco 编辑器中编写 JSX，通过 render(...) 输出预览。需要 state 时可定义组件后 render(<Demo />)。"
+              >
+                <button
+                  type="button"
+                  className="docs-live-info-trigger"
+                  aria-label="代码编辑说明"
+                >
+                  <SymbolInformationCircle width={16} height={16} aria-hidden />
+                </button>
+              </ResponsiveTooltip>
             </div>
             <Button mode="default" size="small" onClick={reset}>
               重置

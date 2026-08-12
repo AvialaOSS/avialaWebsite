@@ -1060,16 +1060,24 @@ export const formFieldKnobs: KnobDef[] = [
     defaultValue: "aviala",
     placeholder: "输入框占位符",
   },
+  {
+    kind: "boolean",
+    name: "required",
+    label: "required",
+    defaultValue: false,
+  },
 ];
 
 export function buildFormFieldCode(values: KnobValues): string {
   const label = String(values.label ?? "Username");
   const description = String(values.description ?? "");
   const placeholder = String(values.placeholder ?? "aviala");
+  const required = Boolean(values.required);
   const descriptionProp = description ? `\n    description=${JSON.stringify(description)}` : "";
+  const requiredProp = required ? `\n    required` : "";
 
   return `render(
-  <FormField label=${JSON.stringify(label)}${descriptionProp} className="max-w-sm">
+  <FormField label=${JSON.stringify(label)}${descriptionProp}${requiredProp} className="max-w-sm">
     <Input placeholder=${JSON.stringify(placeholder)} />
   </FormField>
 );`;
@@ -1077,6 +1085,68 @@ export function buildFormFieldCode(values: KnobValues): string {
 
 export const formFieldLiveCode = buildFormFieldCode(
   Object.fromEntries(formFieldKnobs.map((k) => [k.name, k.defaultValue]))
+);
+
+/** Dedicated demo: FormField error tip auto-syncs nested control invalid styling. */
+export const formFieldErrorKnobs: KnobDef[] = [
+  {
+    kind: "string",
+    name: "label",
+    label: "label",
+    defaultValue: "Email",
+    placeholder: "字段标签",
+  },
+  {
+    kind: "string",
+    name: "error",
+    label: "error tip",
+    defaultValue: "Enter a valid email address",
+    placeholder: "错误提示",
+  },
+  {
+    kind: "string",
+    name: "info",
+    label: "info tip",
+    defaultValue: "",
+    placeholder: "信息提示（空=不展示）",
+  },
+  {
+    kind: "string",
+    name: "value",
+    label: "input value",
+    defaultValue: "not-an-email",
+    placeholder: "输入内容",
+  },
+  {
+    kind: "select",
+    name: "controlError",
+    label: "Input error（显式覆盖）",
+    options: ["inherit", "true", "false"],
+    defaultValue: "inherit",
+  },
+];
+
+export function buildFormFieldErrorCode(values: KnobValues): string {
+  const label = String(values.label ?? "Email");
+  const error = String(values.error ?? "").trim();
+  const info = String(values.info ?? "").trim();
+  const value = String(values.value ?? "");
+  const controlError = String(values.controlError ?? "inherit");
+  const errorProp = error ? `\n    error=${JSON.stringify(error)}` : "";
+  const infoProp = info ? `\n    info=${JSON.stringify(info)}` : "";
+  const inputErrorProp =
+    controlError === "true" ? " error" : controlError === "false" ? " error={false}" : "";
+  const valueProp = value ? ` defaultValue=${JSON.stringify(value)}` : "";
+
+  return `render(
+  <FormField label=${JSON.stringify(label)}${errorProp}${infoProp} className="max-w-sm">
+    <Input${valueProp}${inputErrorProp} />
+  </FormField>
+);`;
+}
+
+export const formFieldErrorLiveCode = buildFormFieldErrorCode(
+  Object.fromEntries(formFieldErrorKnobs.map((k) => [k.name, k.defaultValue]))
 );
 
 export const anchorKnobs: KnobDef[] = [

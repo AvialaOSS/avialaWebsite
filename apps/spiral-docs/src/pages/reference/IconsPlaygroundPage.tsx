@@ -242,7 +242,7 @@ export function IconsPlaygroundPage() {
 
             <Typography level="caption" as="p" className="text-[var(--muted-foreground)]">
               浏览完整图标库请前往{" "}
-              <DocsLink to="/reference/icons" level="caption" mode="noBackgroundCustom">
+              <DocsLink to="/components/system-composition/icons" level="caption" mode="noBackgroundCustom">
                 Icons 图标
               </DocsLink>
               。

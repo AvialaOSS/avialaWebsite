@@ -5,7 +5,7 @@
 <script>
 (function () {
   var path = location.pathname || "";
-  if (path.indexOf("/docs/spiral/") !== 0 && path !== "/docs/spiral") return;
+  if (path !== "/docs" && path.indexOf("/docs/") !== 0) return;
   document.documentElement.classList.add("spiral-docs-boot");
   document.title = "Spiral 2 组件文档 — Aviala Design";
 })();

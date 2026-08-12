@@ -7,7 +7,7 @@ import { readSpiralVersion } from "./spiral-package.mjs";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(dirname, "../../..");
-const outDir = path.join(siteRoot, "static/docs/spiral");
+const outDir = path.join(siteRoot, "static/docs");
 
 function hashAssets(dir) {
   const hash = createHash("sha256");
@@ -24,7 +24,7 @@ function hashAssets(dir) {
 const viteIndex = path.join(outDir, "index.html");
 if (existsSync(viteIndex)) {
   unlinkSync(viteIndex);
-  console.log("Removed Vite index.html so Hugo can own /docs/spiral/");
+  console.log("Removed Vite index.html so Hugo can own /docs/");
 }
 
 const versionsDir = path.join(outDir, "v");
@@ -37,7 +37,7 @@ if (existsSync(versionsDir)) {
 
 const rootAssetVersion = hashAssets(outDir);
 if (!rootAssetVersion) {
-  console.error("Missing expected build output under static/docs/spiral/assets/");
+  console.error("Missing expected build output under static/docs/assets/");
   process.exit(1);
 }
 
