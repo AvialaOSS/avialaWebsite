@@ -9,7 +9,8 @@
     "2.6.1",
     "2.6.2",
     "2.7.0",
-    "2.7.1"
+    "2.7.1",
+    "2.7.2"
   ],
   "default": "2.7.1",
   "versions": {
@@ -561,6 +562,74 @@
         },
         "Table": {
           "inherits": "2.7.0"
+        }
+      }
+    },
+    "2.7.2": {
+      "spiral": "2.7.2",
+      "tokens": "2.5.2",
+      "icons": "2.3.0",
+      "status": "draft",
+      "components": {
+        "Button": {
+          "inherits": "2.7.1"
+        },
+        "Popover": {
+          "inherits": "2.7.1"
+        },
+        "Tooltip": {
+          "inherits": "2.7.1"
+        },
+        "Pagination": {
+          "inherits": "2.7.1"
+        },
+        "Navigation": {
+          "inherits": "2.7.1"
+        },
+        "SegmentatorGroup": {
+          "inherits": "2.7.1"
+        },
+        "CascaderField": {
+          "inherits": "2.7.1"
+        },
+        "Modal": {
+          "inherits": "2.7.1"
+        },
+        "DatePickerField": {
+          "inherits": "2.7.1"
+        },
+        "Typeface": {
+          "inherits": "2.7.1"
+        },
+        "Checkbox": {
+          "inherits": "2.7.1"
+        },
+        "Slider": {
+          "inherits": "2.7.1"
+        },
+        "ColorPicker": {
+          "inherits": "2.7.1"
+        },
+        "Tab": {
+          "inherits": "2.7.1"
+        },
+        "List": {
+          "inherits": "2.7.1"
+        },
+        "ScrollPicker": {
+          "inherits": "2.7.1"
+        },
+        "TimePickerField": {
+          "inherits": "2.7.1"
+        },
+        "Progress": {
+          "inherits": "2.7.1"
+        },
+        "Table": {
+          "inherits": "2.7.1"
+        },
+        "FormField": {
+          "rev": "2.7.2"
         }
       }
     }
