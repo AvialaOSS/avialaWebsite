@@ -24,13 +24,13 @@ function hardNavigateToDocsVersion(next: string, current: string) {
   if (!next || next === current) return;
   const rest = getDocsRestPath();
   const pathRest = rest === "/" ? "/" : rest;
-  const target = `/docs/spiral/v/${next}${pathRest}${window.location.search}${window.location.hash}`;
+  const target = `/docs/v/${next}${pathRest}${window.location.search}${window.location.hash}`;
   window.location.assign(target);
 }
 
 /**
  * Switch between covered Spiral docs versions.
- * Production / baked SPAs hard-navigate to `/docs/spiral/v/{version}/`.
+ * Production / baked SPAs hard-navigate to `/docs/v/{version}/`.
  * Local unversioned Vite soft-switches content revisions in place.
  */
 export function DocsVersionSwitcher({

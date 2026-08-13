@@ -38,7 +38,7 @@ const docsBasename = getDocsBasename();
 
 try {
   const redirect = sessionStorage.getItem(SPIRAL_DOCS_REDIRECT_KEY);
-  if (redirect?.startsWith("/docs/spiral")) {
+  if (redirect?.startsWith("/docs")) {
     sessionStorage.removeItem(SPIRAL_DOCS_REDIRECT_KEY);
     window.history.replaceState(null, "", redirect);
   }

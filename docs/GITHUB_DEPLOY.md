@@ -7,7 +7,7 @@
 | 应用 | 源码 | 路由 | 产物 |
 |------|------|------|------|
 | ColorCat | `apps/colorcat` | `/tools/colorcat/` | `static/tools/colorcat/assets/` |
-| Spiral 文档 | `apps/spiral-docs` | `/docs/spiral/` | `static/docs/spiral/assets/` |
+| Spiral 文档 | `apps/spiral-docs` | `/docs/` | `static/docs/assets/` |
 
 ```text
 push main → Actions（npm ci → 构建两个 app → hugo --minify）→ GitHub Pages
@@ -64,7 +64,7 @@ CI 会自行构建两个前端应用，无需本地构建。
 >
 > 文档覆盖版本见 `apps/spiral-docs/src/versions/manifest.json`。构建时会查询 npm latest；若最新包高于文档 `default`，站点顶栏显示过时提醒。
 >
-> 正式构建（`npm run build:spiral-docs`）会对每个 covered patch：从 npm 安装对应 `@aviala-design/spiral` → 打出 `static/docs/spiral/v/{version}/`，并额外打一份默认版到 `static/docs/spiral/assets/`。深链由 404 页就地挂载 SPA（保留顶栏；`head` 里会在首屏前改掉 404 标题并隐藏 404 占位）。本地 `dev` 仍是单份 Vite（当前 lockfile 包），页头版本 Select 会**软切换**文档修订（`doc-revisions` / prose）；正式环境在多份 `/v/{version}/` 构建之间整页跳转。发版后自动开文档 PR：见 [SPIRAL_DOCS_DISPATCH.zh_cn.md](./SPIRAL_DOCS_DISPATCH.zh_cn.md)（英文：[SPIRAL_DOCS_DISPATCH.md](./SPIRAL_DOCS_DISPATCH.md)；需在 Spiral2 配置 GitHub App Client ID + private key）。
+> 正式构建（`npm run build:spiral-docs`）会对每个 covered patch：从 npm 安装对应 `@aviala-design/spiral` → 打出 `static/docs/v/{version}/`，并额外打一份默认版到 `static/docs/assets/`。深链由 404 页就地挂载 SPA（保留顶栏；`head` 里会在首屏前改掉 404 标题并隐藏 404 占位）。本地 `dev` 仍是单份 Vite（当前 lockfile 包），页头版本 Select 会**软切换**文档修订（`doc-revisions` / prose）；正式环境在多份 `/v/{version}/` 构建之间整页跳转。发版后自动开文档 PR：见 [SPIRAL_DOCS_DISPATCH.zh_cn.md](./SPIRAL_DOCS_DISPATCH.zh_cn.md)（英文：[SPIRAL_DOCS_DISPATCH.md](./SPIRAL_DOCS_DISPATCH.md)；需在 Spiral2 配置 GitHub App Client ID + private key）。
 
 ---
 
@@ -74,11 +74,11 @@ CI 会自行构建两个前端应用，无需本地构建。
 npm ci
 
 # 只调文档 app（Vite HMR，最快；无站点顶栏）
-npm run dev:spiral-docs        # http://localhost:5175/docs/spiral/
+npm run dev:spiral-docs        # http://localhost:5175/docs/
 
 # 完整站点 + Spiral 文档 HMR（Hugo 顶栏 + Vite 热更新）
 # 需同时跑 Vite(:5175) 与 Hugo(:1313)；`dev:site` 会一起拉起
-npm run dev:site               # http://localhost:1313/docs/spiral/
+npm run dev:site               # http://localhost:1313/docs/
 # 或分别开两个终端：
 #   npm run dev:spiral-docs
 #   npm run dev:hugo
@@ -97,9 +97,9 @@ npm run build:spiral-docs
 hugo server -D --bind 127.0.0.1 --port 1313
 ```
 
-`hugo server` 下 `/docs/spiral/` 会从 `http://localhost:5175` 拉 Vite 模块（见 `themes/avialaStyle/layouts/docs/single.html`），因此改 `apps/spiral-docs` 可在 1313 上热更新；正式构建 / CI 仍用 `static/docs/spiral/` 静态资源。
+`hugo server` 下 `/docs/` 会从 `http://localhost:5175` 拉 Vite 模块（见 `themes/avialaStyle/layouts/docs/section.html`），因此改 `apps/spiral-docs` 可在 1313 上热更新；正式构建 / CI 仍用 `static/docs/` 静态资源。
 
-`static/docs/spiral/`、`static/tools/colorcat/` 与 `data/spiraldocs.json` 都是构建产物，已在 `.gitignore` 中；**CI / 纯静态本地预览**前必须先构建。
+`static/docs/`、`static/tools/colorcat/` 与 `data/spiraldocs.json` 都是构建产物，已在 `.gitignore` 中；**CI / 纯静态本地预览**前必须先构建。
 
 站点顶栏搜索（`/index.json`）会合并 `data/spiraldocs.json` 里的 `searchPages`（由 `finalize.mjs` 从 nav / MDX / DocPageHeader / props 生成）。`dev:site` 的 Vite HMR **不会**刷新该索引；改完 Spiral 文档文案后需再跑 `npm run build:spiral-docs`（或至少 finalize）并重启 / 刷新 Hugo，搜索结果才会更新。
 
@@ -107,9 +107,8 @@ hugo server -D --bind 127.0.0.1 --port 1313
 
 | URL | 预期 |
 |-----|------|
-| http://127.0.0.1:1313/docs/ | 文档 hub |
-| http://127.0.0.1:1313/docs/spiral/ | 嵌入 Spiral 文档，保留站点顶栏 |
-| http://127.0.0.1:1313/docs/spiral/start/introduction | HTTP 404，但就地挂载 SPA（不闪 404 文案；title 在首屏前改掉） |
+| http://127.0.0.1:1313/docs/ | 嵌入 Spiral 文档，保留站点顶栏（站点「文档」入口） |
+| http://127.0.0.1:1313/docs/start/introduction | HTTP 404，但就地挂载 SPA（不闪 404 文案；title 在首屏前改掉） |
 | http://127.0.0.1:1313/tools/ | ColorCat 等工具页正常 |
 
 深链走的是 `themes/avialaStyle/layouts/404.html`：就地挂载 Spiral SPA；`head.html` 在首屏前把 title 改成文档标题并隐藏 404 占位。
@@ -120,7 +119,7 @@ hugo server -D --bind 127.0.0.1 --port 1313
 
 1. 打开 [Actions](https://github.com/AvialaOSS/avialaWebsite/actions) → 最新的 **Deploy Hugo site to Pages**
 2. 等 **build** 与 **deploy** 均为绿色
-3. 验证 `https://www.aviala.top/docs/`、`/docs/spiral/`、`/docs/spiral/start/introduction`、`/tools/`
+3. 验证 `https://www.aviala.top/docs/`、`/docs/start/introduction`、`/tools/`
 
 资源文件名是固定的 `spiral-docs.js` / `spiral-docs.css`，缓存刷新靠 `data/spiraldocs.json` 里的 `assetVersion`（构建产物内容哈希）作为查询参数。
 
@@ -134,7 +133,7 @@ hugo server -D --bind 127.0.0.1 --port 1313
 | `DOCS_SPIRAL_LOCAL` 启动失败 / 预检报错 | 邻仓路径不对，或缺 icons `src` | 确认 `../Spiral2` 或 `DOCS_SPIRAL_ROOT`；缺图标源码时在 Spiral2 跑 `pnpm --filter @aviala-design/icons build` |
 | `DOCS_SPIRAL_LOCAL` 样式不对（dist 模式） | `DOCS_SPIRAL_LOCAL_DIST=1` 但未 build tokens/spiral | 去掉该环境变量改用默认零构建，或在 Spiral2 build 对应包 |
 | 构建报 `Failed to resolve entry for package @aviala-design/spiral` | 命中了包里指向未发布 `src/` 的 `development` 导出条件 | 确认 `apps/spiral-docs/vite.config.ts` 的 `resolve.conditions` 未被改动 |
-| 本地 `/docs/spiral/` 空白 | 没跑过 `npm run build:spiral-docs` | 先构建再启动 Hugo |
+| 本地 `/docs/` 空白 | 没跑过 `npm run build:spiral-docs` | 先构建再启动 Hugo |
 | API 表格缺列或过时 | 安装的 Spiral 版本无 `props.json`，回退到旧副本 | 发版后 `npm update`，构建日志会显示实际来源版本 |
 | Actions 在 **Install Node.js dependencies** 失败 | `package-lock.json` 与 `package.json` 不同步 | 本地 `npm install` 后提交 lockfile |
 | 线上仍是旧文档 | 浏览器缓存 | 硬刷新；`assetVersion` 变化时会自动失效 |
@@ -170,7 +169,7 @@ hugo server -D --bind 127.0.0.1 --port 1313
 | `apps/spiral-docs/scripts/build-search-index.mjs` | 从 nav / MDX / DocPageHeader / props 生成 Spiral `searchPages` |
 | `apps/spiral-docs/scripts/finalize.mjs` | 删除 Vite `index.html`，写 `data/spiraldocs.json`（含 `searchPages`） |
 | `layouts/_default/index.json` | Fuse 搜索索引；合并 Spiral `searchPages` |
-| `content/docs/` | `/docs/`、`/docs/spiral/` 的 Hugo 内容 |
-| `themes/avialaStyle/layouts/docs/` | 文档 hub 与嵌入布局 |
+| `content/docs/` | `/docs/` Hugo section（挂载 SPA） |
+| `themes/avialaStyle/layouts/docs/` | Spiral 文档嵌入布局 |
 | `themes/avialaStyle/layouts/404.html` | Spiral 深链回跳 |
 | `.github/workflows/hugo.yml` | Pages 部署流水线 |

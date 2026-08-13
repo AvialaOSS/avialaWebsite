@@ -1,12 +1,13 @@
 import {
   DirectionArrowDownLight,
   GeneralCollapseSidebar,
-  GeneralFilter,
   GeneralHome,
+  GeneralKeyboardAndIME,
+  GeneralNotification,
   GeneralSetting,
   SymbolApps,
+  SymbolEye,
   SymbolMindmap,
-  SymbolWarningCircle,
   type AvialaIconProps,
 } from "@aviala-design/icons";
 import {
@@ -20,7 +21,7 @@ import {
 } from "@aviala-design/spiral";
 import { type ComponentType, useCallback, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { flattenNavItems, nav, navPathToHref, type NavSection } from "../nav";
+import { docsNavSearch, flattenNavItems, nav, navPathToHref, type NavSection } from "../nav";
 
 type SidebarProps = {
   onNavigate?: () => void;
@@ -38,11 +39,12 @@ type SectionConfig = {
 
 const SECTION_CONFIG: Record<string, SectionConfig> = {
   开始: { icon: GeneralHome },
+  信息展示: { icon: SymbolEye },
+  信息采集: { icon: GeneralKeyboardAndIME },
   基础输入: { icon: SymbolApps },
-  信息采集: { icon: GeneralFilter },
-  结构导航: { icon: SymbolMindmap },
+  响应与反馈: { icon: GeneralNotification },
   系统组合: { icon: GeneralSetting },
-  反馈: { icon: SymbolWarningCircle },
+  结构导航: { icon: SymbolMindmap },
 };
 
 function findSectionForPath(pathname: string): NavSection | undefined {
@@ -61,6 +63,7 @@ function DocsNavSection({
   onNavigate,
   onPathPreview,
   pathname,
+  search,
 }: {
   section: NavSection;
   expanded: boolean;
@@ -68,6 +71,7 @@ function DocsNavSection({
   onNavigate?: () => void;
   onPathPreview?: (path: string) => void;
   pathname: string;
+  search: string;
 }) {
   const Icon = SECTION_CONFIG[section.section]?.icon ?? GeneralSetting;
   const sectionHasActiveChild = section.items.some((item) => item.path === pathname);
@@ -94,7 +98,7 @@ function DocsNavSection({
           return (
             <NavigationItem key={item.path} itemType="child" asChild active={isActive}>
               <NavLink
-                to={href}
+                to={{ pathname: href, search: docsNavSearch(item.path, search) }}
                 onClick={() => {
                   onPathPreview?.(item.path);
                   onNavigate?.();
@@ -166,6 +170,7 @@ export function Sidebar({
               onNavigate={onNavigate}
               onPathPreview={onPathPreview}
               pathname={pathname}
+              search={location.search}
             />
           ))}
         </NavigationGroup>

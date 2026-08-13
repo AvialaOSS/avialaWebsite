@@ -1,18 +1,20 @@
 /** Shared docs URL helpers (basename may include /v/{version}). */
 
+const DOCS_BASE_RE = /^(\/docs(?:\/v\/[^/]+)?)(?=\/|$)/;
+
 export function getDocsBasename(): string {
   const fromEnv = import.meta.env.VITE_DOCS_BASENAME;
   if (typeof fromEnv === "string" && fromEnv.length > 0) return fromEnv.replace(/\/$/, "");
 
   if (typeof window !== "undefined") {
-    const match = window.location.pathname.match(/^(\/docs\/spiral(?:\/v\/[^/]+)?)/);
+    const match = window.location.pathname.match(DOCS_BASE_RE);
     if (match) return match[1];
   }
-  return "/docs/spiral";
+  return "/docs";
 }
 
 export function getDocsVersionFromBasename(basename = getDocsBasename()): string | null {
-  const match = basename.match(/\/docs\/spiral\/v\/([^/]+)$/);
+  const match = basename.match(/\/docs\/v\/([^/]+)$/);
   return match?.[1] ?? null;
 }
 
@@ -29,6 +31,8 @@ export function getDocsRestPath(pathname = window.location.pathname): string {
     return pathname.slice(basename.length) || "/";
   }
   // Unversioned deep link while viewing a versioned build, or vice versa.
-  const stripped = pathname.replace(/^\/docs\/spiral(?:\/v\/[^/]+)?/, "") || "/";
+  // Also strip legacy /docs/spiral prefixes during transition.
+  const stripped =
+    pathname.replace(/^\/docs(?:\/spiral)?(?:\/v\/[^/]+)?(?=\/|$)/, "") || "/";
   return stripped.startsWith("/") ? stripped : `/${stripped}`;
 }

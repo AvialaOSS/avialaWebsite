@@ -12,11 +12,12 @@ dist/
 /static/tools/colorcat/
 
 # Built by `npm run build:spiral-docs`
-/static/docs/spiral/
+/static/docs/
 /data/spiraldocs.json
 /apps/spiral-docs/.docs-pkg-cache/
 /apps/spiral-docs/.tmp/
 /apps/spiral-docs/src/.generated/
+/apps/design-guide-editor/src/.generated/
 /.workbuddy
 /.cursor/*
 !/.cursor/skills/

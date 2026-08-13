@@ -15,7 +15,7 @@ import {
   type ReactNode,
 } from "react";
 import { useLocation, useNavigate, useOutlet } from "react-router-dom";
-import { getNavItemByPath, getNavPathIndex, navPathToHref } from "../nav";
+import { docsNavSearch, getNavItemByPath, getNavPathIndex, navPathToHref } from "../nav";
 import { getAdjacentPages, Sidebar } from "./Sidebar";
 import { TableOfContents } from "./TableOfContents";
 import { ThemeToolbar } from "./ThemeToolbar";
@@ -25,7 +25,7 @@ const DOCS_CONTRIB_HREF =
 
 type DocsNavDirection = "forward" | "back";
 
-const HEAVY_DOC_PATHS = new Set(["/reference/icons"]);
+const HEAVY_DOC_PATHS = new Set(["/components/system-composition/icons"]);
 
 function prefersReducedMotion() {
   return (
@@ -103,7 +103,7 @@ export function DocLayout() {
 
   const pathname = location.pathname;
   const isContentPending = isOutletPending || eagerPath !== displayedPath;
-  const hideToc = displayedPath === "/reference/icons";
+  const hideToc = displayedPath === "/components/system-composition/icons";
   const pageLabel = getNavItemByPath(displayedPath)?.label;
   const { prev, next } = getAdjacentPages(
     getNavPathIndex(pathname) >= 0 ? pathname : "/start/introduction"
@@ -153,7 +153,10 @@ export function DocLayout() {
   const goTo = (path: string) => {
     setEagerPath(path);
     startTransition(() => {
-      navigate(navPathToHref(path));
+      navigate({
+        pathname: navPathToHref(path),
+        search: docsNavSearch(path, location.search),
+      });
     });
   };
 

@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@source "../../../node_modules/@aviala-design/spiral/dist";
+@source "../../spiral-docs/src";
+@source "../src";
+@import "./.generated/local-spiral-sources.css";
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html,
+  body,
+  #design-guide-editor-root {
+    height: 100%;
+    min-height: 0;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--box-box-normal-background-whiteonly, #ffffff);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button {
+    font: inherit;
+  }
+}
+
+/* Reuse spiral-docs editor / design-guide layout styles */
+@import "../../spiral-docs/src/styles/docs-layout.css";
+
+.docs-dge-shell,
+.docs-design-guide-editor,
+.docs-dge-page,
+.docs-dge-gate {
+  background-color: var(--box-box-normal-background-whiteonly, #ffffff);
+}
+
+.docs-design-guide-editor__toolbar {
+  background: var(--box-box-normal-background-whiteonly, #ffffff);
+}
+
+.docs-dge-shell {
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+.docs-dge-gate {
+  max-width: 36rem;
+  margin: 4rem auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.docs-dge-gate__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.docs-dge-gate__error {
+  color: var(--text-text-fail-primary, #f41544);
+}
+
+.docs-dge-loading-modal__body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 7rem;
+  padding-block: 1.5rem;
+}

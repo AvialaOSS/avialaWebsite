@@ -634,5 +634,5 @@
       }
     }
   },
-  "notes": "covered builds ship at /docs/spiral/v/{version}/. Component doc content resolves via rev/inherits → src/doc-revisions/{Component}/{rev}.ts. Missing pointers inherit from the previous covered docs version. Baseline content lives in doc-revisions/{Component}/2.0.0.ts."
+  "notes": "covered builds ship at /docs/v/{version}/. Component doc content resolves via rev/inherits → src/doc-revisions/{Component}/{rev}.ts. Missing pointers inherit from the previous covered docs version. Baseline content lives in doc-revisions/{Component}/2.0.0.ts."
 }

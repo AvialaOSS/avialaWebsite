@@ -1,7 +1,7 @@
 {{- $hasSpiralSearch := and site.Data.spiraldocs site.Data.spiraldocs.searchPages (gt (len site.Data.spiraldocs.searchPages) 0) -}}
 {{- $.Scratch.Add "index" slice -}}
 {{- range .Site.RegularPages -}}
-    {{- $isSpiralShell := eq .RelPermalink "/docs/spiral/" -}}
+    {{- $isSpiralShell := or (eq .RelPermalink "/docs/") (eq .RelPermalink "/docs") -}}
     {{- if and $hasSpiralSearch $isSpiralShell -}}
     {{- else -}}
         {{- $.Scratch.Add "index" (dict "title" .Title "tags" .Params.tags "categories" .Params.categories "contents" .Plain "permalink" .Permalink) -}}

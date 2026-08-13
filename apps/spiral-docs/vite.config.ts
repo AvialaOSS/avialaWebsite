@@ -10,7 +10,7 @@ import remarkGfm from "remark-gfm";
 import { defineConfig, type Plugin, type PluginOption, loadEnv } from "vite";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-const siteStaticRoot = path.resolve(dirname, "../../static/docs/spiral");
+const siteStaticRoot = path.resolve(dirname, "../../static/docs");
 const siteNodeModules = path.resolve(dirname, "../../node_modules");
 
 function docsBaseRedirectPlugin(docsBasePath: string): Plugin {
@@ -306,7 +306,7 @@ export default defineConfig(async ({ mode }) => {
   const docsBasePath =
     env.VITE_DOCS_BASENAME ||
     process.env.VITE_DOCS_BASENAME ||
-    (docsVersion ? `/docs/spiral/v/${docsVersion}` : "/docs/spiral");
+    (docsVersion ? `/docs/v/${docsVersion}` : "/docs");
   const outDir =
     process.env.DOCS_OUT_DIR ||
     (docsVersion ? path.join(siteStaticRoot, "v", docsVersion) : siteStaticRoot);
