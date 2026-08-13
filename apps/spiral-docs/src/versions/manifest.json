@@ -12,7 +12,7 @@
     "2.7.1",
     "2.7.2"
   ],
-  "default": "2.7.1",
+  "default": "2.7.2",
   "versions": {
     "2.0.0": {
       "spiral": "2.0.0",
@@ -569,7 +569,7 @@
       "spiral": "2.7.2",
       "tokens": "2.5.2",
       "icons": "2.3.0",
-      "status": "draft",
+      "status": "ready",
       "components": {
         "Button": {
           "inherits": "2.7.1"
