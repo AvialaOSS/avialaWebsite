@@ -17,17 +17,19 @@ const designGuide: DesignGuideDoc = {
         {
           type: "demo",
           code: `
-          render(
-            <FormField
-              label="邮箱"
-              required
-              description="用于登录与通知"
-              info="不会在个人主页公开"
-              className="max-w-sm"
-            >
-              <Input placeholder="you@aviala.top" />
-            </FormField>
-          );
+          
+                    render(
+                      <FormField
+                        label="邮箱"
+                        required
+                        description="用于登录与通知"
+                        info="不会在个人主页公开"
+                        className="max-w-sm"
+                      >
+                        <Input placeholder="you@aviala.top" />
+                      </FormField>
+                    );
+                  
         `,
           caption: "一个完整字段",
           height: 220,
@@ -72,7 +74,7 @@ const designGuide: DesignGuideDoc = {
         },
         {
           type: "prose",
-          text: "对照 Semi 的表单解构，FormField 用这些 props 对应各块：\n\n<<<design-markers\n1. 字段标签 `label`。说明这个控件是什么。\n2. 必填星号 `required`。标在标签旁，不要写进 placeholder。\n3. 标签下的说明 `description`。放完成填写需要一直看见的信息。\n4. 输入控件。FormField 只负责字段外壳，具体录入用 Input、Select 等。\n5. 控件下方补充 `info`。弱提示，不挡住提交。\n>>>",
+          text: "FormField 用这些 props 对应各块：\n\n<<<design-markers\n1. 字段标签 `label`。说明这个控件是什么。\n2. 必填星号 `required`。标在标签旁，不要写进 placeholder。\n3. 标签下的说明 `description`。放完成填写需要一直看见的信息。\n4. 输入控件。FormField 只负责字段外壳，具体录入用 Input、Select 等。\n5. 控件下方补充 `info`。弱提示，不挡住提交。\n>>>",
         },
       ],
     },
@@ -86,11 +88,13 @@ const designGuide: DesignGuideDoc = {
         {
           type: "demo",
           code: `
-          render(
-            <FormField label="昵称" required className="max-w-sm">
-              <Input placeholder="Aviala" />
-            </FormField>
-          );
+          
+                    render(
+                      <FormField label="昵称" required className="max-w-sm">
+                        <Input placeholder="Aviala" />
+                      </FormField>
+                    );
+                  
         `,
           caption: "顶部标签（默认）",
           height: 160,
@@ -98,11 +102,13 @@ const designGuide: DesignGuideDoc = {
         {
           type: "demo",
           code: `
-          render(
-            <FormField label="昵称" required direction="horizontal" className="max-w-md">
-              <Input placeholder="Aviala" />
-            </FormField>
-          );
+          
+                    render(
+                      <FormField label="昵称" required direction="horizontal" className="max-w-md">
+                        <Input placeholder="Aviala" />
+                      </FormField>
+                    );
+                  
         `,
           caption: "侧面标签（垂直空间紧时）",
           height: 160,
@@ -119,11 +125,13 @@ const designGuide: DesignGuideDoc = {
         {
           type: "demo",
           code: `
-          render(
-            <FormField label="用户名" required className="max-w-sm">
-              <Input placeholder="aviala" />
-            </FormField>
-          );
+          
+                    render(
+                      <FormField label="用户名" required className="max-w-sm">
+                        <Input placeholder="aviala" />
+                      </FormField>
+                    );
+                  
         `,
           caption: "必填用 required",
           verdict: "good",
@@ -132,11 +140,13 @@ const designGuide: DesignGuideDoc = {
         {
           type: "demo",
           code: `
-          render(
-            <FormField label="用户名" className="max-w-sm">
-              <Input placeholder="必填" />
-            </FormField>
-          );
+          
+                    render(
+                      <FormField label="用户名" className="max-w-sm">
+                        <Input placeholder="必填" />
+                      </FormField>
+                    );
+                  
         `,
           caption: "不要把必填写进 placeholder",
           verdict: "bad",
@@ -151,16 +161,18 @@ const designGuide: DesignGuideDoc = {
     {
       type: "demo",
       code: `
-      render(
-        <div className="flex w-full max-w-lg flex-col gap-4">
-          <FormField label="验证码" required>
-            <Input className="w-24" placeholder="000000" />
-          </FormField>
-          <FormField label="邮箱" required>
-            <Input className="max-w-sm" placeholder="you@aviala.top" />
-          </FormField>
-        </div>
-      );
+      
+            render(
+              <div className="flex w-full max-w-lg flex-col gap-4">
+                <FormField label="验证码" required>
+                  <Input className="w-24" placeholder="000000" />
+                </FormField>
+                <FormField label="邮箱" required>
+                  <Input className="max-w-sm" placeholder="you@aviala.top" />
+                </FormField>
+              </div>
+            );
+          
     `,
       caption: "短码用短框，邮箱用中等宽度",
       verdict: "good",
@@ -173,15 +185,17 @@ const designGuide: DesignGuideDoc = {
     {
       type: "demo",
       code: `
-      render(
-        <FormField
-          label="账号 ID"
-          description="由系统分配，不可修改"
-          className="max-w-sm"
-        >
-          <Input defaultValue="u_1024" disabled />
-        </FormField>
-      );
+      
+            render(
+              <FormField
+                label="账号 ID"
+                description="由系统分配，不可修改"
+                className="max-w-sm"
+              >
+                <Input defaultValue="u_1024" disabled />
+              </FormField>
+            );
+          
     `,
       caption: "禁用控件 + 说明原因",
       height: 180,
@@ -196,16 +210,18 @@ const designGuide: DesignGuideDoc = {
         {
           type: "demo",
           code: `
-          render(
-            <FormField
-              label="手机号"
-              required
-              description="用于接收验证码"
-              className="max-w-sm"
-            >
-              <Input placeholder="138 0000 0000" />
-            </FormField>
-          );
+          
+                    render(
+                      <FormField
+                        label="手机号"
+                        required
+                        description="用于接收验证码"
+                        className="max-w-sm"
+                      >
+                        <Input placeholder="138 0000 0000" />
+                      </FormField>
+                    );
+                  
         `,
           caption: "规则放 description，框内只给示例",
           verdict: "good",
@@ -214,11 +230,13 @@ const designGuide: DesignGuideDoc = {
         {
           type: "demo",
           code: `
-          render(
-            <FormField label="手机号" className="max-w-sm">
-              <Input placeholder="必填，请输入 11 位手机号，用于接收验证码" />
-            </FormField>
-          );
+          
+                    render(
+                      <FormField label="手机号" className="max-w-sm">
+                        <Input placeholder="必填，请输入 11 位手机号，用于接收验证码" />
+                      </FormField>
+                    );
+                  
         `,
           caption: "关键说明不要只放在 placeholder",
           verdict: "bad",
@@ -233,16 +251,18 @@ const designGuide: DesignGuideDoc = {
     {
       type: "demo",
       code: `
-      render(
-        <FormField
-          label="显示名"
-          description="其他人看到的名字"
-          info="之后仍可在设置里修改"
-          className="max-w-sm"
-        >
-          <Input placeholder="Aviala" />
-        </FormField>
-      );
+      
+            render(
+              <FormField
+                label="显示名"
+                description="其他人看到的名字"
+                info="之后仍可在设置里修改"
+                className="max-w-sm"
+              >
+                <Input placeholder="Aviala" />
+              </FormField>
+            );
+          
     `,
       caption: "description 说用途，info 给弱提示",
       height: 220,
@@ -257,16 +277,18 @@ const designGuide: DesignGuideDoc = {
         {
           type: "demo",
           code: `
-          render(
-            <FormField
-              label="邮箱"
-              required
-              error="请输入有效邮箱，例如 you@aviala.top"
-              className="max-w-sm"
-            >
-              <Input defaultValue="not-an-email" />
-            </FormField>
-          );
+          
+                    render(
+                      <FormField
+                        label="邮箱"
+                        required
+                        error="请输入有效邮箱，例如 you@aviala.top"
+                        className="max-w-sm"
+                      >
+                        <Input defaultValue="not-an-email" />
+                      </FormField>
+                    );
+                  
         `,
           caption: "说清原因和改法",
           verdict: "good",
@@ -275,11 +297,13 @@ const designGuide: DesignGuideDoc = {
         {
           type: "demo",
           code: `
-          render(
-            <FormField label="邮箱" error="该字段值不合法" className="max-w-sm">
-              <Input defaultValue="not-an-email" />
-            </FormField>
-          );
+          
+                    render(
+                      <FormField label="邮箱" error="该字段值不合法" className="max-w-sm">
+                        <Input defaultValue="not-an-email" />
+                      </FormField>
+                    );
+                  
         `,
           caption: "空泛报错帮不上忙",
           verdict: "bad",
@@ -293,16 +317,18 @@ const designGuide: DesignGuideDoc = {
         {
           type: "demo",
           code: `
-          render(
-            <FormField
-              label="邮箱"
-              required
-              description="用于登录与通知"
-              className="max-w-sm"
-            >
-              <Input />
-            </FormField>
-          );
+          
+                    render(
+                      <FormField
+                        label="邮箱"
+                        required
+                        description="用于登录与通知"
+                        className="max-w-sm"
+                      >
+                        <Input />
+                      </FormField>
+                    );
+                  
         `,
           caption: "空字段先给说明，不要先报错",
           verdict: "good",
@@ -311,11 +337,13 @@ const designGuide: DesignGuideDoc = {
         {
           type: "demo",
           code: `
-          render(
-            <FormField label="邮箱" error="不能为空" className="max-w-sm">
-              <Input />
-            </FormField>
-          );
+          
+                    render(
+                      <FormField label="邮箱" error="不能为空" className="max-w-sm">
+                        <Input />
+                      </FormField>
+                    );
+                  
         `,
           caption: "还没填就报错",
           verdict: "bad",
@@ -330,26 +358,28 @@ const designGuide: DesignGuideDoc = {
     {
       type: "demo",
       code: `
-      render(
-        <Fieldset
-          title="账号信息"
-          description="登录相关字段放在一组"
-          className="max-w-sm"
-          actions={
-            <>
-              <Button mode="primary">保存</Button>
-              <Button mode="second">取消</Button>
-            </>
-          }
-        >
-          <FormField label="用户名" required>
-            <Input placeholder="aviala" />
-          </FormField>
-          <FormField label="邮箱" required>
-            <Input placeholder="you@aviala.top" />
-          </FormField>
-        </Fieldset>
-      );
+      
+            render(
+              <Fieldset
+                title="账号信息"
+                description="登录相关字段放在一组"
+                className="max-w-sm"
+                actions={
+                  <>
+                    <Button mode="primary">保存</Button>
+                    <Button mode="second">取消</Button>
+                  </>
+                }
+              >
+                <FormField label="用户名" required>
+                  <Input placeholder="aviala" />
+                </FormField>
+                <FormField label="邮箱" required>
+                  <Input placeholder="you@aviala.top" />
+                </FormField>
+              </Fieldset>
+            );
+          
     `,
       caption: "分组 + 主操作靠左",
       verdict: "good",

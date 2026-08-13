@@ -12,9 +12,14 @@ type TypographyHtmlProps = Omit<
 >;
 
 function MdxLink({ href = "", children, ...props }: ComponentPropsWithoutRef<"a">) {
-  if (href.startsWith("/docs/")) {
-    const to = href.replace(/^\/docs(?:\/spiral)?\/?/, "");
-    return <DocsLink to={to}>{children}</DocsLink>;
+  if (href === "/docs" || href.startsWith("/docs/") || href.startsWith("/docs#")) {
+    const stripped = href.replace(/^\/docs(?:\/spiral)?(?=\/|#|$)/, "") || "/";
+    const to = stripped.startsWith("/") || stripped.startsWith("#") ? stripped : `/${stripped}`;
+    return (
+      <DocsLink to={to} {...props}>
+        {children}
+      </DocsLink>
+    );
   }
   const externalProps =
     /^https?:\/\//.test(href)

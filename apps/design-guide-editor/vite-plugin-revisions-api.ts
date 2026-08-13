@@ -27,8 +27,10 @@ function sendText(res: ServerResponse, status: number, text: string) {
 }
 
 function safeJoin(revisionsRoot: string, ...segments: string[]): string | null {
-  const filePath = path.join(revisionsRoot, ...segments);
-  if (!filePath.startsWith(revisionsRoot)) return null;
+  const root = path.resolve(revisionsRoot);
+  const filePath = path.resolve(root, ...segments);
+  const rel = path.relative(root, filePath);
+  if (!rel || rel.startsWith("..") || path.isAbsolute(rel)) return null;
   return filePath;
 }
 

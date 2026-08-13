@@ -1,6 +1,6 @@
 /** Shared docs URL helpers (basename may include /v/{version}). */
 
-const DOCS_BASE_RE = /^(\/docs(?:\/v\/[^/]+)?)/;
+const DOCS_BASE_RE = /^(\/docs(?:\/v\/[^/]+)?)(?=\/|$)/;
 
 export function getDocsBasename(): string {
   const fromEnv = import.meta.env.VITE_DOCS_BASENAME;
@@ -33,6 +33,6 @@ export function getDocsRestPath(pathname = window.location.pathname): string {
   // Unversioned deep link while viewing a versioned build, or vice versa.
   // Also strip legacy /docs/spiral prefixes during transition.
   const stripped =
-    pathname.replace(/^\/docs(?:\/spiral)?(?:\/v\/[^/]+)?/, "") || "/";
+    pathname.replace(/^\/docs(?:\/spiral)?(?:\/v\/[^/]+)?(?=\/|$)/, "") || "/";
   return stripped.startsWith("/") ? stripped : `/${stripped}`;
 }
