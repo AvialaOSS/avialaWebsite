@@ -1066,10 +1066,12 @@ export function buildFormFieldCode(values: KnobValues): string {
   const label = String(values.label ?? "Username");
   const description = String(values.description ?? "");
   const placeholder = String(values.placeholder ?? "aviala");
+  const error = String(values.error ?? "");
   const descriptionProp = description ? `\n    description=${JSON.stringify(description)}` : "";
+  const errorProp = error ? `\n    error=${JSON.stringify(error)}` : "";
 
   return `render(
-  <FormField label=${JSON.stringify(label)}${descriptionProp} className="max-w-sm">
+  <FormField label=${JSON.stringify(label)}${descriptionProp}${errorProp} className="max-w-sm">
     <Input placeholder=${JSON.stringify(placeholder)} />
   </FormField>
 );`;
@@ -1077,6 +1079,21 @@ export function buildFormFieldCode(values: KnobValues): string {
 
 export const formFieldLiveCode = buildFormFieldCode(
   Object.fromEntries(formFieldKnobs.map((k) => [k.name, k.defaultValue]))
+);
+
+export const formFieldErrorKnobs: KnobDef[] = [
+  ...formFieldKnobs,
+  {
+    kind: "string",
+    name: "error",
+    label: "error",
+    defaultValue: "请填写用户名",
+    placeholder: "错误 tip",
+  },
+];
+
+export const formFieldErrorLiveCode = buildFormFieldCode(
+  Object.fromEntries(formFieldErrorKnobs.map((k) => [k.name, k.defaultValue]))
 );
 
 export const anchorKnobs: KnobDef[] = [
