@@ -12,9 +12,9 @@
     "typecheck": "tsc -b"
   },
   "dependencies": {
-    "@aviala-design/icons": "^2.3.0",
-    "@aviala-design/spiral": "^2.7.2",
-    "@aviala-design/tokens": "^2.5.2",
+    "@aviala-design/icons": "^2.4.0",
+    "@aviala-design/spiral": "^2.8.1",
+    "@aviala-design/tokens": "^2.5.4",
     "@babel/standalone": "^8.0.3",
     "@mdx-js/react": "^3.1.0",
     "@monaco-editor/react": "^4.7.0",
