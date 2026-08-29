@@ -43,6 +43,7 @@ import {
   TagDocPage,
   UploadDocPage,
   ScrollPickerDocPage,
+  VideoDocPage,
 } from "./pages/components/RemainingComponentsDocPages";
 import { InstallationPage } from "./pages/guides/InstallationPage";
 import { IntroductionPage } from "./pages/guides/IntroductionPage";
@@ -70,6 +71,7 @@ export function AppRoutes() {
         <Route path="components/information-display/table" element={<TableDocPage />} />
         <Route path="components/information-display/tag" element={<TagDocPage />} />
         <Route path="components/information-display/tooltip" element={<TooltipDocPage />} />
+        <Route path="components/information-display/video" element={<VideoDocPage />} />
 
         <Route path="components/information-collect/cascader" element={<CascaderDocPage />} />
         <Route path="components/information-collect/checkbox" element={<CheckboxDocPage />} />

@@ -40,6 +40,11 @@ export const nav: NavSection[] = [
         path: "/components/information-display/tooltip",
         component: "Tooltip",
       },
+      {
+        label: "Video 视频",
+        path: "/components/information-display/video",
+        component: "Video",
+      },
     ],
   },
   {

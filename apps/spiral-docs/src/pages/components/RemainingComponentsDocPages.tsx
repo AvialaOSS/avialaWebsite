@@ -28,6 +28,7 @@ import {
   TableRow,
   Tag,
   Upload,
+  Video,
 } from "@aviala-design/spiral";
 import { useState } from "react";
 
@@ -54,6 +55,7 @@ import {
   buildTableCode,
   buildTagCode,
   buildUploadCode,
+  buildVideoCode,
   cardKnobs,
   cardLiveCode,
   pageheadKnobs,
@@ -76,6 +78,8 @@ import {
   tagLiveCode,
   uploadKnobs,
   uploadLiveCode,
+  videoKnobs,
+  videoLiveCode,
 } from "../../demos/component-demos";
 
 function DocShell({
@@ -215,6 +219,21 @@ export function UploadDocPage() {
       knobs={uploadKnobs}
       buildCode={buildUploadCode}
       liveCode={uploadLiveCode}
+    />
+  );
+}
+
+export function VideoDocPage() {
+  return (
+    <DocShell
+      title="Video 视频"
+      description="用于在界面中播放与控制视频内容。"
+      prose="适合课程预览、产品演示、监控画面等需要内嵌播放器的场景。控件栏提供播放、跳转、倍速、静音、画面比例、音量平衡与全屏。"
+      componentKey="Video"
+      scope={{ Video }}
+      knobs={videoKnobs}
+      buildCode={buildVideoCode}
+      liveCode={videoLiveCode}
     />
   );
 }

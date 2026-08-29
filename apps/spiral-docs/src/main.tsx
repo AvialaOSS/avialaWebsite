@@ -33,6 +33,7 @@ import "@aviala-design/tokens/layout-effects.css";
 import "@aviala-design/tokens/information-display-extras.css";
 import "@aviala-design/tokens/information-collect-extras.css";
 import "@aviala-design/tokens/structure-navigation-extras.css";
+import "@aviala-design/tokens/video-effects.css";
 
 const SPIRAL_DOCS_REDIRECT_KEY = "aviala-spiral-docs-redirect";
 const docsBasename = getDocsBasename();
