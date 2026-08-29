@@ -159,7 +159,6 @@
       {
         "name": "error",
         "type": "boolean",
-        "defaultValue": "false",
         "required": false,
         "description": ""
       }
@@ -244,7 +243,6 @@
           {
             "name": "error",
             "type": "boolean",
-            "defaultValue": "false",
             "required": false,
             "description": ""
           }
@@ -1132,7 +1130,6 @@
       {
         "name": "error",
         "type": "boolean",
-        "defaultValue": "false",
         "required": false,
         "description": ""
       },
@@ -1394,7 +1391,6 @@
           {
             "name": "error",
             "type": "boolean",
-            "defaultValue": "false",
             "required": false,
             "description": ""
           },
@@ -1496,7 +1492,6 @@
       {
         "name": "error",
         "type": "boolean",
-        "defaultValue": "false",
         "required": false,
         "description": ""
       },
@@ -1654,7 +1649,6 @@
           {
             "name": "error",
             "type": "boolean",
-            "defaultValue": "false",
             "required": false,
             "description": ""
           },
@@ -1841,7 +1835,6 @@
       {
         "name": "error",
         "type": "boolean",
-        "defaultValue": "false",
         "required": false,
         "description": ""
       }
@@ -2133,7 +2126,6 @@
       {
         "name": "error",
         "type": "boolean",
-        "defaultValue": "false",
         "required": false,
         "description": ""
       },
@@ -2286,7 +2278,6 @@
           {
             "name": "error",
             "type": "boolean",
-            "defaultValue": "false",
             "required": false,
             "description": ""
           },
@@ -3599,7 +3590,7 @@
   },
   "FormField": {
     "displayName": "FormField",
-    "description": "FormField — layout wrapper around a form control, or a react-hook-form\nbound field when given `name` + `render` (shadcn-style).",
+    "description": "FormField — layout wrapper around a form control, or a react-hook-form\nbound field when given `name` + `render` (shadcn-style).\n\nWhen an error tip is shown, nested Spiral controls that support `error`\n(Input, Textarea, SelectTrigger, …) inherit the invalid state unless they\nset an explicit `error` prop.",
     "props": [
       {
         "name": "label",
@@ -4021,6 +4012,205 @@
       },
       {
         "displayName": "ModalClose",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ]
+  },
+  "Drawer": {
+    "displayName": "Drawer",
+    "description": "",
+    "props": [],
+    "parts": [
+      {
+        "displayName": "DrawerTrigger",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "DrawerOverlay",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "DrawerContent",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "position",
+            "type": "\"left\" | \"right\" | \"top\" | \"bottom\"",
+            "values": [
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "defaultValue": "right",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "portalled",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "Render without Portal — use inside nested overlays."
+          },
+          {
+            "name": "showOverlay",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "Show the default overlay scrim."
+          }
+        ]
+      },
+      {
+        "displayName": "DrawerHeader",
+        "description": "",
+        "props": [
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional leading status icon"
+          },
+          {
+            "name": "showIcon",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": "Show the leading icon slot"
+          },
+          {
+            "name": "showClose",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "Show the header close control"
+          },
+          {
+            "name": "closeLabel",
+            "type": "string",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "DrawerHeaderText",
+        "description": "",
+        "props": [
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional leading status icon"
+          },
+          {
+            "name": "showIcon",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": "Show the leading icon slot"
+          },
+          {
+            "name": "showClose",
+            "type": "boolean",
+            "defaultValue": "true",
+            "required": false,
+            "description": "Show the header close control"
+          },
+          {
+            "name": "closeLabel",
+            "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "DrawerTitle",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "DrawerDescription",
+        "description": "",
+        "props": [
+          {
+            "name": "asChild",
+            "type": "boolean",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "DrawerBody",
+        "description": "",
+        "props": [
+          {
+            "name": "layout",
+            "type": "\"text\" | \"default\"",
+            "values": [
+              "text",
+              "default"
+            ],
+            "defaultValue": "default",
+            "required": false,
+            "description": "Figma `Content=Text` — title + body copy preset"
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          }
+        ]
+      },
+      {
+        "displayName": "DrawerClose",
         "description": "",
         "props": [
           {
@@ -4660,6 +4850,168 @@
       }
     ]
   },
+  "Video": {
+    "displayName": "Video",
+    "description": "",
+    "props": [
+      {
+        "name": "appearance",
+        "type": "\"default\" | \"light\"",
+        "values": [
+          "default",
+          "light"
+        ],
+        "defaultValue": "default",
+        "required": false,
+        "description": "Figma `Style` — Default stacks the bar; Light floats a pill bar over the stage."
+      },
+      {
+        "name": "skipSeconds",
+        "type": "number",
+        "defaultValue": "10",
+        "required": false,
+        "description": "Seconds to skip when Previous / Next have no playlist handlers."
+      },
+      {
+        "name": "playbackRates",
+        "type": "number[]",
+        "defaultValue": "[...DEFAULT_PLAYBACK_RATES]",
+        "required": false,
+        "description": "Available playback rates in the speed popover."
+      },
+      {
+        "name": "muted",
+        "type": "boolean",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "defaultMuted",
+        "type": "boolean",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "onMutedChange",
+        "type": "(muted: boolean) => void",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "playbackRate",
+        "type": "number",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "defaultPlaybackRate",
+        "type": "number",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "onPlaybackRateChange",
+        "type": "(rate: number) => void",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "objectFit",
+        "type": "\"fill\" | \"original\" | \"stretch\"",
+        "values": [
+          "fill",
+          "original",
+          "stretch"
+        ],
+        "required": false,
+        "description": "Figma 画面比例 — original→contain, stretch→fill, fill→cover."
+      },
+      {
+        "name": "defaultObjectFit",
+        "type": "\"fill\" | \"original\" | \"stretch\"",
+        "values": [
+          "fill",
+          "original",
+          "stretch"
+        ],
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "onObjectFitChange",
+        "type": "(fit: VideoObjectFit) => void",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "volumeBalance",
+        "type": "boolean",
+        "required": false,
+        "description": "Lightweight loudness balance via Web Audio DynamicsCompressor."
+      },
+      {
+        "name": "defaultVolumeBalance",
+        "type": "boolean",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "onVolumeBalanceChange",
+        "type": "(enabled: boolean) => void",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "volume",
+        "type": "number",
+        "required": false,
+        "description": "Linear gain 0–1 (`HTMLMediaElement.volume`)."
+      },
+      {
+        "name": "defaultVolume",
+        "type": "number",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "onVolumeChange",
+        "type": "(volume: number) => void",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "onPrevious",
+        "type": "() => void",
+        "required": false,
+        "description": "Override Previous (default: seek back `skipSeconds`)."
+      },
+      {
+        "name": "onNext",
+        "type": "() => void",
+        "required": false,
+        "description": "Override Next (default: seek forward `skipSeconds`)."
+      },
+      {
+        "name": "stageBackground",
+        "type": "string",
+        "required": false,
+        "description": "Letterbox / pillarbox fill behind the media.\nCSS color value — prefer a token, e.g. `var(--box-box-normal-background-blackonly)`.\nDefaults to Black (`--box-box-normal-background-blackonly`)."
+      },
+      {
+        "name": "autoHideControls",
+        "type": "boolean",
+        "defaultValue": "false",
+        "required": false,
+        "description": "Auto-hide the control bar after idle (slide down + fade).\nPointer move / press on the player reveals it again."
+      },
+      {
+        "name": "autoHideDelay",
+        "type": "number",
+        "required": false,
+        "description": "Idle time in ms before hiding when `autoHideControls` is on. Default 2500."
+      }
+    ]
+  },
   "ScrollPicker": {
     "displayName": "ScrollPicker",
     "description": "",
@@ -5171,7 +5523,15 @@
   "Table": {
     "displayName": "Table",
     "description": "",
-    "props": [],
+    "props": [
+      {
+        "name": "stickyHeader",
+        "type": "boolean",
+        "defaultValue": "false",
+        "required": false,
+        "description": "Freeze header row while the table body scrolls"
+      }
+    ],
     "parts": [
       {
         "displayName": "TableRow",
@@ -5187,6 +5547,24 @@
         ]
       },
       {
+        "displayName": "TableHead",
+        "description": "",
+        "props": [
+          {
+            "name": "actions",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Header trailing button area (Figma Table Head Default)"
+          },
+          {
+            "name": "checkboxProps",
+            "type": "Omit<Omit<CheckboxProps & RefAttributes<HTMLButtonElement>, \"ref\"> & { round?: boolean; size?: CheckboxSize; } & RefAttributes<...>, \"ref\">",
+            "required": false,
+            "description": "Select-all / indeterminate / unchecked via Checkbox props"
+          }
+        ]
+      },
+      {
         "displayName": "TableCell",
         "description": "",
         "props": [
@@ -5197,10 +5575,22 @@
             "description": ""
           },
           {
+            "name": "iconPlace",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Shaped icon place (Figma `icon place+text`)"
+          },
+          {
             "name": "text",
             "type": "ReactNode",
             "required": false,
             "description": ""
+          },
+          {
+            "name": "caption",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Secondary caption under primary text (Figma Typeface pair)"
           },
           {
             "name": "people",
@@ -5230,7 +5620,13 @@
             "name": "actions",
             "type": "ReactNode",
             "required": false,
-            "description": ""
+            "description": "Trailing button area — supported on text / icon / people / badge / action"
+          },
+          {
+            "name": "grabber",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional leading grabber control"
           },
           {
             "name": "checkboxProps",

@@ -15,6 +15,7 @@ import { LinkDocPage } from "./pages/components/LinkDocPage";
 import { ListDocPage } from "./pages/components/ListDocPage";
 import { LoadingDocPage } from "./pages/components/LoadingDocPage";
 import { ModalDocPage } from "./pages/components/ModalDocPage";
+import { DrawerDocPage } from "./pages/components/DrawerDocPage";
 import { NavigationDocPage } from "./pages/components/NavigationDocPage";
 import { TabDocPage } from "./pages/components/TabDocPage";
 import { PopoverDocPage } from "./pages/components/PopoverDocPage";
@@ -64,6 +65,7 @@ export function AppRoutes() {
         <Route path="components/information-display/avatar" element={<AvatarDocPage />} />
         <Route path="components/information-display/badge" element={<BadgeDocPage />} />
         <Route path="components/information-display/modal" element={<ModalDocPage />} />
+        <Route path="components/information-display/drawer" element={<DrawerDocPage />} />
         <Route path="components/information-display/popover" element={<PopoverDocPage />} />
         <Route path="components/information-display/table" element={<TableDocPage />} />
         <Route path="components/information-display/tag" element={<TagDocPage />} />

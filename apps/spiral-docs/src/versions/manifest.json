@@ -595,6 +595,9 @@
         "Modal": {
           "inherits": "2.7.1"
         },
+        "Drawer": {
+          "rev": "2.9.0"
+        },
         "DatePickerField": {
           "inherits": "2.7.1"
         },

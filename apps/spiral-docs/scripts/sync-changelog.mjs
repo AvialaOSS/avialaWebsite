@@ -64,17 +64,8 @@ function loadFromMarkdownDir(dir) {
 }
 
 function resolveRegistry() {
-  const packageDir = findSpiralPackage();
-  const fromPackage = packageDir
-    ? path.join(packageDir, "dist/component-changelogs.json")
-    : null;
-  if (fromPackage && existsSync(fromPackage)) {
-    console.log(
-      `Synced component changelogs from @aviala-design/spiral@${readSpiralVersion()}`,
-    );
-    return JSON.parse(readFileSync(fromPackage, "utf8"));
-  }
-
+  // Prefer sibling Spiral2 when present (local monorepo / dual-checkout),
+  // matching sync-props.mjs so unpublished component changelogs appear in docs.
   const siblingJson = path.resolve(
     repoRoot,
     "../Spiral2/packages/ui/dist/component-changelogs.json",
@@ -89,6 +80,17 @@ function resolveRegistry() {
   if (fromMd) {
     console.log("Synced component changelogs from sibling Spiral2 changelogs/*.md");
     return fromMd;
+  }
+
+  const packageDir = findSpiralPackage();
+  const fromPackage = packageDir
+    ? path.join(packageDir, "dist/component-changelogs.json")
+    : null;
+  if (fromPackage && existsSync(fromPackage)) {
+    console.log(
+      `Synced component changelogs from @aviala-design/spiral@${readSpiralVersion()}`,
+    );
+    return JSON.parse(readFileSync(fromPackage, "utf8"));
   }
 
   if (existsSync(target)) {
