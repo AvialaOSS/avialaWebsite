@@ -1318,6 +1318,55 @@ export const modalLiveCode = buildModalCode(
   Object.fromEntries(modalKnobs.map((k) => [k.name, k.defaultValue]))
 );
 
+export const drawerKnobs: KnobDef[] = [
+  {
+    kind: "select",
+    name: "position",
+    label: "position",
+    options: ["right", "left", "top", "bottom"],
+    defaultValue: "right",
+  },
+  { kind: "boolean", name: "showIcon", label: "showIcon", defaultValue: true },
+  { kind: "boolean", name: "showFooter", label: "showFooter", defaultValue: true },
+];
+
+export function buildDrawerCode(values: KnobValues): string {
+  const position = String(values.position ?? "right");
+  const showIcon = Boolean(values.showIcon);
+  const showFooter = Boolean(values.showFooter);
+  const positionAttr = position === "right" ? "" : ` position=${JSON.stringify(position)}`;
+  const iconBlock = showIcon
+    ? `\n      showIcon\n      icon={<SymbolInformationCircle thickness="Regular" mode="fill" aria-hidden />}`
+    : "";
+
+  return `render(
+  <Drawer>
+    <DrawerTrigger asChild>
+      <Button mode="default">Open drawer</Button>
+    </DrawerTrigger>
+    <DrawerContent${positionAttr}>
+      <DrawerHeaderText${iconBlock}
+        title="Drawer title"
+        description="Supporting caption in the header."
+      />
+      <DrawerBody layout="text" title="Section title" description="Body copy for the drawer." />${
+        showFooter
+          ? `
+      <DrawerFooter>
+        <Button mode="second">Cancel</Button>
+        <Button mode="primary">Confirm</Button>
+      </DrawerFooter>`
+          : ""
+      }
+    </DrawerContent>
+  </Drawer>
+);`;
+}
+
+export const drawerLiveCode = buildDrawerCode(
+  Object.fromEntries(drawerKnobs.map((k) => [k.name, k.defaultValue]))
+);
+
 export const tooltipKnobs: KnobDef[] = [
   {
     kind: "select",
@@ -3017,3 +3066,4 @@ render(<Demo />);`;
 }
 
 export const tableLiveCode = buildTableCode(defaultKnobValues(tableKnobs));
+

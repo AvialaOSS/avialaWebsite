@@ -27,6 +27,14 @@
   ],
   "CascaderField": [
     {
+      "version": "2.8.0",
+      "sections": {
+        "Fixed": [
+          "菜单 Portal 挂到全屏元素或 Modal 容器，避免被对话框遮罩挡住或全屏后不可用"
+        ]
+      }
+    },
+    {
       "version": "2.6.0",
       "sections": {
         "Changed": [
@@ -75,6 +83,14 @@
   ],
   "ColorPicker": [
     {
+      "version": "2.8.0",
+      "sections": {
+        "Fixed": [
+          "面板 Portal 挂到全屏元素或 Modal 容器，避免被对话框遮罩挡住或全屏后不可用"
+        ]
+      }
+    },
+    {
       "version": "2.6.0",
       "sections": {
         "Changed": [
@@ -102,6 +118,14 @@
   ],
   "DatePickerField": [
     {
+      "version": "2.8.0",
+      "sections": {
+        "Fixed": [
+          "面板 Portal 挂到全屏元素或 Modal 容器，避免被对话框遮罩挡住或全屏后不可用"
+        ]
+      }
+    },
+    {
       "version": "2.6.1",
       "sections": {
         "Changed": [
@@ -128,6 +152,16 @@
       "sections": {
         "Changed": [
           "键盘与布局细节打磨"
+        ]
+      }
+    }
+  ],
+  "Drawer": [
+    {
+      "version": "Unreleased",
+      "sections": {
+        "Added": [
+          "新增 `Drawer` 抽屉组件（对齐 Figma Components → Drawer）：支持 `position`（`left` / `right` / `top` / `bottom`），复合结构含 `DrawerHeader` / `DrawerHeaderText` / `DrawerBody` / `DrawerFooter`，遮罩与滑入退场动画；关闭文案由 `LocaleProvider` 提供"
         ]
       }
     }
@@ -185,6 +219,16 @@
       }
     }
   ],
+  "Loading": [
+    {
+      "version": "2.8.0",
+      "sections": {
+        "Fixed": [
+          "旋转环改为 SVG 2px stroke（Figma r15−r13，与 Progress 环形一致），避免 CSS mask 内沿发虚"
+        ]
+      }
+    }
+  ],
   "LocaleProvider": [
     {
       "version": "2.6.0",
@@ -197,6 +241,14 @@
     }
   ],
   "Modal": [
+    {
+      "version": "2.8.0",
+      "sections": {
+        "Fixed": [
+          "Modal 内的 Popover / Select / Tooltip 等浮层改为挂到对话框内容节点，避免被遮罩挡住或因 `body` 的 `pointer-events` 无法交互"
+        ]
+      }
+    },
     {
       "version": "2.6.0",
       "sections": {
@@ -216,6 +268,14 @@
     }
   ],
   "Navigation": [
+    {
+      "version": "2.8.0",
+      "sections": {
+        "Fixed": [
+          "项菜单 Portal 挂到全屏元素或 Modal 容器，避免被对话框遮罩挡住或全屏后不可用"
+        ]
+      }
+    },
     {
       "version": "2.6.1",
       "sections": {
@@ -272,6 +332,15 @@
     }
   ],
   "Popover": [
+    {
+      "version": "2.8.0",
+      "sections": {
+        "Fixed": [
+          "箭头 outline 路径恢复填充（去掉 `fill: none`），与面板底色一致，描边仍保留",
+          "浮层 Portal 挂到全屏元素或 Modal 容器，避免全屏 / 对话框内看不见、点不到"
+        ]
+      }
+    },
     {
       "version": "2.6.1",
       "sections": {
@@ -337,6 +406,14 @@
   ],
   "SegmentatorGroup": [
     {
+      "version": "2.8.0",
+      "sections": {
+        "Fixed": [
+          "指示器改用布局 offset 测量，避免 Popover 入场 `scale` 让 `getBoundingClientRect` 叠乘导致拇指偏移（点选后才复位）"
+        ]
+      }
+    },
+    {
       "version": "2.7.0",
       "sections": {
         "Changed": [
@@ -383,7 +460,25 @@
       }
     }
   ],
+  "Select": [
+    {
+      "version": "2.8.0",
+      "sections": {
+        "Fixed": [
+          "菜单与子菜单 Portal 挂到全屏元素或 Modal 容器，避免被对话框遮罩挡住或全屏后不可用"
+        ]
+      }
+    }
+  ],
   "Slider": [
+    {
+      "version": "2.8.0",
+      "sections": {
+        "Added": [
+          "`orientation`：`horizontal`（默认）/ `vertical`，竖向轨道用于 Video 音量弹出层等场景"
+        ]
+      }
+    },
     {
       "version": "2.6.1",
       "sections": {
@@ -409,6 +504,17 @@
         ],
         "Fixed": [
           "`type` 在 `default` ↔ `range` 间切换时重新挂载，避免第二拇指不显示"
+        ]
+      }
+    }
+  ],
+  "Switch": [
+    {
+      "version": "2.8.1",
+      "sections": {
+        "Changed": [
+          "拇指改为可打断的流体滑动（`inset-inline` 配对过渡，约 260ms），移动中轻微拉长，连点可从当前进度反转",
+          "选中态轨道 Hover / Active 改为可过渡的 `background-color`（高光仍用 gloss 层），避免 `background-image` 瞬切"
         ]
       }
     }
@@ -450,6 +556,14 @@
   ],
   "TimePickerField": [
     {
+      "version": "2.8.0",
+      "sections": {
+        "Fixed": [
+          "面板 Portal 挂到全屏元素或 Modal 容器，避免被对话框遮罩挡住或全屏后不可用"
+        ]
+      }
+    },
+    {
       "version": "2.6.1",
       "sections": {
         "Changed": [
@@ -460,6 +574,14 @@
     }
   ],
   "Tooltip": [
+    {
+      "version": "2.8.0",
+      "sections": {
+        "Fixed": [
+          "Portal 挂到全屏元素或 Modal 容器，避免被对话框遮罩挡住"
+        ]
+      }
+    },
     {
       "version": "2.6.0",
       "sections": {
@@ -499,6 +621,34 @@
       "sections": {
         "Changed": [
           "标题间距使用 `--gap-none`"
+        ]
+      }
+    }
+  ],
+  "Video": [
+    {
+      "version": "2.8.0",
+      "sections": {
+        "Added": [
+          "新增 `Video` 视频播放器，对齐 Figma Information Display → Video（`Style=default` / `light`）",
+          "控件栏复用 `Button`、`Input`、`Slider`、`Popover`、`Select` 菜单样式、`SegmentatorGroup`、`Switch`",
+          "支持播放/暂停、跳转、倍速、音量、画面比例、音量平衡与全屏",
+          "画面外区域默认使用 Black token（`--box-box-normal-background-blackonly`），可通过 `stageBackground` 传入其它 token / 色值",
+          "`volume` / `defaultVolume` / `onVolumeChange`：线性音量 0–1",
+          "`autoHideControls` / `autoHideDelay`：播放中空闲后控件栏下滑淡出；指针移动或点按播放器可重新呼出（暂停时始终显示）",
+          "播放 / 暂停 / 上一首 / 下一首使用交付的动画 SVG（`currentColor` 填充）；点击时播一次形变，静止时停在结束帧"
+        ],
+        "Changed": [
+          "倍速弹出层改为 Figma Speed Popover（`1963:4438`）：标题「倍速调整」+ Select 菜单项，选中项尾随 `SymbolRight`；菜单项固定宽度 160px",
+          "音量改为 Figma Volume Popover（`1963:4424`）：竖向 `Slider` + 百分比；默认档位 `0.5 / 1 / 1.5 / 2 / 3`"
+        ],
+        "Fixed": [
+          "播放/暂停图标双层叠放：暂停中显示 play，播放中显示 pause；切换时先把目标层 seek 到形变起点再显示，避免换 SVG 闪动",
+          "Default 全屏时控件栏铺满播放器宽度（`max-width` 仅用于 Light 悬浮栏）",
+          "全屏时倍速 / 音量 / 设置等浮层挂到全屏节点，避免 Portal 到 `body` 后不可用",
+          "时间 `Input` 未聚焦时无背景；聚焦后使用普通 Input 选中态（白底 + 主题描边）",
+          "Light 全屏时控件栏水平居中（对齐 Figma Controls Container `items-center`）",
+          "Light 浮层控件栏补齐磨砂材质：`backdrop-filter` + 半透明 `lightBackground-1`（`<video>` 上纯 `mix-blend-mode: luminosity` 常无法采样画面）"
         ]
       }
     }
