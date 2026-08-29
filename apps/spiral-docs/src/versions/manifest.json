@@ -14,7 +14,7 @@
     "2.8.1",
     "2.9.0"
   ],
-  "default": "2.7.2",
+  "default": "2.9.0",
   "versions": {
     "2.0.0": {
       "spiral": "2.0.0",
@@ -716,7 +716,7 @@
       "spiral": "2.9.0",
       "tokens": "2.5.5",
       "icons": "2.4.0",
-      "status": "draft",
+      "status": "ready",
       "components": {
         "Button": {
           "inherits": "2.7.2"
@@ -780,6 +780,9 @@
         },
         "FormField": {
           "inherits": "2.7.2"
+        },
+        "Switch": {
+          "inherits": "2.8.1"
         },
         "Video": {
           "inherits": "2.7.2"
