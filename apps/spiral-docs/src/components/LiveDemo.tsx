@@ -45,7 +45,7 @@ import {
   zhCN,
   type Direction,
 } from "../lib/spiral-optional";
-import { buildDemoIconScope, isIconCatalogLoaded, loadIconCatalog } from "../demos/demo-icons";
+import { buildDemoIconScope, collectIconNamesFromCode, isIconCatalogLoaded, loadIconCatalog } from "../demos/demo-icons";
 import {
   DemoKnobs,
   defaultKnobValues,
@@ -271,17 +271,19 @@ export function LiveDemo({ initialCode, scope, knobs = EMPTY_KNOBS, buildCode }:
   }, [initialCode, monacoReady]);
 
   useEffect(() => {
-    if (!usesIconKnobs || catalogReady) return;
+    if (catalogReady) return;
     void loadIconCatalog().then(() => setCatalogReady(true));
-  }, [usesIconKnobs, catalogReady]);
+  }, [catalogReady]);
 
   const mergedScope = useMemo(() => {
-    // Always include common icons — many demos hardcode <GeneralSetting /> without icon knobs.
-    const iconScope = buildDemoIconScope(
-      usesIconKnobs ? collectIconKnobNames(knobs, knobValues) : [],
-    );
+    // Fallback icons + icon-knob picks + any icon JSX tags in the live source
+    // (so Monaco edits like swapping SymbolInformationCircle → SymbolWrong resolve).
+    const iconScope = buildDemoIconScope([
+      ...(usesIconKnobs ? collectIconKnobNames(knobs, knobValues) : []),
+      ...collectIconNamesFromCode(code),
+    ]);
     return { ...iconScope, ...scope };
-  }, [scope, knobs, knobValues, usesIconKnobs, catalogReady]);
+  }, [scope, knobs, knobValues, usesIconKnobs, catalogReady, code]);
 
   const applyKnobs = useCallback(
     (values: KnobValues) => {

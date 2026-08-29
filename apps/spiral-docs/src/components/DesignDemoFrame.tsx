@@ -11,7 +11,7 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
-import { buildDemoIconScope } from "../demos/demo-icons";
+import { buildDemoIconScope, collectIconNamesFromCode, isIconCatalogLoaded, loadIconCatalog } from "../demos/demo-icons";
 import type {
   DesignDemoAlign,
   DesignDemoMarker,
@@ -316,14 +316,20 @@ export function DesignDemoFrame({
   const [editingId, setEditingId] = useState<string | null>(null);
   const hideTimer = useRef<number | null>(null);
   const submenuHoldRef = useRef(false);
+  const [catalogReady, setCatalogReady] = useState(isIconCatalogLoaded());
+
+  useEffect(() => {
+    if (catalogReady) return;
+    void loadIconCatalog().then(() => setCatalogReady(true));
+  }, [catalogReady]);
 
   const mergedScope = useMemo(
     () => ({
-      ...buildDemoIconScope([]),
+      ...buildDemoIconScope(collectIconNamesFromCode(code)),
       useState,
       ...scope,
     }),
-    [scope],
+    [scope, code, catalogReady],
   );
   const { element, error } = useMemo(
     () => evaluateLiveCode(code, mergedScope),

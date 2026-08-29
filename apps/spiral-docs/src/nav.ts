@@ -27,6 +27,7 @@ export const nav: NavSection[] = [
       { label: "Avatar 头像", path: "/components/information-display/avatar", component: "Avatar" },
       { label: "Badge 徽章", path: "/components/information-display/badge", component: "Badge" },
       { label: "Modal 模态框", path: "/components/information-display/modal", component: "Modal" },
+      { label: "Drawer 抽屉", path: "/components/information-display/drawer", component: "Drawer" },
       {
         label: "Popover 弹出层",
         path: "/components/information-display/popover",

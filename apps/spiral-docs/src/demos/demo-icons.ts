@@ -47,6 +47,16 @@ export function resolveIconName(name: string): string {
   return DEFAULT_ICON_NAME;
 }
 
+/** JSX tags in live code that match known icon component names (fallback + loaded catalog). */
+export function collectIconNamesFromCode(code: string): string[] {
+  const names: string[] = [];
+  for (const match of code.matchAll(/<\s*([A-Z][A-Za-z0-9]*)\b/g)) {
+    const name = match[1]!;
+    if (componentByName.has(name)) names.push(name);
+  }
+  return names;
+}
+
 export function buildDemoIconScope(names: readonly string[]): Record<string, unknown> {
   const scope: Record<string, unknown> = { ...FALLBACK_ICON_COMPONENTS };
   const unique = [...new Set(names.map((name) => resolveIconName(name)).filter(Boolean))];
