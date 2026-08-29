@@ -1,0 +1,163 @@
+{
+  "displayName": "Video",
+  "description": "",
+  "props": [
+    {
+      "name": "appearance",
+      "type": "\"default\" | \"light\"",
+      "values": [
+        "default",
+        "light"
+      ],
+      "defaultValue": "default",
+      "required": false,
+      "description": "Figma `Style` — Default stacks the bar; Light floats a pill bar over the stage."
+    },
+    {
+      "name": "skipSeconds",
+      "type": "number",
+      "defaultValue": "10",
+      "required": false,
+      "description": "Seconds to skip when Previous / Next have no playlist handlers."
+    },
+    {
+      "name": "playbackRates",
+      "type": "number[]",
+      "defaultValue": "[...DEFAULT_PLAYBACK_RATES]",
+      "required": false,
+      "description": "Available playback rates in the speed popover."
+    },
+    {
+      "name": "muted",
+      "type": "boolean",
+      "required": false,
+      "description": ""
+    },
+    {
+      "name": "defaultMuted",
+      "type": "boolean",
+      "required": false,
+      "description": ""
+    },
+    {
+      "name": "onMutedChange",
+      "type": "(muted: boolean) => void",
+      "required": false,
+      "description": ""
+    },
+    {
+      "name": "playbackRate",
+      "type": "number",
+      "required": false,
+      "description": ""
+    },
+    {
+      "name": "defaultPlaybackRate",
+      "type": "number",
+      "required": false,
+      "description": ""
+    },
+    {
+      "name": "onPlaybackRateChange",
+      "type": "(rate: number) => void",
+      "required": false,
+      "description": ""
+    },
+    {
+      "name": "objectFit",
+      "type": "\"fill\" | \"original\" | \"stretch\"",
+      "values": [
+        "fill",
+        "original",
+        "stretch"
+      ],
+      "required": false,
+      "description": "Figma 画面比例 — original→contain, stretch→fill, fill→cover."
+    },
+    {
+      "name": "defaultObjectFit",
+      "type": "\"fill\" | \"original\" | \"stretch\"",
+      "values": [
+        "fill",
+        "original",
+        "stretch"
+      ],
+      "required": false,
+      "description": ""
+    },
+    {
+      "name": "onObjectFitChange",
+      "type": "(fit: VideoObjectFit) => void",
+      "required": false,
+      "description": ""
+    },
+    {
+      "name": "volumeBalance",
+      "type": "boolean",
+      "required": false,
+      "description": "Lightweight loudness balance via Web Audio DynamicsCompressor."
+    },
+    {
+      "name": "defaultVolumeBalance",
+      "type": "boolean",
+      "required": false,
+      "description": ""
+    },
+    {
+      "name": "onVolumeBalanceChange",
+      "type": "(enabled: boolean) => void",
+      "required": false,
+      "description": ""
+    },
+    {
+      "name": "volume",
+      "type": "number",
+      "required": false,
+      "description": "Linear gain 0–1 (`HTMLMediaElement.volume`)."
+    },
+    {
+      "name": "defaultVolume",
+      "type": "number",
+      "required": false,
+      "description": ""
+    },
+    {
+      "name": "onVolumeChange",
+      "type": "(volume: number) => void",
+      "required": false,
+      "description": ""
+    },
+    {
+      "name": "onPrevious",
+      "type": "() => void",
+      "required": false,
+      "description": "Override Previous (default: seek back `skipSeconds`)."
+    },
+    {
+      "name": "onNext",
+      "type": "() => void",
+      "required": false,
+      "description": "Override Next (default: seek forward `skipSeconds`)."
+    },
+    {
+      "name": "stageBackground",
+      "type": "string",
+      "required": false,
+      "description": "Letterbox / pillarbox fill behind the media."
+    },
+    {
+      "name": "autoHideControls",
+      "type": "boolean",
+      "defaultValue": "false",
+      "required": false,
+      "description": "Auto-hide the control bar after idle (slide down + fade). Pointer move / press reveals it again."
+    },
+    {
+      "name": "autoHideDelay",
+      "type": "number",
+      "defaultValue": "2500",
+      "required": false,
+      "description": "Idle time in ms before hiding when `autoHideControls` is on."
+    }
+  ]
+}

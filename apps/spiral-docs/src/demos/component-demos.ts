@@ -3017,3 +3017,54 @@ render(<Demo />);`;
 }
 
 export const tableLiveCode = buildTableCode(defaultKnobValues(tableKnobs));
+
+const VIDEO_SAMPLE_SRC =
+  "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4";
+
+export const videoKnobs: KnobDef[] = [
+  {
+    kind: "select",
+    name: "appearance",
+    label: "appearance",
+    options: ["default", "light"],
+    defaultValue: "default",
+  },
+  {
+    kind: "select",
+    name: "defaultObjectFit",
+    label: "defaultObjectFit",
+    options: ["original", "stretch", "fill"],
+    defaultValue: "original",
+  },
+  {
+    kind: "boolean",
+    name: "defaultMuted",
+    label: "defaultMuted",
+    defaultValue: false,
+  },
+  {
+    kind: "boolean",
+    name: "autoHideControls",
+    label: "autoHideControls",
+    defaultValue: false,
+  },
+];
+
+export function buildVideoCode(values: KnobValues): string {
+  const appearance = String(values.appearance ?? "default");
+  const defaultObjectFit = String(values.defaultObjectFit ?? "original");
+  const defaultMuted = Boolean(values.defaultMuted);
+  const autoHideControls = Boolean(values.autoHideControls);
+  return `render(
+  <Video
+    appearance=${JSON.stringify(appearance)}
+    defaultObjectFit=${JSON.stringify(defaultObjectFit)}${jsxBool(defaultMuted, "defaultMuted")}${jsxBool(autoHideControls, "autoHideControls")}
+    src=${JSON.stringify(VIDEO_SAMPLE_SRC)}
+    style={{ width: "100%", maxWidth: 800 }}
+  />
+);`;
+}
+
+export const videoLiveCode = buildVideoCode(
+  Object.fromEntries(videoKnobs.map((k) => [k.name, k.defaultValue]))
+);
