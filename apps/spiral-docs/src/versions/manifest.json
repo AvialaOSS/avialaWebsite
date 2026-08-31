@@ -12,7 +12,8 @@
     "2.7.1",
     "2.7.2",
     "2.8.1",
-    "2.9.0"
+    "2.9.0",
+    "3.0.0"
   ],
   "default": "2.9.0",
   "versions": {
@@ -786,6 +787,92 @@
         },
         "Video": {
           "inherits": "2.7.2"
+        }
+      }
+    },
+    "3.0.0": {
+      "spiral": "3.0.0",
+      "tokens": "2.6.0",
+      "icons": "2.4.0",
+      "status": "draft",
+      "components": {
+        "Button": {
+          "inherits": "2.9.0"
+        },
+        "Popover": {
+          "inherits": "2.9.0"
+        },
+        "Tooltip": {
+          "inherits": "2.9.0"
+        },
+        "Pagination": {
+          "inherits": "2.9.0"
+        },
+        "Navigation": {
+          "inherits": "2.9.0"
+        },
+        "SegmentatorGroup": {
+          "rev": "3.0.0"
+        },
+        "CascaderField": {
+          "rev": "3.0.0"
+        },
+        "Modal": {
+          "inherits": "2.9.0"
+        },
+        "Drawer": {
+          "inherits": "2.9.0"
+        },
+        "DatePickerField": {
+          "rev": "3.0.0"
+        },
+        "Typeface": {
+          "rev": "3.0.0"
+        },
+        "Checkbox": {
+          "inherits": "2.9.0"
+        },
+        "Slider": {
+          "inherits": "2.9.0"
+        },
+        "ColorPicker": {
+          "inherits": "2.9.0"
+        },
+        "Tab": {
+          "inherits": "2.9.0"
+        },
+        "List": {
+          "rev": "3.0.0"
+        },
+        "ScrollPicker": {
+          "rev": "3.0.0"
+        },
+        "TimePickerField": {
+          "rev": "3.0.0"
+        },
+        "Progress": {
+          "inherits": "2.9.0"
+        },
+        "Table": {
+          "rev": "3.0.0"
+        },
+        "FormField": {
+          "rev": "3.0.0"
+        },
+        "Switch": {
+          "inherits": "2.9.0"
+        },
+        "Video": {
+          "rev": "3.0.0"
+        },
+        "Card": {
+          "rev": "3.0.0"
+        },
+        "Form": {
+          "rev": "3.0.0"
+        },
+        "Select": {
+          "rev": "3.0.0"
         }
       }
     }
