@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@aviala-design/icons": "^2.4.0",
-    "@aviala-design/spiral": "^2.9.0",
-    "@aviala-design/tokens": "^2.5.5",
+    "@aviala-design/spiral": "^3.0.0",
+    "@aviala-design/tokens": "^2.6.0",
     "@babel/standalone": "^8.0.3",
     "@mdx-js/react": "^3.1.0",
     "@monaco-editor/react": "^4.7.0",
