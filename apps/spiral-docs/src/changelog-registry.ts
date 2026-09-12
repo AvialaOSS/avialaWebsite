@@ -45,7 +45,7 @@ function componentDocPath(name: string): string | undefined {
 }
 
 export function getSpiralRepositoryUrl(): string {
-  return npmReleases.repositoryUrl || "https://github.com/AvialaOSS/spiral-2";
+  return npmReleases.repositoryUrl || "https://github.com/AvialaOSS/developer-kit";
 }
 
 export type SpiralPackageManager = "npm" | "yarn" | "pnpm";

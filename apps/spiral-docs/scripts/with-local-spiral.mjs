@@ -1,12 +1,12 @@
 /**
  * Run a command with DOCS_SPIRAL_LOCAL=1 so Vite resolves
- * @aviala-design/* from a sibling Spiral2 checkout.
+ * @aviala-design/* from a sibling Spiral checkout.
  *
  * Usage:
  *   node apps/spiral-docs/scripts/with-local-spiral.mjs npm run dev -w @aviala/spiral-docs
  *
- * Daily local docs need Spiral2 next to avialaWebsite (or DOCS_SPIRAL_ROOT).
- * Tokens CSS is served via Spiral2's tokens vite-plugin (no tokens build).
+ * Daily local docs need Spiral next to avialaWebsite (or DOCS_SPIRAL_ROOT).
+ * Tokens CSS is served via Spiral's tokens vite-plugin (no tokens build).
  * Icons use packages/icons/src (codegen); only missing src needs icons:build.
  * Set DOCS_SPIRAL_LOCAL_DIST=1 to force package dist folders instead.
  */
@@ -24,7 +24,7 @@ function resolveSpiralRoot() {
   const rootEnv = process.env.DOCS_SPIRAL_ROOT?.trim();
   return rootEnv
     ? path.resolve(siteRoot, rootEnv)
-    : path.resolve(siteRoot, "../Spiral2");
+    : path.resolve(siteRoot, "../developer-kit");
 }
 
 function preflight() {
@@ -34,7 +34,7 @@ function preflight() {
 
   if (!existsSync(path.join(root, "package.json"))) {
     errors.push(
-      `Spiral2 not found at ${root}\n` +
+      `Spiral not found at ${root}\n` +
         `  Clone it next to avialaWebsite, or set DOCS_SPIRAL_ROOT.`,
     );
   } else {
@@ -49,7 +49,7 @@ function preflight() {
       if (!existsSync(plugin)) {
         errors.push(
           `Missing tokens vite-plugin at ${plugin}\n` +
-            `  Update Spiral2 (playground uses the same plugin for zero-build CSS).`,
+            `  Update Spiral (playground uses the same plugin for zero-build CSS).`,
         );
       }
 
@@ -58,7 +58,7 @@ function preflight() {
       if (!existsSync(iconsSrc) && !existsSync(iconsDist)) {
         errors.push(
           `Icons entry missing under ${path.join(root, "packages/icons")}\n` +
-            `  In Spiral2 run: pnpm --filter @aviala-design/icons build\n` +
+            `  In Spiral run: pnpm --filter @aviala-design/icons build\n` +
             `  (or pnpm icons:sync if you need a Figma export first)`,
         );
       }
@@ -77,7 +77,7 @@ function preflight() {
         if (!existsSync(abs)) {
           errors.push(
             `DOCS_SPIRAL_LOCAL_DIST=1 but missing ${label} at ${abs}\n` +
-              `  In Spiral2 run: pnpm --filter ${filter} build`,
+              `  In Spiral run: pnpm --filter ${filter} build`,
           );
         }
       }

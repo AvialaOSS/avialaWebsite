@@ -13,7 +13,7 @@
 push main → Actions（npm ci → 构建两个 app → hugo --minify）→ GitHub Pages
 ```
 
-Spiral 文档通过 npm 上**已发布**的 `@aviala-design/spiral`、`@aviala-design/tokens`、`@aviala-design/icons` 消费组件库。因此文档展示的始终是用户能实际安装到的版本，本仓库不需要 clone [spiral-2](https://github.com/AvialaOSS/spiral-2)。
+Spiral 文档通过 npm 上**已发布**的 `@aviala-design/spiral`、`@aviala-design/tokens`、`@aviala-design/icons` 消费组件库。因此文档展示的始终是用户能实际安装到的版本，本仓库不需要 clone [developer-kit](https://github.com/AvialaOSS/developer-kit)。
 
 ---
 
@@ -51,20 +51,20 @@ CI 会自行构建两个前端应用，无需本地构建。
 
 文档内容（页面、Demo、MDX）改动，与上面的日常发布相同——直接改 `apps/spiral-docs/` 后 push 即可。
 
-若要让文档反映**新的组件行为**，必须先在 Spiral2 发版：
+若要让文档反映**新的组件行为**，必须先在 Spiral 发版：
 
-1. Spiral2：`pnpm changeset` 记录变更，合并到 `main`
+1. Spiral：`pnpm changeset` 记录变更，合并到 `main`
 2. `release.yml` 通过 Changesets + npm Trusted Publishing（OIDC，无需 `NPM_TOKEN`）发布
-3. 发布成功后 Spiral2 用 **GitHub App** 向本仓派发 `spiral-released`；`scaffold-spiral-docs.yml` 自动开 PR（含 manifest / stubs **以及** workspace 依赖 + lockfile bump）
+3. 发布成功后 Spiral 用 **GitHub App** 向本仓派发 `spiral-released`；`scaffold-spiral-docs.yml` 自动开 PR（含 manifest / stubs **以及** workspace 依赖 + lockfile bump）
 4. 按 bot checklist 补文档 → 将 manifest `status` 设为 `ready` 并更新 `default` → merge
 
 > 组件 API 表格数据来自 `@aviala-design/spiral` 包内的 `props.json`。构建脚本 `apps/spiral-docs/scripts/sync-props.mjs` 会把它复制到 `src/generated/props.json`；若安装的版本尚未附带该文件，则回退到仓库里已提交的副本，并打印一条 warning。
 >
-> 组件更新记录来自 Spiral2 的 `packages/ui/changelogs/*.md`（构建为 `component-changelogs.json`）。`sync-changelog.mjs` 优先从已安装包或邻仓 Spiral2 同步，否则使用已提交的 `src/generated/component-changelogs.json`。
+> 组件更新记录来自 Spiral 的 `packages/ui/changelogs/*.md`（构建为 `component-changelogs.json`）。`sync-changelog.mjs` 优先从已安装包或邻仓 Spiral 同步，否则使用已提交的 `src/generated/component-changelogs.json`。
 >
 > 文档覆盖版本见 `apps/spiral-docs/src/versions/manifest.json`。构建时会查询 npm latest；若最新包高于文档 `default`，站点顶栏显示过时提醒。
 >
-> 正式构建（`npm run build:spiral-docs`）会对每个 covered patch：从 npm 安装对应 `@aviala-design/spiral` → 打出 `static/docs/v/{version}/`，并额外打一份默认版到 `static/docs/assets/`。深链由 404 页就地挂载 SPA（保留顶栏；`head` 里会在首屏前改掉 404 标题并隐藏 404 占位）。本地 `dev` 仍是单份 Vite（当前 lockfile 包），页头版本 Select 会**软切换**文档修订（`doc-revisions` / prose）；正式环境在多份 `/v/{version}/` 构建之间整页跳转。发版后自动开文档 PR：见 [SPIRAL_DOCS_DISPATCH.zh_cn.md](./SPIRAL_DOCS_DISPATCH.zh_cn.md)（英文：[SPIRAL_DOCS_DISPATCH.md](./SPIRAL_DOCS_DISPATCH.md)；需在 Spiral2 配置 GitHub App Client ID + private key）。
+> 正式构建（`npm run build:spiral-docs`）会对每个 covered patch：从 npm 安装对应 `@aviala-design/spiral` → 打出 `static/docs/v/{version}/`，并额外打一份默认版到 `static/docs/assets/`。深链由 404 页就地挂载 SPA（保留顶栏；`head` 里会在首屏前改掉 404 标题并隐藏 404 占位）。本地 `dev` 仍是单份 Vite（当前 lockfile 包），页头版本 Select 会**软切换**文档修订（`doc-revisions` / prose）；正式环境在多份 `/v/{version}/` 构建之间整页跳转。发版后自动开文档 PR：见 [SPIRAL_DOCS_DISPATCH.zh_cn.md](./SPIRAL_DOCS_DISPATCH.zh_cn.md)（英文：[SPIRAL_DOCS_DISPATCH.md](./SPIRAL_DOCS_DISPATCH.md)；需在 Spiral 配置 GitHub App Client ID + private key）。
 
 ---
 
@@ -83,13 +83,13 @@ npm run dev:site               # http://localhost:1313/docs/
 #   npm run dev:spiral-docs
 #   npm run dev:hugo
 
-# 临时用邻仓 Spiral2 源码（未发 npm 也能验组件）
-# 默认解析 `../Spiral2`；可用 DOCS_SPIRAL_ROOT 覆盖路径
-# 日常：tokens 走 Spiral2 vite-plugin（无需 tokens build）；icons 用 packages/icons/src
-# 仅缺 icons 源码时才需在 Spiral2：pnpm --filter @aviala-design/icons build
+# 临时用邻仓 Spiral 源码（未发 npm 也能验组件）
+# 默认解析 `../developer-kit`；可用 DOCS_SPIRAL_ROOT 覆盖路径
+# 日常：tokens 走 Spiral vite-plugin（无需 tokens build）；icons 用 packages/icons/src
+# 仅缺 icons 源码时才需在 Spiral：pnpm --filter @aviala-design/icons build
 npm run dev:spiral-docs:local
 npm run dev:site:local
-# 强制用 Spiral2 packages/*/dist（不要 src / vite-plugin）：DOCS_SPIRAL_LOCAL_DIST=1
+# 强制用 Spiral packages/*/dist（不要 src / vite-plugin）：DOCS_SPIRAL_LOCAL_DIST=1
 
 # 生产形态（静态产物嵌入 Hugo，无 HMR）
 npm run build:colorcat
@@ -129,9 +129,9 @@ hugo server -D --bind 127.0.0.1 --port 1313
 
 | 现象 | 可能原因 | 处理 |
 |------|----------|------|
-| `Missing "./xxx-effects.css" specifier in "@aviala-design/tokens"` | 已发布的 tokens 版本还没有该导出 | 在 Spiral2 发版后 `npm update @aviala-design/tokens` |
-| `DOCS_SPIRAL_LOCAL` 启动失败 / 预检报错 | 邻仓路径不对，或缺 icons `src` | 确认 `../Spiral2` 或 `DOCS_SPIRAL_ROOT`；缺图标源码时在 Spiral2 跑 `pnpm --filter @aviala-design/icons build` |
-| `DOCS_SPIRAL_LOCAL` 样式不对（dist 模式） | `DOCS_SPIRAL_LOCAL_DIST=1` 但未 build tokens/spiral | 去掉该环境变量改用默认零构建，或在 Spiral2 build 对应包 |
+| `Missing "./xxx-effects.css" specifier in "@aviala-design/tokens"` | 已发布的 tokens 版本还没有该导出 | 在 Spiral 发版后 `npm update @aviala-design/tokens` |
+| `DOCS_SPIRAL_LOCAL` 启动失败 / 预检报错 | 邻仓路径不对，或缺 icons `src` | 确认 `../developer-kit` 或 `DOCS_SPIRAL_ROOT`；缺图标源码时在 Spiral 跑 `pnpm --filter @aviala-design/icons build` |
+| `DOCS_SPIRAL_LOCAL` 样式不对（dist 模式） | `DOCS_SPIRAL_LOCAL_DIST=1` 但未 build tokens/spiral | 去掉该环境变量改用默认零构建，或在 Spiral build 对应包 |
 | 构建报 `Failed to resolve entry for package @aviala-design/spiral` | 命中了包里指向未发布 `src/` 的 `development` 导出条件 | 确认 `apps/spiral-docs/vite.config.ts` 的 `resolve.conditions` 未被改动 |
 | 本地 `/docs/` 空白 | 没跑过 `npm run build:spiral-docs` | 先构建再启动 Hugo |
 | API 表格缺列或过时 | 安装的 Spiral 版本无 `props.json`，回退到旧副本 | 发版后 `npm update`，构建日志会显示实际来源版本 |

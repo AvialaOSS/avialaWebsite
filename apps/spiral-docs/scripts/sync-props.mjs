@@ -11,7 +11,7 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(dirname, "../../..");
 const target = path.resolve(dirname, "../src/generated/props.json");
 const patchesDir = path.resolve(dirname, "props-patches");
-const siblingProps = path.resolve(repoRoot, "../Spiral2/packages/ui/dist/props.json");
+const siblingProps = path.resolve(repoRoot, "../developer-kit/packages/ui/dist/props.json");
 
 function applyLocalPatches(registry) {
   if (!existsSync(patchesDir)) return registry;
@@ -37,10 +37,10 @@ function applyLocalPatches(registry) {
 }
 
 function resolvePropsPath() {
-  // Prefer sibling Spiral2 when present (local monorepo / dual-checkout).
+  // Prefer sibling Spiral when present (local monorepo / dual-checkout).
   // CI without a sibling checkout falls through to the installed package.
   if (existsSync(siblingProps)) {
-    return { file: siblingProps, label: "sibling Spiral2 dist/props.json" };
+    return { file: siblingProps, label: "sibling Spiral dist/props.json" };
   }
 
   const packageDir = findSpiralPackage();

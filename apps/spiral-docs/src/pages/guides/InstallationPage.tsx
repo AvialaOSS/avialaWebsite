@@ -5,7 +5,7 @@ import { mdxComponents } from "../../mdx-components";
 export function InstallationPage() {
   return (
     <>
-      <DocPageHeader title="安装" description="在项目中接入 Spiral 2" />
+      <DocPageHeader title="安装" description="在项目中接入 Spiral" />
       <div className="docs-prose">
         <InstallationMdx components={mdxComponents} />
       </div>

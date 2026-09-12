@@ -1,6 +1,6 @@
 name: Scaffold Spiral docs version
 
-# Opened by Spiral2 after npm publish (repository_dispatch), or manually.
+# Opened by Spiral after npm publish (repository_dispatch), or manually.
 on:
   repository_dispatch:
     types: [spiral-released]

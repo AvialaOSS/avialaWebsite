@@ -93,7 +93,7 @@ type LocalSpiralPaths = {
   tokens: string;
   icons: string;
   spiralEntry: string;
-  /** When true, leave tokens CSS / spiral styles.css to Spiral2 tokens vite-plugin. */
+  /** When true, leave tokens CSS / spiral styles.css to Spiral tokens vite-plugin. */
   useTokensVitePlugin: boolean;
 };
 
@@ -110,23 +110,23 @@ function resolveLocalSpiral(): LocalSpiralPaths | null {
 
   const root = rootEnv
     ? path.resolve(dirname, rootEnv)
-    : path.resolve(dirname, "../../../Spiral2");
+    : path.resolve(dirname, "../../../developer-kit");
 
   const ui = path.join(root, "packages/ui");
   const tokens = path.join(root, "packages/tokens");
   const icons = path.join(root, "packages/icons");
 
   for (const [label, dir] of [
-    ["Spiral2", root],
+    ["Spiral", root],
     ["@aviala-design/spiral (packages/ui)", ui],
     ["@aviala-design/tokens", tokens],
     ["@aviala-design/icons", icons],
   ] as const) {
     if (!existsSync(path.join(dir, "package.json"))) {
       console.warn(`[spiral-docs] local Spiral missing ${label}: ${dir}`);
-      if (label === "Spiral2") {
+      if (label === "Spiral") {
         console.warn(
-          "  Set DOCS_SPIRAL_ROOT to the Spiral2 checkout, or clone it next to avialaWebsite.",
+          "  Set DOCS_SPIRAL_ROOT to the Spiral checkout, or clone it next to avialaWebsite.",
         );
       }
       return null;
@@ -156,7 +156,7 @@ function resolveLocalSpiral(): LocalSpiralPaths | null {
     const iconsDist = path.join(icons, "dist/index.js");
     if (!existsSync(iconsSrc) && !existsSync(iconsDist)) {
       console.warn(
-        `[spiral-docs] icons src/dist missing — in Spiral2 run: pnpm --filter @aviala-design/icons build`,
+        `[spiral-docs] icons src/dist missing — in Spiral run: pnpm --filter @aviala-design/icons build`,
       );
       console.warn(`  (in ${root})`);
     }
@@ -197,7 +197,7 @@ async function loadLocalTokensVitePlugin(
   }
 }
 
-/** Resolve @aviala-design/{spiral,tokens,icons} from a local Spiral2 checkout. */
+/** Resolve @aviala-design/{spiral,tokens,icons} from a local Spiral checkout. */
 function localSpiralResolvePlugin(local: LocalSpiralPaths): Plugin {
   const packageDirs: Record<string, string> = {
     "@aviala-design/spiral": local.ui,
@@ -230,7 +230,7 @@ function localSpiralResolvePlugin(local: LocalSpiralPaths): Plugin {
       for (const [name, pkgDir] of Object.entries(packageDirs)) {
         if (source !== name && !source.startsWith(`${name}/`)) continue;
 
-        // Defer tokens package + spiral/styles.css to Spiral2's tokens vite-plugin
+        // Defer tokens package + spiral/styles.css to Spiral's tokens vite-plugin
         // (same zero-build path as playground / Storybook).
         if (local.useTokensVitePlugin) {
           if (name === "@aviala-design/tokens") return null;
