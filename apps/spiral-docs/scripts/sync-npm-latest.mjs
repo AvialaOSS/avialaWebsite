@@ -9,7 +9,7 @@ const releasesTarget = path.resolve(generatedDir, "npm-releases.json");
 
 const PACKAGE_NAME = "@aviala-design/spiral";
 const REGISTRY_URL = `https://registry.npmjs.org/${PACKAGE_NAME}`;
-const DEFAULT_REPO = "https://github.com/AvialaOSS/spiral-2";
+const DEFAULT_REPO = "https://github.com/AvialaOSS/developer-kit";
 
 function repoUrlFromNpm(repository) {
   if (!repository) return DEFAULT_REPO;

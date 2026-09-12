@@ -1,7 +1,7 @@
 ---
 name: spiral-docs-local
 description: >-
-  Local debugging of Spiral docs against a sibling Spiral2 checkout using
+  Local debugging of Spiral docs against a sibling Spiral checkout using
   DOCS_SPIRAL_LOCAL, tokens vite-plugin zero-build CSS, and icons src.
   Use when running dev:spiral-docs:local, dev:site:local, setting
   DOCS_SPIRAL_ROOT / DOCS_SPIRAL_LOCAL_DIST, or debugging unpublished Spiral in docs.
@@ -14,23 +14,23 @@ description: >-
 | Goal | Command |
 |------|---------|
 | What users install (npm lockfile) | `npm run dev:spiral-docs` / `dev:site` |
-| Unpublished Spiral2 source | `npm run dev:spiral-docs:local` / `dev:site:local` |
+| Unpublished Spiral source | `npm run dev:spiral-docs:local` / `dev:site:local` |
 
-Default sibling path: `../Spiral2`. Override with `DOCS_SPIRAL_ROOT`.
+Default sibling path: `../developer-kit`. Override with `DOCS_SPIRAL_ROOT`.
 
 ## Zero-build local (default)
 
 `with-local-spiral.mjs` sets `DOCS_SPIRAL_LOCAL=1` and **preflights** before Vite:
 
-- Spiral2 checkout + `packages/{ui,tokens,icons}` present
-- Tokens CSS via Spiral2 `packages/tokens/vite-plugin.mjs` (same as playground) — **no** `tokens build` required
-- Icons prefer `packages/icons/src`; only if src/dist missing → in Spiral2 run `pnpm --filter @aviala-design/icons build` (or `icons:sync` after Figma)
+- Spiral checkout + `packages/{ui,tokens,icons}` present
+- Tokens CSS via Spiral `packages/tokens/vite-plugin.mjs` (same as playground) — **no** `tokens build` required
+- Icons prefer `packages/icons/src`; only if src/dist missing → in Spiral run `pnpm --filter @aviala-design/icons build` (or `icons:sync` after Figma)
 
 Vite wires this in `apps/spiral-docs/vite.config.ts` (`aviala-tokens-css` + `docs-local-spiral-resolve`).
 
 ## Dist mode
 
-Set `DOCS_SPIRAL_LOCAL_DIST=1` only to validate publish-shaped `packages/*/dist`. Then Spiral2 must have built spiral / tokens / icons dists.
+Set `DOCS_SPIRAL_LOCAL_DIST=1` only to validate publish-shaped `packages/*/dist`. Then Spiral must have built spiral / tokens / icons dists.
 
 ## Fail-fast
 

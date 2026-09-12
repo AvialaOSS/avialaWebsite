@@ -7,7 +7,7 @@ export function IntroductionPage() {
     <>
       <DocPageHeader
         title="介绍"
-        description="Spiral 2 — 与 Aviala Design 对齐的 React 组件库"
+        description="Spiral — 与 Aviala Design 对齐的 React 组件库"
       />
       <div className="docs-prose">
         <IntroductionMdx components={mdxComponents} />

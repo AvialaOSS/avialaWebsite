@@ -141,8 +141,8 @@ export function DocLayout() {
 
   useEffect(() => {
     const title = pageLabel
-      ? `${pageLabel} — Spiral 2 · Aviala Design`
-      : "Spiral 2 组件文档 — Aviala Design";
+      ? `${pageLabel} — Spiral · Aviala Design`
+      : "Spiral 组件文档 — Aviala Design";
     document.title = title;
   }, [pageLabel]);
 

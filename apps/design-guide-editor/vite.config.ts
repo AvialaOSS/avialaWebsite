@@ -54,7 +54,7 @@ function resolveLocalSpiral(): LocalSpiralPaths | null {
 
   const root = rootEnv
     ? path.resolve(dirname, rootEnv)
-    : path.resolve(dirname, "../../../Spiral2");
+    : path.resolve(dirname, "../../../developer-kit");
 
   const ui = path.join(root, "packages/ui");
   const tokens = path.join(root, "packages/tokens");

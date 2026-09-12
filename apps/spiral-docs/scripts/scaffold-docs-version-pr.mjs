@@ -2,7 +2,7 @@
  * Scaffold a docs-coverage PR payload on avialaWebsite after Spiral publishes.
  *
  * Normally run by `.github/workflows/scaffold-spiral-docs.yml` (repository_dispatch
- * from Spiral2). Locally:
+ * from Spiral). Locally:
  *
  *   SPIRAL_VERSION=2.3.1 \
  *   COMPONENT_CHANGELOGS=./path/to/component-changelogs.json \
@@ -35,7 +35,7 @@ if (!spiralVersion) {
 }
 
 const changelogsPath = process.env.COMPONENT_CHANGELOGS
-  ?? path.resolve(appRoot, "../../../Spiral2/packages/ui/dist/component-changelogs.json");
+  ?? path.resolve(appRoot, "../../../developer-kit/packages/ui/dist/component-changelogs.json");
 const bumpDeps = process.env.BUMP_DEPS === "1";
 
 const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));

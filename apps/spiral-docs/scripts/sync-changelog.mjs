@@ -64,21 +64,21 @@ function loadFromMarkdownDir(dir) {
 }
 
 function resolveRegistry() {
-  // Prefer sibling Spiral2 when present (local monorepo / dual-checkout),
+  // Prefer sibling Spiral when present (local monorepo / dual-checkout),
   // matching sync-props.mjs so unpublished component changelogs appear in docs.
   const siblingJson = path.resolve(
     repoRoot,
-    "../Spiral2/packages/ui/dist/component-changelogs.json",
+    "../developer-kit/packages/ui/dist/component-changelogs.json",
   );
   if (existsSync(siblingJson)) {
-    console.log("Synced component changelogs from sibling Spiral2 dist JSON");
+    console.log("Synced component changelogs from sibling Spiral dist JSON");
     return JSON.parse(readFileSync(siblingJson, "utf8"));
   }
 
-  const siblingMd = path.resolve(repoRoot, "../Spiral2/packages/ui/changelogs");
+  const siblingMd = path.resolve(repoRoot, "../developer-kit/packages/ui/changelogs");
   const fromMd = loadFromMarkdownDir(siblingMd);
   if (fromMd) {
-    console.log("Synced component changelogs from sibling Spiral2 changelogs/*.md");
+    console.log("Synced component changelogs from sibling Spiral changelogs/*.md");
     return fromMd;
   }
 
