@@ -5,10 +5,10 @@ import { ThemeProvider } from "@aviala-design/spiral";
 import { AppRoutes } from "./App";
 import { DocsVersionProvider } from "./components/DocsVersionProvider";
 import { getDocsBasename } from "./docs-base";
-/* Via JS import so DOCS_SPIRAL_LOCAL resolve plugin applies (CSS @import via
-   Tailwind would hit npm). One file: effects + ald-theme + residual utilities. */
-import "@aviala-design/spiral/styles.css";
+/* Tailwind + docs chrome first (preflight). Spiral aggregate after so
+   aviala-* effects win, matching the previous tokens-effects-after-index order. */
 import "./index.css";
+import "@aviala-design/spiral/styles.css";
 
 const SPIRAL_DOCS_REDIRECT_KEY = "aviala-spiral-docs-redirect";
 const docsBasename = getDocsBasename();
