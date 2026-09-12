@@ -1,9 +1,7 @@
+/* Docs chrome only — Spiral components ship styles in
+   `@aviala-design/spiral/styles.css` (no consumer @source of spiral). */
 @import "tailwindcss";
-
-@source "../../../node_modules/@aviala-design/spiral/dist";
 @source "../src";
-/* Populated when DOCS_SPIRAL_LOCAL=1 (sibling developer-kit ui/src). */
-@import "./.generated/local-spiral-sources.css";
 
 @layer base {
   * {
