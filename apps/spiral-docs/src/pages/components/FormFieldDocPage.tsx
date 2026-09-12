@@ -1,4 +1,5 @@
-import { Button, Fieldset, FormField, Input } from "@aviala-design/spiral";
+import { FormField } from "@aviala-design/spiral/form";
+import { Button, Fieldset, Input } from "@aviala-design/spiral";
 import { ComponentDocView } from "../../components/ComponentDocView";
 import { DemoBlock } from "../../components/DemoBlock";
 import {

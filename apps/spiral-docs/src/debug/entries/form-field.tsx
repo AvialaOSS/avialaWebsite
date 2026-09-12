@@ -1,5 +1,5 @@
+import { FormField } from "@aviala-design/spiral/form";
 import {
-  FormField,
   Input,
   NumberInput,
   Select,

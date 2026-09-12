@@ -1,7 +1,7 @@
 import { GeneralDelete, GeneralGrabber, SymbolAdd } from "@aviala-design/icons";
+import { FormField } from "@aviala-design/spiral/form";
 import {
   Button,
-  FormField,
   Input,
   Select,
   SelectContent,

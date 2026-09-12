@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { FormField } from "@aviala-design/spiral/form";
 import {
-  FormField,
   TimePicker,
   TimePickerContent,
   TimePickerField,
