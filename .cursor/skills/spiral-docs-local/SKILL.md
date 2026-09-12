@@ -5,6 +5,7 @@ description: >-
   DOCS_SPIRAL_LOCAL, tokens vite-plugin zero-build CSS, and icons src.
   Use when running dev:spiral-docs:local, dev:site:local, setting
   DOCS_SPIRAL_ROOT / DOCS_SPIRAL_LOCAL_DIST, or debugging unpublished Spiral in docs.
+audience: maintainer
 ---
 
 # Spiral Docs Local Debug (avialaWebsite)

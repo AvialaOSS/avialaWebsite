@@ -1,6 +1,15 @@
 # Spiral 介绍
 
-Spiral 是 Aviala Design 的 React 组件库，建在 Radix UI 和 Tailwind CSS v4 之上，设计令牌和 Figma 里的组件一一对应。
+Spiral 是 Aviala Design 的 React 组件库，建在 Radix UI 之上，设计令牌和 Figma 里的组件一一对应。业务应用只需安装发布包、导入一份 CSS，并用 `ThemeProvider` 包裹——**不需要**为 Spiral 单独配置 Tailwind。
+
+## 消费侧快速路径
+
+```tsx
+import "@aviala-design/spiral/styles.css";
+import { ThemeProvider, Button } from "@aviala-design/spiral";
+```
+
+详见 [安装](/docs/start/installation)。英文 / Agent 入口：[CONSUMER.md](https://github.com/AvialaOSS/developer-kit/blob/main/CONSUMER.md)。
 
 ## 特性
 
@@ -22,3 +31,4 @@ Spiral 是 Aviala Design 的 React 组件库，建在 Radix UI 和 Tailwind CSS 
 - [国际化](/docs/start/locale)
 - [Button 按钮](/docs/components/basic-input/button)
 - [Tab 标签页](/docs/components/structure-navigation/tab)
+- [贡献 / 开发 kit](/docs/start/contribute) — 改库请外链到 developer-kit `AGENTS.md`，本站不复制 monorepo 命令
