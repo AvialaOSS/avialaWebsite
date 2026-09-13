@@ -1,3 +1,6 @@
+/* Docs is a Tailwind host. Scan spiral dist so component utilities (flex, etc.)
+   still compile here — published spiral/styles.css does not yet replace that
+   scan, and even after it does, docs chrome shares the same Tailwind pipeline. */
 @import "tailwindcss";
 
 @source "../../../node_modules/@aviala-design/spiral/dist";

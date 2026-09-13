@@ -81,9 +81,15 @@ function defaultSpiralAlias(): Record<string, string> | undefined {
     existsSync(path.join(dir, "package.json")),
   );
   if (!spiralPackageDir) return undefined;
+  // Only alias the CSS subpath. Do NOT alias `@aviala-design/spiral` → a file:
+  // Vite/Rollup treat string aliases as prefixes, so that would resolve
+  // `@aviala-design/spiral/styles.css` to `dist/index.js/styles.css`.
+  // Main entry uses package exports with `conditions` below (no `development`).
   return {
-    "@aviala-design/spiral": path.resolve(spiralPackageDir, "dist/index.js"),
-    "@aviala-design/spiral/styles.css": path.resolve(spiralPackageDir, "dist/styles.css"),
+    "@aviala-design/spiral/styles.css": path.resolve(
+      spiralPackageDir,
+      "dist/styles.css",
+    ),
   };
 }
 

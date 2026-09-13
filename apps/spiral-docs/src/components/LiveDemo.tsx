@@ -5,9 +5,9 @@ import {
   SymbolInformationCircle,
 } from "@aviala-design/icons";
 import Editor, { type Monaco, type OnMount } from "@monaco-editor/react";
+import { FormField } from "@aviala-design/spiral/form";
 import {
   Button,
-  FormField,
   Loading,
   SegmentatorGroup,
   SegmentatorItem,

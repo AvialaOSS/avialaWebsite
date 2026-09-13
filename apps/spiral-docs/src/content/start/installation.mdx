@@ -3,33 +3,33 @@
 ## 环境要求
 
 - Node.js 20 及以上
-- pnpm 9 及以上
+- React 18 及以上
 
-## 在 monorepo 里使用
-
-Spiral 目前以 workspace 包的形式发布：
+## 安装
 
 ```bash
-pnpm add @aviala-design/spiral @aviala-design/tokens @aviala-design/icons
+pnpm add @aviala-design/spiral
+# 或 npm install / yarn add
 ```
+
+`@aviala-design/tokens` 与 `@aviala-design/icons` 会作为 Spiral 的依赖自动装上，一般不必再单独安装。
 
 ## 引入样式
 
-在应用入口把 Spiral 的样式和 ALD 主题一起引进来：
+在应用入口只导入一份 CSS（已包含设计令牌、全部组件 effects、默认 ALD 主题，以及库构建期预编译的少量布局 utility）：
 
 ```tsx
 import "@aviala-design/spiral/styles.css";
-import "@aviala-design/tokens/ald-theme.css";
-import "@aviala-design/tokens/input-effects.css";
-import "@aviala-design/tokens/basic-input-effects.css";
-import "@aviala-design/tokens/button-effects.css";
 ```
 
-其余组件按需补上对应的效果样式，比如 `popover-effects.css`、`cascader-effects.css`、`tab-effects.css`（Tab 标签页）。
+**不需要**安装 `tailwindcss`、配置 `@tailwindcss/vite`，也不需要 `@source` 扫描 Spiral 源码。
+
+高级用法：若只要按需裁剪样式，仍可从 `@aviala-design/tokens` 的子路径导入单个 `*-effects.css` / `ald-theme.css`（见该包 exports）。默认路径请只用上面这一份 `styles.css`。
 
 ## 挂上 ThemeProvider
 
 ```tsx
+import "@aviala-design/spiral/styles.css";
 import { ThemeProvider, Button } from "@aviala-design/spiral";
 
 export function App() {
@@ -40,6 +40,8 @@ export function App() {
   );
 }
 ```
+
+`defaultPresetId="ald"` 使用内置 ALD 静态主题（变量已打进 `styles.css`）。动态品牌主题仍走 ThemeProvider 的运行时生成。
 
 组件内置文案（分页、日期选择等）默认中文。需要英文或与业务 i18n 同步时，见 [国际化](/docs/start/locale)。
 
