@@ -19,6 +19,7 @@ export const nav: NavSection[] = [
       { label: "主题", path: "/start/theme" },
       { label: "国际化", path: "/start/locale" },
       { label: "更新记录", path: "/start/changelog" },
+      { label: "贡献", path: "/start/contribute" },
     ],
   },
   {

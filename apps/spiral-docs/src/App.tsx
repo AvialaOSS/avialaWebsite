@@ -50,6 +50,7 @@ import { IntroductionPage } from "./pages/guides/IntroductionPage";
 import { ThemePage } from "./pages/guides/ThemePage";
 import { LocalePage } from "./pages/guides/LocalePage";
 import { ChangelogPage } from "./pages/guides/ChangelogPage";
+import { ContributePage } from "./pages/guides/ContributePage";
 import { IconsDocPage } from "./pages/reference/IconsDocPage";
 
 export function AppRoutes() {
@@ -62,6 +63,7 @@ export function AppRoutes() {
         <Route path="start/theme" element={<ThemePage />} />
         <Route path="start/locale" element={<LocalePage />} />
         <Route path="start/changelog" element={<ChangelogPage />} />
+        <Route path="start/contribute" element={<ContributePage />} />
 
         <Route path="components/information-display/avatar" element={<AvatarDocPage />} />
         <Route path="components/information-display/badge" element={<BadgeDocPage />} />

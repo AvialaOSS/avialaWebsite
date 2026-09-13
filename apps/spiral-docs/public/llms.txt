@@ -1,0 +1,34 @@
+# Spiral Docs — for consumer agents
+
+> **Consumer agents start here.** This index is for installing and using published `@aviala-design/spiral` in product apps. Do not follow developer-kit monorepo / Figma / changeset workflows unless the task is explicitly to contribute to the library.
+
+## Minimal use path
+
+```tsx
+import "@aviala-design/spiral/styles.css";
+import { ThemeProvider, Button } from "@aviala-design/spiral";
+```
+
+No consumer Tailwind. Full English twin: [CONSUMER.md](https://github.com/AvialaOSS/developer-kit/blob/main/CONSUMER.md). Skill: [spiral-consume](https://github.com/AvialaOSS/developer-kit/blob/main/skills/spiral-consume/SKILL.md).
+
+## Start guides (human Chinese docs)
+
+- [介绍](https://www.aviala.top/docs/start/introduction)
+- [安装](https://www.aviala.top/docs/start/installation) — keep in sync with CONSUMER.md
+- [主题](https://www.aviala.top/docs/start/theme)
+- [国际化](https://www.aviala.top/docs/start/locale)
+- [更新记录](https://www.aviala.top/docs/start/changelog)
+
+## Machine data (npm)
+
+- `@aviala-design/spiral/component-catalog.json` — slim component list (import path, ThemeProvider hint)
+- `@aviala-design/spiral/props.json` — prop docs
+- `@aviala-design/spiral/styles.css` — single stylesheet
+
+## Form entry
+
+Import `Form` / `FormField` from `@aviala-design/spiral/form` and install peer `react-hook-form` (`>=7.50`).
+
+## Contribute / maintain the library
+
+Maintainer agents only: [developer-kit AGENTS.md](https://github.com/AvialaOSS/developer-kit/blob/main/AGENTS.md). Site stub: [贡献](https://www.aviala.top/docs/start/contribute).

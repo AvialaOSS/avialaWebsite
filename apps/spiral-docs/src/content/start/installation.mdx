@@ -1,5 +1,7 @@
 # 安装
 
+> 与 developer-kit [`CONSUMER.md`](https://github.com/AvialaOSS/developer-kit/blob/main/CONSUMER.md) **同源**：改安装步骤时两边一起改。英文 / Agent 优先读 `CONSUMER.md`；本页给人读（中文）。
+
 ## 环境要求
 
 - Node.js 20 及以上
@@ -45,6 +47,10 @@ export function App() {
 
 组件内置文案（分页、日期选择等）默认中文。需要英文或与业务 i18n 同步时，见 [国际化](/docs/start/locale)。
 
+表单绑定请从 `@aviala-design/spiral/form` 导入，并安装 peer `react-hook-form`（`>=7.50`）。
+
+机器可读目录：`@aviala-design/spiral/component-catalog.json`；Agent 站点索引见本应用 `llms.txt`。
+
 ## 本地跑文档站
 
 文档站源码在这个 `avialaWebsite` 仓库，组件库本身是通过 npm 上发布的 `@aviala-design/*` 来消费的：
@@ -56,4 +62,4 @@ npm run dev:spiral-docs
 
 默认运行在 `http://localhost:5175/docs/`。
 
-组件库的开发在 [developer-kit](https://github.com/AvialaOSS/developer-kit) 仓库进行。改完发版后，文档站才会跟着更新。
+组件库的开发在 [developer-kit](https://github.com/AvialaOSS/developer-kit) 仓库进行（维护侧见 [AGENTS.md](https://github.com/AvialaOSS/developer-kit/blob/main/AGENTS.md)）。改完发版后，文档站才会跟着更新。业务仓请勿把 playground / changeset / icons:export 当成安装步骤。

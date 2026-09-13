@@ -6,6 +6,7 @@ description: >-
   ready/default workflow after scaffold. Use when editing spiral-docs,
   doc-revisions, component demos, designGuide, versions/manifest.json, docs
   coverage checklist, or Chinese docs copy.
+audience: maintainer
 ---
 
 # Spiral Docs Writing (avialaWebsite)
@@ -13,6 +14,10 @@ description: >-
 ## Scope
 
 Public docs live in `apps/spiral-docs/`. They consume **published** `@aviala-design/*` on production; local unpublished Spiral uses `spiral-docs-local`.
+
+**Start section = consumer only** (install / theme / first component). Contribution links out to [developer-kit `AGENTS.md`](https://github.com/AvialaOSS/developer-kit/blob/main/AGENTS.md) — do not paste monorepo commands into spiral-docs.
+
+**Install sync:** `src/content/start/installation.mdx` must stay aligned with developer-kit [`CONSUMER.md`](https://github.com/AvialaOSS/developer-kit/blob/main/CONSUMER.md) (same CSS + ThemeProvider path). Change both in one effort. Agent index: `apps/spiral-docs/public/llms.txt`.
 
 ## Prose tone (Chinese)
 
