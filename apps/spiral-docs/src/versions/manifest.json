@@ -13,7 +13,8 @@
     "2.7.2",
     "2.8.1",
     "2.9.0",
-    "3.0.0"
+    "3.0.0",
+    "3.0.2"
   ],
   "default": "3.0.0",
   "versions": {
@@ -873,6 +874,92 @@
         },
         "Select": {
           "rev": "3.0.0"
+        }
+      }
+    },
+    "3.0.2": {
+      "spiral": "3.0.2",
+      "tokens": "2.6.2",
+      "icons": "2.4.1",
+      "status": "draft",
+      "components": {
+        "Button": {
+          "inherits": "3.0.0"
+        },
+        "Popover": {
+          "inherits": "3.0.0"
+        },
+        "Tooltip": {
+          "inherits": "3.0.0"
+        },
+        "Pagination": {
+          "inherits": "3.0.0"
+        },
+        "Navigation": {
+          "inherits": "3.0.0"
+        },
+        "SegmentatorGroup": {
+          "inherits": "3.0.0"
+        },
+        "CascaderField": {
+          "inherits": "3.0.0"
+        },
+        "Modal": {
+          "inherits": "3.0.0"
+        },
+        "Drawer": {
+          "inherits": "3.0.0"
+        },
+        "DatePickerField": {
+          "inherits": "3.0.0"
+        },
+        "Typeface": {
+          "inherits": "3.0.0"
+        },
+        "Checkbox": {
+          "inherits": "3.0.0"
+        },
+        "Slider": {
+          "inherits": "3.0.0"
+        },
+        "ColorPicker": {
+          "inherits": "3.0.0"
+        },
+        "Tab": {
+          "inherits": "3.0.0"
+        },
+        "List": {
+          "inherits": "3.0.0"
+        },
+        "ScrollPicker": {
+          "inherits": "3.0.0"
+        },
+        "TimePickerField": {
+          "inherits": "3.0.0"
+        },
+        "Progress": {
+          "inherits": "3.0.0"
+        },
+        "Table": {
+          "inherits": "3.0.0"
+        },
+        "FormField": {
+          "inherits": "3.0.0"
+        },
+        "Switch": {
+          "inherits": "3.0.0"
+        },
+        "Video": {
+          "inherits": "3.0.0"
+        },
+        "Card": {
+          "inherits": "3.0.0"
+        },
+        "Form": {
+          "inherits": "3.0.0"
+        },
+        "Select": {
+          "inherits": "3.0.0"
         }
       }
     }
