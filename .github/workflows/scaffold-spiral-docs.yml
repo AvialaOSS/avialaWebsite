@@ -32,14 +32,17 @@ jobs:
 
       - name: Resolve Spiral version
         id: ver
+        env:
+          DISPATCH_VERSION: ${{ github.event.client_payload.spiral_version }}
+          INPUT_VERSION: ${{ inputs.spiral_version }}
         run: |
-          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
-            VERSION="${{ github.event.client_payload.spiral_version }}"
+          if [ "$GITHUB_EVENT_NAME" = "repository_dispatch" ]; then
+            VERSION="$DISPATCH_VERSION"
           else
-            VERSION="${{ inputs.spiral_version }}"
+            VERSION="$INPUT_VERSION"
           fi
-          if [ -z "$VERSION" ]; then
-            echo "Missing spiral_version" >&2
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "A published stable x.y.z spiral_version is required" >&2
             exit 1
           fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
@@ -50,12 +53,8 @@ jobs:
         run: |
           mkdir -p .tmp
           URL="https://cdn.jsdelivr.net/npm/@aviala-design/spiral@${{ steps.ver.outputs.version }}/dist/component-changelogs.json"
-          if curl -fsSL "$URL" -o .tmp/component-changelogs.json; then
-            echo "Downloaded changelogs from jsDelivr"
-          else
-            echo "No component-changelogs.json on npm yet; continuing with empty set"
-            echo '{}' > .tmp/component-changelogs.json
-          fi
+          curl --retry 5 --retry-delay 10 --retry-all-errors -fsSL "$URL" -o .tmp/component-changelogs.json
+          jq -e 'type == "object" and length > 0' .tmp/component-changelogs.json >/dev/null
 
       - name: Scaffold manifest + revision stubs + dep bump
         working-directory: apps/spiral-docs
@@ -101,8 +100,7 @@ jobs:
             apps/spiral-docs/src/doc-revisions \
             apps/spiral-docs/package.json \
             apps/colorcat/package.json \
-            package-lock.json \
-            || true
+            package-lock.json
           git status
           git commit -m "$TITLE" || { echo "Nothing to commit"; exit 0; }
           git push -u origin "$BRANCH"

@@ -13,17 +13,17 @@ import { ThemeProvider } from "@aviala-design/spiral";
   defaultDensity="default"
 >
   {children}
-</ThemeProvider>
+</ThemeProvider>;
 ```
 
 ## 密度：Default 与 Mobile Friendly
 
 ALD 的 `base-numbers` 给了两套尺寸令牌：
 
-| 令牌示例 | Default | Mobile Friendly |
-| --- | --- | --- |
-| `--size-regular` | 14px | 18px |
-| `--line-height-regular` | 18px | 24px |
+| 令牌示例                | Default | Mobile Friendly |
+| ----------------------- | ------- | --------------- |
+| `--size-regular`        | 14px    | 18px            |
+| `--line-height-regular` | 18px    | 24px            |
 
 切换方式：
 
@@ -47,3 +47,64 @@ function DensitySwitch() {
 `useTheme()` 还提供了 `setMode`、`setPrimaryColor`、`applyPreset` 等接口，偏好会写进 `localStorage`（默认键名 `aviala-theme`）。
 
 直接用文档顶栏的 **浅色/深色** 和 **Default / Mobile Friendly** 按钮，就能实时看组件在不同主题下的样子。
+
+## 3.1：以 Theme Engine 项目为主题来源
+
+从 Spiral 3.1.0 / tokens 2.7.0 起，可以把标准 `TokenProject` 直接交给组件库。数据链路为：基础色阶 → 语义 Token → 组件 Token → Spiral 样式。组件不用绑定 Figma 的变量 ID，也不需要读取 Figma 快照。
+
+```tsx
+import { ThemeProvider } from "@aviala-design/spiral";
+import {
+  parseProject,
+  avialaProjectCssOptions,
+} from "@aviala-design/tokens/project";
+import "@aviala-design/spiral/styles.css";
+import projectJson from "./theme.project.json";
+
+const project = parseProject(JSON.stringify(projectJson));
+const cssOptions = avialaProjectCssOptions(project);
+
+export function App() {
+  return (
+    <ThemeProvider
+      project={project}
+      projectCssOptions={cssOptions}
+      defaultMode="light"
+      defaultDensity="default"
+      defaultEffects
+    >
+      {/* 应用内容 */}
+    </ThemeProvider>
+  );
+}
+```
+
+传入 `project` 后，`setMode`、`setDensity`、`setEffects` 选择项目中相应的模式。旧版 `setPrimaryColor`、`applyPreset` 不会改写标准项目；需要换色时，先在 ThemeCat 中修改主题，再传入更新后的项目。
+
+| Web 状态                      | 项目模式                      |
+| ----------------------------- | ----------------------------- |
+| `light` / `dark`              | `Light` / `Dark`              |
+| `default` / `mobile-friendly` | `Default` / `Mobile Friendly` |
+| effects `true` / `false`      | `ON` / `OFF`                  |
+
+`useTheme()` 提供 `effects`、`setEffects` 和 `isProjectTheme`。已有浏览器偏好可能覆盖 `defaultMode`、`defaultDensity`，不同预览使用独立 `storageKey`。
+
+### 单位与公开名称
+
+项目保留设计单位。通用 `projectCssVariables` 默认保持 px；Aviala 的 `avialaProjectCssOptions(project)` 明确将基础字号与行高转成 rem，组件尺寸仍按各自单位输出。不要再次把整份 CSS 数值统一除以 16。
+
+Token ID 负责稳定引用；公开 CSS 使用可读的 kebab-case 名称。设计路径改名会产生新名称，并保留旧名兼容；也可以显式固定 `cssName`。旧语义兼容层继续供尚未迁移的业务代码使用。
+
+### 局部预览与服务端生成
+
+`projectTarget` 可指定一个已挂载的 HTML 容器。主题变量和关联弹层使用这个局部作用域，适合在同一页比较多个主题。卸载时仅清理运行时拥有的样式，恢复接管前的值。
+
+无需 React 时，从 `@aviala-design/tokens` 导入 `applyProjectTheme` 与 `removeProjectTheme`，并明确传入目标元素。构建阶段或服务端可使用无 DOM 依赖的 `@aviala-design/tokens/project`：`validateProject` 校验引用和模式，`projectCssVariables` / `projectCssText` 生成 CSS。
+
+### ThemeBuilder、ThemeCat 与 Figma 的分工
+
+ThemeBuilder 管理 Token、Collection、Mode 结构；ThemeCat 修改已有 Token 的值或引用，默认保存相对基础版本的差异，也可导出独立主题。Figma Variables 是标准项目的适配目标，Components 变量快照不作为 Web 的另一份权威来源。
+
+基础项目以已发布版本供各端消费。升级时先处理被删除或冲突的引用，再采用新版本；缺失模式值必须补齐或显式配置默认模式继承。ADC 与 Components 分文件同步时，需要分别完成目标文件的回写与核对，不能把单个文件的成功回执视为全主题已同步。
+
+有关本次 API 迁移与尚未完成的设计验收，见 [3.1 升级指南](/docs/start/migration-3-1)。

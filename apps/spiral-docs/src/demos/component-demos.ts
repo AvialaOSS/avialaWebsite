@@ -5,6 +5,7 @@ import {
   type KnobValues,
 } from "../components/DemoKnobs";
 import { DEFAULT_ICON_NAME, jsxIconProp } from "./demo-icons";
+import { usesComponentButtonModes } from "../lib/spiral-version-features";
 
 function jsxBool(value: boolean, attr: string) {
   return value ? ` ${attr}` : ` ${attr}={false}`;
@@ -21,9 +22,9 @@ export const buttonKnobs: KnobDef[] = [
     label: "mode",
     options: [
       "primary",
-      "second",
-      "default",
-      "defaultCustom",
+      ...(usesComponentButtonModes
+        ? ["secondary", "tertiary", "tertiaryCustom"]
+        : ["second", "default", "defaultCustom"]),
       "outline",
       "outlineCustom",
       "noBackground",
@@ -39,26 +40,47 @@ export const buttonKnobs: KnobDef[] = [
     options: ["tiny", "small", "regular", "big"],
     defaultValue: "regular",
   },
+  {
+    kind: "boolean",
+    name: "iconOnly",
+    label: "iconOnly · 仅图标",
+    defaultValue: false,
+  },
   { kind: "boolean", name: "disabled", label: "disabled", defaultValue: false },
   { kind: "boolean", name: "loading", label: "loading", defaultValue: false },
   { kind: "boolean", name: "allRound", label: "allRound", defaultValue: false },
   { kind: "boolean", name: "compact", label: "compact", defaultValue: false },
-  { kind: "boolean", name: "iconOnly", label: "iconOnly", defaultValue: false },
-  { kind: "boolean", name: "showLeftIcon", label: "leftIcon 显示", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "showLeftIcon",
+    label: "leftIcon 显示",
+    defaultValue: true,
+  },
   {
     kind: "icon",
     name: "leftIcon",
     label: "leftIcon",
     defaultValue: DEFAULT_ICON_NAME,
   },
-  { kind: "boolean", name: "showRightIcon", label: "rightIcon 显示", defaultValue: false },
+  {
+    kind: "boolean",
+    name: "showRightIcon",
+    label: "rightIcon 显示",
+    defaultValue: false,
+  },
   {
     kind: "icon",
     name: "rightIcon",
     label: "rightIcon",
     defaultValue: DEFAULT_ICON_NAME,
   },
-  { kind: "string", name: "label", label: "children", defaultValue: "Primary", placeholder: "按钮文字" },
+  {
+    kind: "string",
+    name: "label",
+    label: "children",
+    defaultValue: "Primary",
+    placeholder: "按钮文字",
+  },
 ];
 
 export function buildButtonCode(values: KnobValues): string {
@@ -75,10 +97,18 @@ export function buildButtonCode(values: KnobValues): string {
   const leftIcon = String(values.leftIcon ?? DEFAULT_ICON_NAME);
   const rightIcon = String(values.rightIcon ?? DEFAULT_ICON_NAME);
 
-  const leftIconProp = jsxIconProp(iconOnly || showLeftIcon, leftIcon, "leftIcon");
-  const rightIconProp = iconOnly ? "" : jsxIconProp(showRightIcon, rightIcon, "rightIcon");
+  const leftIconProp = jsxIconProp(
+    iconOnly || showLeftIcon,
+    leftIcon,
+    "leftIcon",
+  );
+  const rightIconProp = iconOnly
+    ? ""
+    : jsxIconProp(showRightIcon, rightIcon, "rightIcon");
   const iconOnlyProp = iconOnly ? jsxBool(true, "iconOnly") : "";
-  const ariaLabelProp = iconOnly ? `\n    aria-label=${JSON.stringify(label || "Button")}` : "";
+  const ariaLabelProp = iconOnly
+    ? `\n    aria-label=${JSON.stringify(label || "Button")}`
+    : "";
   const childrenBlock = iconOnly ? "" : `\n    ${jsxString(label)}\n  `;
 
   return `render(
@@ -90,7 +120,12 @@ export function buildButtonCode(values: KnobValues): string {
 }
 
 export const buttonLiveCode = buildButtonCode(
-  Object.fromEntries(buttonKnobs.map((k) => [k.name, k.kind === "boolean" ? k.defaultValue : k.defaultValue]))
+  Object.fromEntries(
+    buttonKnobs.map((k) => [
+      k.name,
+      k.kind === "boolean" ? k.defaultValue : k.defaultValue,
+    ]),
+  ),
 );
 
 export const inputKnobs: KnobDef[] = [
@@ -116,14 +151,24 @@ export const inputKnobs: KnobDef[] = [
     defaultValue: "",
     placeholder: "默认值（可选）",
   },
-  { kind: "boolean", name: "showLeftIcon", label: "leftIcon 显示", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "showLeftIcon",
+    label: "leftIcon 显示",
+    defaultValue: true,
+  },
   {
     kind: "icon",
     name: "leftIcon",
     label: "leftIcon",
     defaultValue: "GeneralSearch",
   },
-  { kind: "boolean", name: "showRightIcon", label: "rightIcon 显示", defaultValue: false },
+  {
+    kind: "boolean",
+    name: "showRightIcon",
+    label: "rightIcon 显示",
+    defaultValue: false,
+  },
   {
     kind: "icon",
     name: "rightIcon",
@@ -142,7 +187,9 @@ export function buildInputCode(values: KnobValues): string {
   const leftIcon = String(values.leftIcon ?? "GeneralSearch");
   const rightIcon = String(values.rightIcon ?? "GeneralSetting");
 
-  const defaultValueAttr = defaultValue ? `\n    defaultValue=${JSON.stringify(defaultValue)}` : "";
+  const defaultValueAttr = defaultValue
+    ? `\n    defaultValue=${JSON.stringify(defaultValue)}`
+    : "";
   const leftIconProp = jsxIconProp(showLeftIcon, leftIcon, "leftIcon");
   const rightIconProp = jsxIconProp(showRightIcon, rightIcon, "rightIcon");
 
@@ -156,7 +203,12 @@ export function buildInputCode(values: KnobValues): string {
 }
 
 export const inputLiveCode = buildInputCode(
-  Object.fromEntries(inputKnobs.map((k) => [k.name, k.kind === "boolean" ? k.defaultValue : k.defaultValue]))
+  Object.fromEntries(
+    inputKnobs.map((k) => [
+      k.name,
+      k.kind === "boolean" ? k.defaultValue : k.defaultValue,
+    ]),
+  ),
 );
 
 export const segmentatorKnobs: KnobDef[] = [
@@ -175,7 +227,12 @@ export const segmentatorKnobs: KnobDef[] = [
     defaultValue: "horizontal",
   },
   { kind: "boolean", name: "allRound", label: "allRound", defaultValue: false },
-  { kind: "boolean", name: "equalWidth", label: "equalWidth", defaultValue: false },
+  {
+    kind: "boolean",
+    name: "equalWidth",
+    label: "equalWidth",
+    defaultValue: false,
+  },
   { kind: "boolean", name: "disabled", label: "disabled", defaultValue: false },
 ];
 
@@ -297,8 +354,18 @@ export const alertKnobs: KnobDef[] = [
     options: ["default", "light"],
     defaultValue: "default",
   },
-  { kind: "boolean", name: "dismissible", label: "dismissible", defaultValue: true },
-  { kind: "boolean", name: "showActions", label: "showActions", defaultValue: false },
+  {
+    kind: "boolean",
+    name: "dismissible",
+    label: "dismissible",
+    defaultValue: true,
+  },
+  {
+    kind: "boolean",
+    name: "showActions",
+    label: "showActions",
+    defaultValue: false,
+  },
   {
     kind: "string",
     name: "title",
@@ -344,7 +411,7 @@ export function buildAlertCode(values: KnobValues): string {
 }
 
 export const alertLiveCode = buildAlertCode(
-  Object.fromEntries(alertKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(alertKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const feedbackKnobs: KnobDef[] = [
@@ -369,7 +436,12 @@ export const feedbackKnobs: KnobDef[] = [
     options: ["default", "primary"],
     defaultValue: "default",
   },
-  { kind: "boolean", name: "showClose", label: "showClose", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "showClose",
+    label: "showClose",
+    defaultValue: true,
+  },
   {
     kind: "string",
     name: "title",
@@ -410,7 +482,7 @@ export function buildFeedbackCode(values: KnobValues): string {
 }
 
 export const feedbackLiveCode = buildFeedbackCode(
-  Object.fromEntries(feedbackKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(feedbackKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const datePickerKnobs: KnobDef[] = [
@@ -428,7 +500,12 @@ export const datePickerKnobs: KnobDef[] = [
     options: ["regular", "big"],
     defaultValue: "regular",
   },
-  { kind: "boolean", name: "enableTime", label: "enableTime", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "enableTime",
+    label: "enableTime",
+    defaultValue: true,
+  },
   { kind: "boolean", name: "disabled", label: "disabled", defaultValue: false },
   { kind: "boolean", name: "error", label: "error", defaultValue: false },
   { kind: "boolean", name: "allRound", label: "allRound", defaultValue: false },
@@ -469,7 +546,7 @@ render(<Demo />);`;
 }
 
 export const datePickerLiveCode = buildDatePickerCode(
-  Object.fromEntries(datePickerKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(datePickerKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const switchKnobs: KnobDef[] = [
@@ -480,7 +557,12 @@ export const switchKnobs: KnobDef[] = [
     options: ["regular", "small"],
     defaultValue: "regular",
   },
-  { kind: "boolean", name: "defaultChecked", label: "defaultChecked", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "defaultChecked",
+    label: "defaultChecked",
+    defaultValue: true,
+  },
   { kind: "boolean", name: "disabled", label: "disabled", defaultValue: false },
 ];
 
@@ -497,7 +579,7 @@ export function buildSwitchCode(values: KnobValues): string {
 }
 
 export const switchLiveCode = buildSwitchCode(
-  Object.fromEntries(switchKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(switchKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const linkKnobs: KnobDef[] = [
@@ -545,7 +627,7 @@ export function buildLinkCode(values: KnobValues): string {
 }
 
 export const linkLiveCode = buildLinkCode(
-  Object.fromEntries(linkKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(linkKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const textareaKnobs: KnobDef[] = [
@@ -586,7 +668,7 @@ export function buildTextareaCode(values: KnobValues): string {
 }
 
 export const textareaLiveCode = buildTextareaCode(
-  Object.fromEntries(textareaKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(textareaKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const numberInputKnobs: KnobDef[] = [
@@ -605,7 +687,12 @@ export const numberInputKnobs: KnobDef[] = [
     defaultValue: "default",
   },
   { kind: "boolean", name: "allRound", label: "allRound", defaultValue: false },
-  { kind: "boolean", name: "showControls", label: "showControls", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "showControls",
+    label: "showControls",
+    defaultValue: true,
+  },
   { kind: "boolean", name: "disabled", label: "disabled", defaultValue: false },
   { kind: "boolean", name: "error", label: "error", defaultValue: false },
   {
@@ -659,8 +746,14 @@ export function buildNumberInputCode(values: KnobValues): string {
   const error = Boolean(values.error);
 
   const stepAttr = stepRaw ? `\n    step={${Number(stepRaw) || 1}}` : "";
-  const minAttr = minRaw !== "" && Number.isFinite(Number(minRaw)) ? `\n    min={${Number(minRaw)}}` : "";
-  const maxAttr = maxRaw !== "" && Number.isFinite(Number(maxRaw)) ? `\n    max={${Number(maxRaw)}}` : "";
+  const minAttr =
+    minRaw !== "" && Number.isFinite(Number(minRaw))
+      ? `\n    min={${Number(minRaw)}}`
+      : "";
+  const maxAttr =
+    maxRaw !== "" && Number.isFinite(Number(maxRaw))
+      ? `\n    max={${Number(maxRaw)}}`
+      : "";
   const defaultValueAttr =
     defaultValue !== ""
       ? `\n    defaultValue={${Number.isFinite(Number(defaultValue)) ? Number(defaultValue) : JSON.stringify(defaultValue)}}`
@@ -677,11 +770,16 @@ export function buildNumberInputCode(values: KnobValues): string {
 }
 
 export const numberInputLiveCode = buildNumberInputCode(
-  Object.fromEntries(numberInputKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(numberInputKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const checkboxKnobs: KnobDef[] = [
-  { kind: "boolean", name: "defaultChecked", label: "defaultChecked", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "defaultChecked",
+    label: "defaultChecked",
+    defaultValue: true,
+  },
   {
     kind: "select",
     name: "size",
@@ -711,7 +809,7 @@ export function buildCheckboxCode(values: KnobValues): string {
 }
 
 export const checkboxLiveCode = buildCheckboxCode(
-  Object.fromEntries(checkboxKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(checkboxKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const radioKnobs: KnobDef[] = [
@@ -745,7 +843,7 @@ export function buildRadioCode(values: KnobValues): string {
 }
 
 export const radioLiveCode = buildRadioCode(
-  Object.fromEntries(radioKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(radioKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const cascaderKnobs: KnobDef[] = [
@@ -812,7 +910,7 @@ render(<Demo />);`;
 }
 
 export const cascaderLiveCode = buildCascaderCode(
-  Object.fromEntries(cascaderKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(cascaderKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const colorPickerKnobs: KnobDef[] = [
@@ -849,7 +947,7 @@ render(<Demo />);`;
 }
 
 export const colorPickerLiveCode = buildColorPickerCode(
-  Object.fromEntries(colorPickerKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(colorPickerKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const listKnobs: KnobDef[] = [
@@ -946,7 +1044,15 @@ export const typographyKnobs: KnobDef[] = [
     kind: "select",
     name: "level",
     label: "level",
-    options: ["display", "headline1", "headline2", "title", "subtitle", "text", "caption"],
+    options: [
+      "display",
+      "headline1",
+      "headline2",
+      "title",
+      "subtitle",
+      "text",
+      "caption",
+    ],
     defaultValue: "text",
   },
   {
@@ -986,7 +1092,7 @@ export function buildTypographyCode(values: KnobValues): string {
 }
 
 export const typographyLiveCode = buildTypographyCode(
-  Object.fromEntries(typographyKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(typographyKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const typefaceKnobs: KnobDef[] = [
@@ -1035,7 +1141,7 @@ export function buildTypefaceCode(values: KnobValues): string {
 }
 
 export const typefaceLiveCode = buildTypefaceCode(
-  Object.fromEntries(typefaceKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(typefaceKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const formFieldKnobs: KnobDef[] = [
@@ -1073,7 +1179,9 @@ export function buildFormFieldCode(values: KnobValues): string {
   const description = String(values.description ?? "");
   const placeholder = String(values.placeholder ?? "aviala");
   const required = Boolean(values.required);
-  const descriptionProp = description ? `\n    description=${JSON.stringify(description)}` : "";
+  const descriptionProp = description
+    ? `\n    description=${JSON.stringify(description)}`
+    : "";
   const requiredProp = required ? `\n    required` : "";
 
   return `render(
@@ -1084,7 +1192,7 @@ export function buildFormFieldCode(values: KnobValues): string {
 }
 
 export const formFieldLiveCode = buildFormFieldCode(
-  Object.fromEntries(formFieldKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(formFieldKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 /** Dedicated demo: FormField error tip auto-syncs nested control invalid styling. */
@@ -1135,7 +1243,11 @@ export function buildFormFieldErrorCode(values: KnobValues): string {
   const errorProp = error ? `\n    error=${JSON.stringify(error)}` : "";
   const infoProp = info ? `\n    info=${JSON.stringify(info)}` : "";
   const inputErrorProp =
-    controlError === "true" ? " error" : controlError === "false" ? " error={false}" : "";
+    controlError === "true"
+      ? " error"
+      : controlError === "false"
+        ? " error={false}"
+        : "";
   const valueProp = value ? ` defaultValue=${JSON.stringify(value)}` : "";
 
   return `render(
@@ -1146,7 +1258,7 @@ export function buildFormFieldErrorCode(values: KnobValues): string {
 }
 
 export const formFieldErrorLiveCode = buildFormFieldErrorCode(
-  Object.fromEntries(formFieldErrorKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(formFieldErrorKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const anchorKnobs: KnobDef[] = [
@@ -1181,7 +1293,7 @@ export function buildAnchorCode(values: KnobValues): string {
 }
 
 export const anchorLiveCode = buildAnchorCode(
-  Object.fromEntries(anchorKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(anchorKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const popoverKnobs: KnobDef[] = [
@@ -1206,7 +1318,12 @@ export const popoverKnobs: KnobDef[] = [
     options: ["caption", "text"],
     defaultValue: "text",
   },
-  { kind: "boolean", name: "showArrow", label: "showArrow", defaultValue: false },
+  {
+    kind: "boolean",
+    name: "showArrow",
+    label: "showArrow",
+    defaultValue: false,
+  },
   { kind: "boolean", name: "flush", label: "flush", defaultValue: false },
 ];
 
@@ -1217,7 +1334,9 @@ export function buildPopoverCode(values: KnobValues): string {
   const showArrow = Boolean(values.showArrow);
   const flush = Boolean(values.flush);
   const appearanceProp =
-    appearance === "default" ? "" : `\n      appearance=${JSON.stringify(appearance)}`;
+    appearance === "default"
+      ? ""
+      : `\n      appearance=${JSON.stringify(appearance)}`;
   const levelProp =
     (appearance === "tooltip" && level === "caption") ||
     (appearance !== "tooltip" && level === "text")
@@ -1237,7 +1356,7 @@ export function buildPopoverCode(values: KnobValues): string {
 }
 
 export const popoverLiveCode = buildPopoverCode(
-  Object.fromEntries(popoverKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(popoverKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const hoverPopoverKnobs: KnobDef[] = [
@@ -1248,7 +1367,12 @@ export const hoverPopoverKnobs: KnobDef[] = [
     options: ["top", "right", "bottom", "left"],
     defaultValue: "top",
   },
-  { kind: "boolean", name: "showArrow", label: "showArrow", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "showArrow",
+    label: "showArrow",
+    defaultValue: true,
+  },
 ];
 
 export function buildHoverPopoverCode(values: KnobValues): string {
@@ -1266,7 +1390,7 @@ export function buildHoverPopoverCode(values: KnobValues): string {
 }
 
 export const hoverPopoverLiveCode = buildHoverPopoverCode(
-  Object.fromEntries(hoverPopoverKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(hoverPopoverKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const modalKnobs: KnobDef[] = [
@@ -1278,7 +1402,12 @@ export const modalKnobs: KnobDef[] = [
     defaultValue: "default",
   },
   { kind: "boolean", name: "showIcon", label: "showIcon", defaultValue: true },
-  { kind: "boolean", name: "showFooter", label: "showFooter", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "showFooter",
+    label: "showFooter",
+    defaultValue: true,
+  },
 ];
 
 export function buildModalCode(values: KnobValues): string {
@@ -1315,7 +1444,7 @@ export function buildModalCode(values: KnobValues): string {
 }
 
 export const modalLiveCode = buildModalCode(
-  Object.fromEntries(modalKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(modalKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const drawerKnobs: KnobDef[] = [
@@ -1327,14 +1456,20 @@ export const drawerKnobs: KnobDef[] = [
     defaultValue: "right",
   },
   { kind: "boolean", name: "showIcon", label: "showIcon", defaultValue: true },
-  { kind: "boolean", name: "showFooter", label: "showFooter", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "showFooter",
+    label: "showFooter",
+    defaultValue: true,
+  },
 ];
 
 export function buildDrawerCode(values: KnobValues): string {
   const position = String(values.position ?? "right");
   const showIcon = Boolean(values.showIcon);
   const showFooter = Boolean(values.showFooter);
-  const positionAttr = position === "right" ? "" : ` position=${JSON.stringify(position)}`;
+  const positionAttr =
+    position === "right" ? "" : ` position=${JSON.stringify(position)}`;
   const iconBlock = showIcon
     ? `\n      showIcon\n      icon={<SymbolInformationCircle thickness="Regular" mode="fill" aria-hidden />}`
     : "";
@@ -1364,7 +1499,7 @@ export function buildDrawerCode(values: KnobValues): string {
 }
 
 export const drawerLiveCode = buildDrawerCode(
-  Object.fromEntries(drawerKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(drawerKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const tooltipKnobs: KnobDef[] = [
@@ -1389,7 +1524,12 @@ export const tooltipKnobs: KnobDef[] = [
     options: ["0", "300"],
     defaultValue: "300",
   },
-  { kind: "boolean", name: "showArrow", label: "showArrow", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "showArrow",
+    label: "showArrow",
+    defaultValue: true,
+  },
 ];
 
 export function buildTooltipCode(values: KnobValues): string {
@@ -1420,7 +1560,7 @@ export function buildTooltipCode(values: KnobValues): string {
 }
 
 export const tooltipLiveCode = buildTooltipCode(
-  Object.fromEntries(tooltipKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(tooltipKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const responsiveTooltipKnobs: KnobDef[] = [
@@ -1445,7 +1585,12 @@ export const responsiveTooltipKnobs: KnobDef[] = [
     options: ["0", "300"],
     defaultValue: "300",
   },
-  { kind: "boolean", name: "showArrow", label: "showArrow", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "showArrow",
+    label: "showArrow",
+    defaultValue: true,
+  },
 ];
 
 export function buildResponsiveTooltipCode(values: KnobValues): string {
@@ -1471,7 +1616,9 @@ export function buildResponsiveTooltipCode(values: KnobValues): string {
 }
 
 export const responsiveTooltipLiveCode = buildResponsiveTooltipCode(
-  Object.fromEntries(responsiveTooltipKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(
+    responsiveTooltipKnobs.map((k) => [k.name, k.defaultValue]),
+  ),
 );
 
 export const loadingKnobs: KnobDef[] = [
@@ -1479,7 +1626,15 @@ export const loadingKnobs: KnobDef[] = [
     kind: "select",
     name: "level",
     label: "level",
-    options: ["display", "headline1", "headline2", "title", "subtitle", "text", "caption"],
+    options: [
+      "display",
+      "headline1",
+      "headline2",
+      "title",
+      "subtitle",
+      "text",
+      "caption",
+    ],
     defaultValue: "text",
   },
   {
@@ -1489,7 +1644,12 @@ export const loadingKnobs: KnobDef[] = [
     options: ["theme", "themeText", "black", "white"],
     defaultValue: "theme",
   },
-  { kind: "boolean", name: "lineHeightFix", label: "lineHeightFix", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "lineHeightFix",
+    label: "lineHeightFix",
+    defaultValue: true,
+  },
 ];
 
 export function buildLoadingCode(values: KnobValues): string {
@@ -1506,7 +1666,7 @@ export function buildLoadingCode(values: KnobValues): string {
 }
 
 export const loadingLiveCode = buildLoadingCode(
-  Object.fromEntries(loadingKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(loadingKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const datePickerWithTimeCode = `function Demo() {
@@ -1593,7 +1753,7 @@ render(<Demo />);`;
 }
 
 export const timePickerLiveCode = buildTimePickerCode(
-  Object.fromEntries(timePickerKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(timePickerKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const timePickerWithFormFieldCode = `function Demo() {
@@ -1692,7 +1852,9 @@ export function buildTabCode(values: KnobValues): string {
   const withSlots = values.withSlots !== false;
   const disabled = Boolean(values.disabled);
   const backgroundProp =
-    background !== "none" ? `\n      background=${JSON.stringify(background)}` : "";
+    background !== "none"
+      ? `\n      background=${JSON.stringify(background)}`
+      : "";
   const disabledProp = disabled ? `\n      disabled` : "";
   const slotsProp = withSlots
     ? `
@@ -1722,7 +1884,8 @@ export function buildTabCode(values: KnobValues): string {
     style === "card" && background === "none"
       ? `\n    <div style={{ background: "var(--box-box-theme-secondarybackground, #ffe9e5)", padding: 12, borderRadius: 8 }}>`
       : "";
-  const cardWrapClose = style === "card" && background === "none" ? `\n    </div>` : "";
+  const cardWrapClose =
+    style === "card" && background === "none" ? `\n    </div>` : "";
 
   return `function Demo() {
   const [value, setValue] = useState("a");
@@ -1766,8 +1929,18 @@ export const navigationKnobs: KnobDef[] = [
     options: ["none", "default"],
     defaultValue: "default",
   },
-  { kind: "boolean", name: "dividingLine", label: "dividingLine", defaultValue: false },
-  { kind: "boolean", name: "showBrand", label: "showBrand", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "dividingLine",
+    label: "dividingLine",
+    defaultValue: false,
+  },
+  {
+    kind: "boolean",
+    name: "showBrand",
+    label: "showBrand",
+    defaultValue: true,
+  },
   {
     kind: "string",
     name: "brandTitle",
@@ -1798,16 +1971,46 @@ export const navigationKnobs: KnobDef[] = [
         defaultValue: "default",
       },
       { kind: "boolean", name: "active", label: "active", defaultValue: false },
-      { kind: "boolean", name: "showLeftIcon", label: "leftIcon", defaultValue: true },
+      {
+        kind: "boolean",
+        name: "showLeftIcon",
+        label: "leftIcon",
+        defaultValue: true,
+      },
     ],
     defaultValue: [
-      { label: "Overview", itemType: "default", active: true, showLeftIcon: true },
-      { label: "Active child", itemType: "child", active: true, showLeftIcon: false },
-      { label: "Child item", itemType: "child", active: false, showLeftIcon: false },
-      { label: "Settings", itemType: "default", active: false, showLeftIcon: true },
+      {
+        label: "Overview",
+        itemType: "default",
+        active: true,
+        showLeftIcon: true,
+      },
+      {
+        label: "Active child",
+        itemType: "child",
+        active: true,
+        showLeftIcon: false,
+      },
+      {
+        label: "Child item",
+        itemType: "child",
+        active: false,
+        showLeftIcon: false,
+      },
+      {
+        label: "Settings",
+        itemType: "default",
+        active: false,
+        showLeftIcon: true,
+      },
     ],
   },
-  { kind: "boolean", name: "showActions", label: "showActions", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "showActions",
+    label: "showActions",
+    defaultValue: true,
+  },
   {
     kind: "string",
     name: "actionLabel",
@@ -1815,23 +2018,32 @@ export const navigationKnobs: KnobDef[] = [
     defaultValue: "Collapse",
     placeholder: "操作按钮文案",
   },
-  { kind: "boolean", name: "showActionSlot", label: "showActionSlot", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "showActionSlot",
+    label: "showActionSlot",
+    defaultValue: true,
+  },
 ];
 
-function buildNavigationItemLine(item: Record<string, string | boolean>): string {
+function buildNavigationItemLine(
+  item: Record<string, string | boolean>,
+): string {
   const label = String(item.label ?? "Item");
   const itemType = String(item.itemType ?? "default");
   const active = Boolean(item.active);
   const showLeftIcon = Boolean(item.showLeftIcon);
   const typeAttr = itemType === "child" ? ' itemType="child"' : "";
   const activeAttr = active ? " active" : "";
-  const iconAttr = showLeftIcon ? " leftIcon={<GeneralSetting aria-hidden />}" : "";
+  const iconAttr = showLeftIcon
+    ? " leftIcon={<GeneralSetting aria-hidden />}"
+    : "";
   return `<NavigationItem${typeAttr}${activeAttr}${iconAttr}>${label}</NavigationItem>`;
 }
 
 function buildNavigationGroupItems(
   items: Array<Record<string, string | boolean>>,
-  direction: string
+  direction: string,
 ): string {
   const lines: string[] = [];
   let childBuffer: string[] = [];
@@ -1855,9 +2067,7 @@ function buildNavigationGroupItems(
   };
 
   for (const item of items) {
-    const coerced = horizontal
-      ? { ...item, itemType: "default" }
-      : item;
+    const coerced = horizontal ? { ...item, itemType: "default" } : item;
     const line = buildNavigationItemLine(coerced);
     if (!horizontal && String(item.itemType ?? "default") === "child") {
       childBuffer.push(line);
@@ -1874,21 +2084,44 @@ export function buildNavigationCode(values: KnobValues): string {
   const direction = String(values.direction ?? "vertical");
   const background = String(values.background ?? "default");
   const dividingLine = Boolean(values.dividingLine);
-  const showBrand = values.showBrand === undefined ? true : Boolean(values.showBrand);
+  const showBrand =
+    values.showBrand === undefined ? true : Boolean(values.showBrand);
   const brandTitle = String(values.brandTitle ?? "Brand");
-  const showActions = values.showActions === undefined ? true : Boolean(values.showActions);
+  const showActions =
+    values.showActions === undefined ? true : Boolean(values.showActions);
   const actionLabel = String(values.actionLabel ?? "Collapse");
-  const showActionSlot = values.showActionSlot === undefined ? true : Boolean(values.showActionSlot);
+  const showActionSlot =
+    values.showActionSlot === undefined ? true : Boolean(values.showActionSlot);
   const ariaLabel = direction === "vertical" ? "Sidebar" : "Top bar";
   const layoutStyle =
     direction === "vertical"
       ? "{ width: 260 }"
-      : "{ width: \"100%\", maxWidth: 1076 }";
+      : '{ width: "100%", maxWidth: 1076 }';
   const items = getKnobItems(values, "items", [
-    { label: "Overview", itemType: "default", active: true, showLeftIcon: true },
-    { label: "Active child", itemType: "child", active: true, showLeftIcon: false },
-    { label: "Child item", itemType: "child", active: false, showLeftIcon: false },
-    { label: "Settings", itemType: "default", active: false, showLeftIcon: true },
+    {
+      label: "Overview",
+      itemType: "default",
+      active: true,
+      showLeftIcon: true,
+    },
+    {
+      label: "Active child",
+      itemType: "child",
+      active: true,
+      showLeftIcon: false,
+    },
+    {
+      label: "Child item",
+      itemType: "child",
+      active: false,
+      showLeftIcon: false,
+    },
+    {
+      label: "Settings",
+      itemType: "default",
+      active: false,
+      showLeftIcon: true,
+    },
   ]);
 
   const brandBlock = showBrand
@@ -1942,7 +2175,9 @@ ${brandBlock}${groupBlock}${actionsBlock}  </Navigation>
 );`;
 }
 
-export const navigationLiveCode = buildNavigationCode(defaultKnobValues(navigationKnobs));
+export const navigationLiveCode = buildNavigationCode(
+  defaultKnobValues(navigationKnobs),
+);
 
 export const navigationItemStatesCode = `render(
   <div className="flex w-[280px] flex-col gap-3">
@@ -2070,8 +2305,19 @@ export const badgeKnobs: KnobDef[] = [
     defaultValue: "caption",
   },
   { kind: "boolean", name: "primary", label: "primary", defaultValue: false },
-  { kind: "boolean", name: "lineHeightFix", label: "lineHeightFix", defaultValue: true },
-  { kind: "string", name: "label", label: "children", defaultValue: "Badge", placeholder: "文字" },
+  {
+    kind: "boolean",
+    name: "lineHeightFix",
+    label: "lineHeightFix",
+    defaultValue: true,
+  },
+  {
+    kind: "string",
+    name: "label",
+    label: "children",
+    defaultValue: "Badge",
+    placeholder: "文字",
+  },
 ];
 
 export function buildBadgeCode(values: KnobValues): string {
@@ -2091,7 +2337,7 @@ export function buildBadgeCode(values: KnobValues): string {
 }
 
 export const badgeLiveCode = buildBadgeCode(
-  Object.fromEntries(badgeKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(badgeKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const avatarKnobs: KnobDef[] = [
@@ -2109,8 +2355,19 @@ export const avatarKnobs: KnobDef[] = [
     options: ["text", "picture", "icon"],
     defaultValue: "text",
   },
-  { kind: "boolean", name: "lineHeightFix", label: "lineHeightFix", defaultValue: false },
-  { kind: "string", name: "label", label: "children", defaultValue: "K", placeholder: "首字母" },
+  {
+    kind: "boolean",
+    name: "lineHeightFix",
+    label: "lineHeightFix",
+    defaultValue: false,
+  },
+  {
+    kind: "string",
+    name: "label",
+    label: "children",
+    defaultValue: "K",
+    placeholder: "首字母",
+  },
 ];
 
 export function buildAvatarCode(values: KnobValues): string {
@@ -2148,7 +2405,7 @@ export function buildAvatarCode(values: KnobValues): string {
 }
 
 export const avatarLiveCode = buildAvatarCode(
-  Object.fromEntries(avatarKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(avatarKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const tagKnobs: KnobDef[] = [
@@ -2168,7 +2425,13 @@ export const tagKnobs: KnobDef[] = [
   },
   { kind: "boolean", name: "closable", label: "closable", defaultValue: true },
   { kind: "boolean", name: "disabled", label: "disabled", defaultValue: false },
-  { kind: "string", name: "label", label: "children", defaultValue: "Tag", placeholder: "文字" },
+  {
+    kind: "string",
+    name: "label",
+    label: "children",
+    defaultValue: "Tag",
+    placeholder: "文字",
+  },
 ];
 
 export function buildTagCode(values: KnobValues): string {
@@ -2178,7 +2441,9 @@ export function buildTagCode(values: KnobValues): string {
   const closable = Boolean(values.closable);
   const disabled = Boolean(values.disabled);
   const peopleProps =
-    content === "people" ? `\n    avatarText=${JSON.stringify(label.charAt(0) || "T")}` : "";
+    content === "people"
+      ? `\n    avatarText=${JSON.stringify(label.charAt(0) || "T")}`
+      : "";
   return `render(
   <Tag
     level=${JSON.stringify(level)}
@@ -2190,7 +2455,7 @@ export function buildTagCode(values: KnobValues): string {
 }
 
 export const tagLiveCode = buildTagCode(
-  Object.fromEntries(tagKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(tagKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const progressKnobs: KnobDef[] = [
@@ -2215,7 +2480,12 @@ export const progressKnobs: KnobDef[] = [
     options: ["bar", "ring"],
     defaultValue: "bar",
   },
-  { kind: "boolean", name: "showLabel", label: "showLabel", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "showLabel",
+    label: "showLabel",
+    defaultValue: true,
+  },
   {
     kind: "string",
     name: "value",
@@ -2242,7 +2512,7 @@ export function buildProgressCode(values: KnobValues): string {
 }
 
 export const progressLiveCode = buildProgressCode(
-  Object.fromEntries(progressKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(progressKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const scrollKnobs: KnobDef[] = [
@@ -2289,7 +2559,7 @@ export function buildScrollCode(values: KnobValues): string {
 }
 
 export const scrollLiveCode = buildScrollCode(
-  Object.fromEntries(scrollKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(scrollKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const sliderKnobs: KnobDef[] = [
@@ -2333,7 +2603,7 @@ export function buildSliderCode(values: KnobValues): string {
 }
 
 export const sliderLiveCode = buildSliderCode(
-  Object.fromEntries(sliderKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(sliderKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const uploadKnobs: KnobDef[] = [
@@ -2360,7 +2630,8 @@ export function buildUploadCode(values: KnobValues): string {
   const disabled = Boolean(values.disabled);
   const multiple = Boolean(values.multiple);
   const label = String(values.label ?? "Upload");
-  const labelProp = style === "default" ? `\n    label=${JSON.stringify(label)}` : "";
+  const labelProp =
+    style === "default" ? `\n    label=${JSON.stringify(label)}` : "";
   return `render(
   <Upload
     style=${JSON.stringify(style)}${labelProp}${jsxBool(disabled, "disabled")}${jsxBool(multiple, "multiple")}
@@ -2369,7 +2640,7 @@ export function buildUploadCode(values: KnobValues): string {
 }
 
 export const uploadLiveCode = buildUploadCode(
-  Object.fromEntries(uploadKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(uploadKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const scrollPickerKnobs: KnobDef[] = [
@@ -2397,7 +2668,7 @@ render(<Demo />);`;
 }
 
 export const scrollPickerLiveCode = buildScrollPickerCode(
-  Object.fromEntries(scrollPickerKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(scrollPickerKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const breadcrumbKnobs: KnobDef[] = [
@@ -2430,8 +2701,18 @@ export const breadcrumbKnobs: KnobDef[] = [
         defaultValue: "Item",
         placeholder: "content 文案",
       },
-      { kind: "boolean", name: "current", label: "current", defaultValue: false },
-      { kind: "boolean", name: "activated", label: "activated", defaultValue: false },
+      {
+        kind: "boolean",
+        name: "current",
+        label: "current",
+        defaultValue: false,
+      },
+      {
+        kind: "boolean",
+        name: "activated",
+        label: "activated",
+        defaultValue: false,
+      },
     ],
     defaultValue: [
       { type: "content", label: "Home", current: false, activated: false },
@@ -2492,7 +2773,7 @@ export function buildBreadcrumbCode(values: KnobValues): string {
 ${menuItems
   .map(
     (item) =>
-      `            <BreadcrumbEllipsisItem href="#">${String(item.label ?? "Item")}</BreadcrumbEllipsisItem>`
+      `            <BreadcrumbEllipsisItem href="#">${String(item.label ?? "Item")}</BreadcrumbEllipsisItem>`,
   )
   .join("\n")}
           </>
@@ -2551,7 +2832,9 @@ ${children}
 render(<Demo />);`;
 }
 
-export const breadcrumbLiveCode = buildBreadcrumbCode(defaultKnobValues(breadcrumbKnobs));
+export const breadcrumbLiveCode = buildBreadcrumbCode(
+  defaultKnobValues(breadcrumbKnobs),
+);
 
 export const pageheadKnobs: KnobDef[] = [
   {
@@ -2569,8 +2852,18 @@ export const pageheadKnobs: KnobDef[] = [
     placeholder: "描述",
   },
   { kind: "boolean", name: "showBack", label: "showBack", defaultValue: false },
-  { kind: "boolean", name: "showBreadcrumb", label: "showBreadcrumb", defaultValue: true },
-  { kind: "boolean", name: "showActions", label: "showActions", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "showBreadcrumb",
+    label: "showBreadcrumb",
+    defaultValue: true,
+  },
+  {
+    kind: "boolean",
+    name: "showActions",
+    label: "showActions",
+    defaultValue: true,
+  },
   {
     kind: "select",
     name: "actionCount",
@@ -2593,7 +2886,12 @@ export const pageheadKnobs: KnobDef[] = [
         defaultValue: "Page",
         placeholder: "面包屑文案",
       },
-      { kind: "boolean", name: "current", label: "current", defaultValue: false },
+      {
+        kind: "boolean",
+        name: "current",
+        label: "current",
+        defaultValue: false,
+      },
     ],
     defaultValue: [
       { label: "Home", current: false },
@@ -2608,7 +2906,10 @@ export function buildPageheadCode(values: KnobValues): string {
   const showBack = Boolean(values.showBack);
   const showBreadcrumb = Boolean(values.showBreadcrumb);
   const showActions = Boolean(values.showActions);
-  const actionCount = Math.min(3, Math.max(1, Number(values.actionCount ?? 1) || 1));
+  const actionCount = Math.min(
+    3,
+    Math.max(1, Number(values.actionCount ?? 1) || 1),
+  );
   const crumbs = getKnobItems(values, "crumbs", [
     { label: "Home", current: false },
     { label: "Page", current: true },
@@ -2620,9 +2921,13 @@ export function buildPageheadCode(values: KnobValues): string {
     const current = Boolean(crumb.current);
     if (index > 0) crumbNodes.push("        <BreadcrumbSeparator />");
     if (current) {
-      crumbNodes.push(`        <BreadcrumbItem current>${label}</BreadcrumbItem>`);
+      crumbNodes.push(
+        `        <BreadcrumbItem current>${label}</BreadcrumbItem>`,
+      );
     } else {
-      crumbNodes.push(`        <BreadcrumbItem href="#">${label}</BreadcrumbItem>`);
+      crumbNodes.push(
+        `        <BreadcrumbItem href="#">${label}</BreadcrumbItem>`,
+      );
     }
   });
 
@@ -2671,7 +2976,9 @@ ${crumbNodes.join("\n")}
 );`;
 }
 
-export const pageheadLiveCode = buildPageheadCode(defaultKnobValues(pageheadKnobs));
+export const pageheadLiveCode = buildPageheadCode(
+  defaultKnobValues(pageheadKnobs),
+);
 
 export const stepsKnobs: KnobDef[] = [
   {
@@ -2693,7 +3000,14 @@ export const stepsKnobs: KnobDef[] = [
         kind: "select",
         name: "state",
         label: "state",
-        options: ["done", "fail", "warning", "waiting", "inProgress", "default"],
+        options: [
+          "done",
+          "fail",
+          "warning",
+          "waiting",
+          "inProgress",
+          "default",
+        ],
         defaultValue: "default",
       },
       {
@@ -2720,7 +3034,12 @@ export const stepsKnobs: KnobDef[] = [
     ],
     defaultValue: [
       { state: "done", title: "Done", description: "Completed", index: "1" },
-      { state: "inProgress", title: "In progress", description: "Working", index: "2" },
+      {
+        state: "inProgress",
+        title: "In progress",
+        description: "Working",
+        index: "2",
+      },
       { state: "default", title: "Next", description: "Waiting", index: "3" },
     ],
   },
@@ -2728,10 +3047,16 @@ export const stepsKnobs: KnobDef[] = [
 
 export function buildStepsCode(values: KnobValues): string {
   const direction = String(values.direction ?? "horizontal");
-  const widthProp = direction === "horizontal" ? `\n    style={{ width: 420 }}` : "";
+  const widthProp =
+    direction === "horizontal" ? `\n    style={{ width: 420 }}` : "";
   const items = getKnobItems(values, "items", [
     { state: "done", title: "Done", description: "Completed", index: "1" },
-    { state: "inProgress", title: "In progress", description: "Working", index: "2" },
+    {
+      state: "inProgress",
+      title: "In progress",
+      description: "Working",
+      index: "2",
+    },
     { state: "default", title: "Next", description: "Waiting", index: "3" },
   ]);
 
@@ -2771,7 +3096,12 @@ export const paginationKnobs: KnobDef[] = [
     placeholder: "总页数",
   },
   { kind: "boolean", name: "showJump", label: "showJump", defaultValue: true },
-  { kind: "boolean", name: "showSizeChanger", label: "showSizeChanger", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "showSizeChanger",
+    label: "showSizeChanger",
+    defaultValue: true,
+  },
 ];
 
 export function buildPaginationCode(values: KnobValues): string {
@@ -2794,7 +3124,7 @@ render(<Demo />);`;
 }
 
 export const paginationLiveCode = buildPaginationCode(
-  Object.fromEntries(paginationKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(paginationKnobs.map((k) => [k.name, k.defaultValue])),
 );
 
 export const cardKnobs: KnobDef[] = [
@@ -2813,7 +3143,12 @@ export const cardKnobs: KnobDef[] = [
     placeholder: "描述",
   },
   { kind: "boolean", name: "showBody", label: "showBody", defaultValue: true },
-  { kind: "boolean", name: "showBottom", label: "showBottom", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "showBottom",
+    label: "showBottom",
+    defaultValue: true,
+  },
   {
     kind: "select",
     name: "bottomSlotType",
@@ -2828,8 +3163,11 @@ export function buildCardCode(values: KnobValues): string {
   const title = String(values.title ?? "Card title");
   const description = String(values.description ?? "");
   const showBody = Boolean(values.showBody);
-  const showBottom = values.showBottom === undefined ? true : Boolean(values.showBottom);
-  const body = showBody ? `\n    <CardBody>Body content for this card.</CardBody>` : "";
+  const showBottom =
+    values.showBottom === undefined ? true : Boolean(values.showBottom);
+  const body = showBody
+    ? `\n    <CardBody>Body content for this card.</CardBody>`
+    : "";
   const bottom = showBottom
     ? `\n    <CardBottom slotType=${JSON.stringify(slotType)} />`
     : "";
@@ -2860,9 +3198,24 @@ const TABLE_ROW_DEFAULTS = [
 ];
 
 export const tableKnobs: KnobDef[] = [
-  { kind: "boolean", name: "showCheckbox", label: "showCheckbox", defaultValue: true },
-  { kind: "boolean", name: "stickyHeader", label: "stickyHeader", defaultValue: false },
-  { kind: "boolean", name: "showActions", label: "showActions", defaultValue: true },
+  {
+    kind: "boolean",
+    name: "showCheckbox",
+    label: "showCheckbox",
+    defaultValue: true,
+  },
+  {
+    kind: "boolean",
+    name: "stickyHeader",
+    label: "stickyHeader",
+    defaultValue: false,
+  },
+  {
+    kind: "boolean",
+    name: "showActions",
+    label: "showActions",
+    defaultValue: true,
+  },
   {
     kind: "items",
     name: "columns",
@@ -2882,7 +3235,15 @@ export const tableKnobs: KnobDef[] = [
         kind: "select",
         name: "content",
         label: "content",
-        options: ["people", "text", "badge", "switch", "icon+text", "icon-place+text", "action"],
+        options: [
+          "people",
+          "text",
+          "badge",
+          "switch",
+          "icon+text",
+          "icon-place+text",
+          "action",
+        ],
         defaultValue: "text",
       },
     ],
@@ -2910,8 +3271,18 @@ export const tableKnobs: KnobDef[] = [
         defaultValue: "Active",
         placeholder: "徽章文案",
       },
-      { kind: "boolean", name: "switchOn", label: "switchOn", defaultValue: true },
-      { kind: "boolean", name: "checked", label: "checked", defaultValue: false },
+      {
+        kind: "boolean",
+        name: "switchOn",
+        label: "switchOn",
+        defaultValue: true,
+      },
+      {
+        kind: "boolean",
+        name: "checked",
+        label: "checked",
+        defaultValue: false,
+      },
     ],
     defaultValue: TABLE_ROW_DEFAULTS,
   },
@@ -2919,8 +3290,12 @@ export const tableKnobs: KnobDef[] = [
 
 function buildTableCellCode(
   content: string,
-  row: { name?: string | boolean; badge?: string | boolean; switchOn?: string | boolean },
-  showActions: boolean
+  row: {
+    name?: string | boolean;
+    badge?: string | boolean;
+    switchOn?: string | boolean;
+  },
+  showActions: boolean,
 ): string {
   const name = String(row.name ?? "Text");
   const badge = String(row.badge ?? "Active");
@@ -3018,7 +3393,7 @@ export function buildTableCode(values: KnobValues): string {
         />`
         : null;
       const dataCells = columns.map((column) =>
-        buildTableCellCode(String(column.content ?? "text"), row, showActions)
+        buildTableCellCode(String(column.content ?? "text"), row, showActions),
       );
       return `      <TableRow>
 ${[checkboxCell, ...dataCells].filter(Boolean).join("\n")}
@@ -3115,6 +3490,5 @@ export function buildVideoCode(values: KnobValues): string {
 }
 
 export const videoLiveCode = buildVideoCode(
-  Object.fromEntries(videoKnobs.map((k) => [k.name, k.defaultValue]))
+  Object.fromEntries(videoKnobs.map((k) => [k.name, k.defaultValue])),
 );
-

@@ -1,0 +1,60 @@
+# 升级到 Spiral 3.1
+
+本页适用于 Spiral 3.1.0、Tokens 2.7.0 与 Icons 2.5.0。较旧文档版本不包含全部新 API，请在版本选单中选择 3.1.0。
+
+## 安装与样式
+
+```sh
+npm install @aviala-design/spiral@3.1.0 @aviala-design/tokens@2.7.0 @aviala-design/icons@2.5.0
+```
+
+应用入口导入一次 `@aviala-design/spiral/styles.css`，并使用 `ThemeProvider`。完整样式包含组件效果和所需工具类，不要求应用复制组件库的 Tailwind 源码。使用表单封装时，仍从 `@aviala-design/spiral/form` 导入，并安装其 `react-hook-form` peer dependency。
+
+## Button 与 Icon
+
+Button 的公开模式与 Figma 对齐。旧名仍可用，建议新增代码使用新名：
+
+| 旧名            | 新名             |
+| --------------- | ---------------- |
+| `default`       | `tertiary`       |
+| `defaultCustom` | `tertiaryCustom` |
+| `second`        | `secondary`      |
+
+`primary`、`noBackground`、`noBackgroundCustom`、`outline`、`outlineCustom` 保持各自语义。不要仅凭名字相近将旧 control 语义变量替换为新组件变量。
+
+Icon 的 `lineHeightAlign="both"` 让外层宽高共同采用所选 Typography 等级的行高，内部图形仍使用独立图标尺寸。Button 的 `iconOnly` 已接入该布局；普通按钮使用各自的横纵 padding。
+
+## 新组件与可选能力
+
+- `Rate` / `RateIcon`：星形或点赞评分，支持半选。交互输入使用 Rate，单独展示图形使用 RateIcon。
+- `MultiSelect`：带 Tag 的多选控件。原 Select 仍为单选，不需要迁移已有单选代码。
+- `SelectSearch`：SelectContent 内的搜索输入行，复用 InputProps；过滤与空状态由应用控制。
+- `PopoverIcon`：普通、主题及 tooltip 外观的内容图标插槽。
+- `ButtonGroup`：操作按钮组合与可选说明。
+- `InputGroup` / `InputGroupItem` / `InputGroupAddon`：输入框与前后附加内容。
+- `CardHead` / `CardBottom` 新增可选 `heading`，保留原来的 `title`、`description` 和操作区。
+- `TimePicker` / `TimePickerField` 使用 `showSeconds` 开启秒列；默认仍为时分。缺省秒为 00，隐藏秒列不清空已有秒值。
+- `TableHead` 新增 `leftIcon` / `rightIcon`，默认不显示图标。
+
+```tsx
+<TimePickerField showSeconds defaultValue={{ hours: 9, minutes: 30, seconds: 15 }} />
+<CardHead heading="工作区设置" title="成员" description="管理访问权限" />
+```
+
+## Token 与主题
+
+消费链为基础 Token → 语义 Token → 组件 Token。Token ID 用于项目身份和引用，公开 CSS 名仍为可读的 kebab-case。改名后保留旧 CSS 别名；已有组件的显式旧覆盖入口继续优先。没有提供兼容入口的新属性应使用对应组件 Token。
+
+Light/Dark、Default/Mobile Friendly、效果 ON/OFF 独立组合。尺寸、行高、字重继续复用共享 Typography；Aviala CSS 配置将字号和行高转为 rem，间距保持原单位。详细 API 见“主题”。
+
+## 本次发布已知限制
+
+本次正式发布包含已实现的 Web 能力，不声明 Figma 与 Web 的全部变体已完成最终验收。
+
+- Card 的可选 heading 已在 Web 实现；Figma 原文件因连接器无法加载 OPPO Sans 4.0 SemiBold，尚未补齐该层。
+- Upload 图标颜色和大号图标尺寸尚未全部组件 Token 化，保留现有外观。
+- Button `destructive` 保留 Web 兼容实现，Figma 尚无对应变体与组件 Token。
+- ScrollPicker 的滚动结束兜底、输入单位与边界修改已通过定向代码检查；最新改动的真实滚轮、触摸和完整交互回归尚未完成。
+- Figma 回写的部分交互验收仍未完成；不支持可靠写入的附加透明度引用必须按同步助手提示逐项处理和回读核对，不应视为自动迁移成功。
+
+升级前请在实际应用中核对局部主题、浮层、禁用态、旧 CSS 覆盖、RTL 与窄宽布局。发现差异时保留 Token 引用链和最小示例，便于定位。
