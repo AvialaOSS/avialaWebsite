@@ -9,6 +9,7 @@ import { getDocsBasename } from "./docs-base";
    aviala-* effects win, matching the previous tokens-effects-after-index order. */
 import "./index.css";
 import "@aviala-design/spiral/styles.css";
+import "./.generated/local-spiral-effects.css";
 
 const SPIRAL_DOCS_REDIRECT_KEY = "aviala-spiral-docs-redirect";
 const docsBasename = getDocsBasename();
@@ -24,18 +25,23 @@ try {
 }
 
 const mount =
-  document.getElementById("spiral-docs-root") ?? document.getElementById("root");
+  document.getElementById("spiral-docs-root") ??
+  document.getElementById("root");
 
 if (mount) {
   createRoot(mount).render(
     <StrictMode>
-      <ThemeProvider defaultMode="light" defaultPresetId="ald" storageKey="aviala-spiral-docs">
+      <ThemeProvider
+        defaultMode="light"
+        defaultPresetId="ald"
+        storageKey="aviala-spiral-docs"
+      >
         <BrowserRouter basename={docsBasename}>
           <DocsVersionProvider>
             <AppRoutes />
           </DocsVersionProvider>
         </BrowserRouter>
       </ThemeProvider>
-    </StrictMode>
+    </StrictMode>,
   );
 }

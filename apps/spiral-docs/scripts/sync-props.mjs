@@ -1,4 +1,11 @@
-import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  writeFileSync,
+} from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { findSpiralPackage, readSpiralVersion } from "./spiral-package.mjs";
@@ -11,7 +18,17 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(dirname, "../../..");
 const target = path.resolve(dirname, "../src/generated/props.json");
 const patchesDir = path.resolve(dirname, "props-patches");
-const siblingProps = path.resolve(repoRoot, "../developer-kit/packages/ui/dist/props.json");
+const spiralRoot = path.resolve(
+  repoRoot,
+  process.env.DOCS_SPIRAL_ROOT?.trim() || "../developer-kit",
+);
+const siblingProps = path.join(spiralRoot, "packages/ui/dist/props.json");
+const useLocalSpiral =
+  !process.env.DOCS_PKG_ROOT &&
+  Boolean(
+    process.env.DOCS_SPIRAL_ROOT?.trim() ||
+    ["1", "true", "yes"].includes(process.env.DOCS_SPIRAL_LOCAL),
+  );
 
 function applyLocalPatches(registry) {
   if (!existsSync(patchesDir)) return registry;
@@ -27,7 +44,9 @@ function applyLocalPatches(registry) {
     }
     // Only fill gaps — published docs win when present.
     if (next[key]) {
-      console.log(`Props patch skipped for ${key} (already in package props.json)`);
+      console.log(
+        `Props patch skipped for ${key} (already in package props.json)`,
+      );
       continue;
     }
     next[key] = patch;
@@ -37,14 +56,15 @@ function applyLocalPatches(registry) {
 }
 
 function resolvePropsPath() {
-  // Prefer sibling Spiral when present (local monorepo / dual-checkout).
-  // CI without a sibling checkout falls through to the installed package.
-  if (existsSync(siblingProps)) {
+  // Versioned builds must use the pinned package, even beside a local checkout.
+  if (useLocalSpiral && existsSync(siblingProps)) {
     return { file: siblingProps, label: "sibling Spiral dist/props.json" };
   }
 
   const packageDir = findSpiralPackage();
-  const fromPackage = packageDir ? path.join(packageDir, "dist/props.json") : null;
+  const fromPackage = packageDir
+    ? path.join(packageDir, "dist/props.json")
+    : null;
   if (fromPackage && existsSync(fromPackage)) {
     return {
       file: fromPackage,

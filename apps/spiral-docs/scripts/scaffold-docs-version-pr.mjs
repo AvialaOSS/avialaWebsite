@@ -21,6 +21,7 @@ import { readFileSync, existsSync, writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import { setTimeout } from "node:timers/promises";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const appRoot = path.resolve(dirname, "..");
@@ -29,13 +30,19 @@ const manifestPath = path.join(appRoot, "src/versions/manifest.json");
 const resultPath = path.join(appRoot, ".tmp/scaffold-result.json");
 
 const spiralVersion = process.env.SPIRAL_VERSION;
-if (!spiralVersion) {
-  console.error("Set SPIRAL_VERSION to the published @aviala-design/spiral version.");
+if (!spiralVersion || !/^\d+\.\d+\.\d+$/.test(spiralVersion)) {
+  console.error(
+    "Set SPIRAL_VERSION to the published @aviala-design/spiral version.",
+  );
   process.exit(1);
 }
 
-const changelogsPath = process.env.COMPONENT_CHANGELOGS
-  ?? path.resolve(appRoot, "../../../developer-kit/packages/ui/dist/component-changelogs.json");
+const changelogsPath =
+  process.env.COMPONENT_CHANGELOGS ??
+  path.resolve(
+    appRoot,
+    "../../../developer-kit/packages/ui/dist/component-changelogs.json",
+  );
 const bumpDeps = process.env.BUMP_DEPS === "1";
 
 const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
@@ -66,36 +73,71 @@ if (existsSync(changelogsPath)) {
 
 /**
  * tokens/icons versions do not track the spiral package version — resolve from
- * the published spiral package dependencies (falls back to previous entry).
+ * the published spiral package dependencies. Never substitute an older release.
  */
-function resolveCompanionVersions(version) {
-  const result = spawnSync(
-    process.platform === "win32" ? "npm.cmd" : "npm",
-    ["view", `@aviala-design/spiral@${version}`, "dependencies", "--json"],
-    { encoding: "utf8", shell: process.platform === "win32" },
-  );
-  if (result.status === 0 && result.stdout?.trim()) {
-    try {
-      const deps = JSON.parse(result.stdout);
-      const tokens = deps["@aviala-design/tokens"];
-      const icons = deps["@aviala-design/icons"];
-      if (tokens && icons) {
-        return {
-          tokens: String(tokens).replace(/^[\^~]/, ""),
-          icons: String(icons).replace(/^[\^~]/, ""),
-        };
+async function resolveCompanionVersions(version) {
+  for (let attempt = 0; attempt < 40; attempt++) {
+    const result = spawnSync(
+      process.platform === "win32" ? "npm.cmd" : "npm",
+      ["view", `@aviala-design/spiral@${version}`, "dependencies", "--json"],
+      { encoding: "utf8", shell: process.platform === "win32" },
+    );
+    if (result.status === 0 && result.stdout?.trim()) {
+      try {
+        const deps = JSON.parse(result.stdout);
+        const tokens = deps["@aviala-design/tokens"];
+        const icons = deps["@aviala-design/icons"];
+        if (tokens && icons) {
+          const companions = {
+            tokens: String(tokens).replace(/^[\^~]/, ""),
+            icons: String(icons).replace(/^[\^~]/, ""),
+          };
+          const available = Object.entries(companions).every(([name, pin]) => {
+            if (!/^\d+\.\d+\.\d+$/.test(pin)) return false;
+            const check = spawnSync(
+              process.platform === "win32" ? "npm.cmd" : "npm",
+              [
+                "view",
+                `@aviala-design/${name}@${pin}`,
+                "version",
+                "--prefer-online",
+              ],
+              { encoding: "utf8", shell: process.platform === "win32" },
+            );
+            return check.status === 0 && check.stdout.trim() === pin;
+          });
+          if (available) {
+            const artifacts = await Promise.all(
+              Object.entries({ spiral: version, ...companions }).map(
+                async ([name, pin]) => {
+                  const response = await fetch(
+                    `https://registry.npmjs.org/@aviala-design/${name}/-/${name}-${pin}.tgz`,
+                    {
+                      method: "HEAD",
+                      signal: AbortSignal.timeout(15000),
+                    },
+                  );
+                  return response.ok;
+                },
+              ),
+            );
+            if (artifacts.every(Boolean)) return companions;
+          }
+        }
+      } catch {
+        // fall through
       }
-    } catch {
-      // fall through
+    }
+    if (attempt < 39) {
+      console.log(
+        `Waiting for spiral@${version} and companion packages to become available on npm (${attempt + 1}/40).`,
+      );
+      await setTimeout(15000);
     }
   }
-  console.warn(
-    `Could not resolve companion versions from npm for spiral@${version}; using previous manifest entry.`,
+  throw new Error(
+    `Published packages for spiral@${version} are not all available; retry later. No dependency fallback was applied.`,
   );
-  return {
-    tokens: previousEntry?.tokens ?? version,
-    icons: previousEntry?.icons ?? "2.0.2",
-  };
 }
 
 function npmCmd() {
@@ -179,7 +221,9 @@ function formatChangelogAppendix(component) {
     const items = sections[key];
     if (!Array.isArray(items) || items.length === 0) continue;
     for (const item of items) {
-      const text = String(item).trim().replace(/[。；;]+$/u, "");
+      const text = String(item)
+        .trim()
+        .replace(/[。；;]+$/u, "");
       if (text) parts.push(text);
     }
   }
@@ -189,8 +233,7 @@ function formatChangelogAppendix(component) {
 
 function buildRevisionStub(component, prevRevId, appendix) {
   const prevFile =
-    prevRevId &&
-    path.join(revisionsRoot, component, `${prevRevId}.ts`);
+    prevRevId && path.join(revisionsRoot, component, `${prevRevId}.ts`);
 
   if (prevRevId && prevFile && existsSync(prevFile)) {
     const proseExpr = appendix
@@ -210,7 +253,8 @@ export default revision;
 `;
   }
 
-  const prose = appendix || `TODO: update docs for ${component} @ ${spiralVersion}`;
+  const prose =
+    appendix || `TODO: update docs for ${component} @ ${spiralVersion}`;
   const description = appendix
     ? `${spiralVersion} 变更见下方说明；请补全组件简介。`
     : `TODO: update description for ${spiralVersion}`;
@@ -228,7 +272,7 @@ export default revision;
 `;
 }
 
-const companions = resolveCompanionVersions(spiralVersion);
+const companions = await resolveCompanionVersions(spiralVersion);
 
 const components = {};
 const prevComponents = previousEntry?.components ?? {};
@@ -317,7 +361,9 @@ if (process.env.OPEN_PR === "1") {
     bumpDeps
       ? `- Bumped \`@aviala-design/spiral@${spiralVersion}\`, tokens@${companions.tokens}, icons@${companions.icons} (+ lockfile).`
       : "",
-    stubPaths.length ? `- Created revision stubs:\n  - ${stubPaths.join("\n  - ")}` : "",
+    stubPaths.length
+      ? `- Created revision stubs:\n  - ${stubPaths.join("\n  - ")}`
+      : "",
     ``,
     `Checklist is posted as a follow-up bot comment after the PR opens.`,
   ]

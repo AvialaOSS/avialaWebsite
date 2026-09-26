@@ -14,9 +14,10 @@
     "2.8.1",
     "2.9.0",
     "3.0.0",
-    "3.0.2"
+    "3.0.2",
+    "3.1.0"
   ],
-  "default": "3.0.2",
+  "default": "3.1.0",
   "versions": {
     "2.0.0": {
       "spiral": "2.0.0",
@@ -960,6 +961,167 @@
         },
         "Select": {
           "inherits": "3.0.0"
+        }
+      }
+    },
+    "3.1.0": {
+      "spiral": "3.1.0",
+      "tokens": "2.7.0",
+      "icons": "2.5.0",
+      "status": "ready",
+      "components": {
+        "Button": {
+          "rev": "3.1.0"
+        },
+        "Popover": {
+          "rev": "3.1.0"
+        },
+        "Tooltip": {
+          "rev": "3.1.0"
+        },
+        "Pagination": {
+          "rev": "3.1.0"
+        },
+        "Navigation": {
+          "rev": "3.1.0"
+        },
+        "SegmentatorGroup": {
+          "rev": "3.1.0"
+        },
+        "CascaderField": {
+          "rev": "3.1.0"
+        },
+        "Modal": {
+          "rev": "3.1.0"
+        },
+        "Drawer": {
+          "rev": "3.1.0"
+        },
+        "DatePickerField": {
+          "rev": "3.1.0"
+        },
+        "Typeface": {
+          "rev": "3.1.0"
+        },
+        "Checkbox": {
+          "rev": "3.1.0"
+        },
+        "Slider": {
+          "rev": "3.1.0"
+        },
+        "ColorPicker": {
+          "rev": "3.1.0"
+        },
+        "Tab": {
+          "rev": "3.1.0"
+        },
+        "List": {
+          "rev": "3.1.0"
+        },
+        "ScrollPicker": {
+          "rev": "3.1.0"
+        },
+        "TimePickerField": {
+          "rev": "3.1.0"
+        },
+        "Progress": {
+          "rev": "3.1.0"
+        },
+        "Table": {
+          "rev": "3.1.0"
+        },
+        "FormField": {
+          "rev": "3.1.0"
+        },
+        "Switch": {
+          "rev": "3.1.0"
+        },
+        "Video": {
+          "rev": "3.1.0"
+        },
+        "Card": {
+          "rev": "3.1.0"
+        },
+        "Form": {
+          "inherits": "3.0.2"
+        },
+        "Select": {
+          "rev": "3.1.0"
+        },
+        "Alert": {
+          "rev": "3.1.0"
+        },
+        "Anchor": {
+          "rev": "3.1.0"
+        },
+        "Avatar": {
+          "rev": "3.1.0"
+        },
+        "Badge": {
+          "rev": "3.1.0"
+        },
+        "Breadcrumb": {
+          "rev": "3.1.0"
+        },
+        "ButtonGroup": {
+          "rev": "3.1.0"
+        },
+        "Cascader": {
+          "rev": "3.1.0"
+        },
+        "Feedback": {
+          "rev": "3.1.0"
+        },
+        "Fieldset": {
+          "rev": "3.1.0"
+        },
+        "Input": {
+          "rev": "3.1.0"
+        },
+        "InputGroup": {
+          "rev": "3.1.0"
+        },
+        "Link": {
+          "rev": "3.1.0"
+        },
+        "Loading": {
+          "rev": "3.1.0"
+        },
+        "MultiSelect": {
+          "rev": "3.1.0"
+        },
+        "NumberInput": {
+          "rev": "3.1.0"
+        },
+        "Pagehead": {
+          "rev": "3.1.0"
+        },
+        "RadioGroup": {
+          "rev": "3.1.0"
+        },
+        "Rate": {
+          "rev": "3.1.0"
+        },
+        "RateIcon": {
+          "rev": "3.1.0"
+        },
+        "Scroll": {
+          "rev": "3.1.0"
+        },
+        "Steps": {
+          "rev": "3.1.0"
+        },
+        "Tag": {
+          "rev": "3.1.0"
+        },
+        "Textarea": {
+          "rev": "3.1.0"
+        },
+        "ThemeProvider": {
+          "rev": "3.1.0"
+        },
+        "Upload": {
+          "rev": "3.1.0"
         }
       }
     }

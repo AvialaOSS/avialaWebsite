@@ -17,6 +17,7 @@ export const nav: NavSection[] = [
       { label: "介绍", path: "/start/introduction" },
       { label: "安装", path: "/start/installation" },
       { label: "主题", path: "/start/theme" },
+      { label: "3.1 升级与限制", path: "/start/migration-3-1" },
       { label: "国际化", path: "/start/locale" },
       { label: "更新记录", path: "/start/changelog" },
       { label: "贡献", path: "/start/contribute" },
@@ -25,17 +26,41 @@ export const nav: NavSection[] = [
   {
     section: "信息展示",
     items: [
-      { label: "Avatar 头像", path: "/components/information-display/avatar", component: "Avatar" },
-      { label: "Badge 徽章", path: "/components/information-display/badge", component: "Badge" },
-      { label: "Modal 模态框", path: "/components/information-display/modal", component: "Modal" },
-      { label: "Drawer 抽屉", path: "/components/information-display/drawer", component: "Drawer" },
+      {
+        label: "Avatar 头像",
+        path: "/components/information-display/avatar",
+        component: "Avatar",
+      },
+      {
+        label: "Badge 徽章",
+        path: "/components/information-display/badge",
+        component: "Badge",
+      },
+      {
+        label: "Modal 模态框",
+        path: "/components/information-display/modal",
+        component: "Modal",
+      },
+      {
+        label: "Drawer 抽屉",
+        path: "/components/information-display/drawer",
+        component: "Drawer",
+      },
       {
         label: "Popover 弹出层",
         path: "/components/information-display/popover",
         component: "Popover",
       },
-      { label: "Table 表格", path: "/components/information-display/table", component: "Table" },
-      { label: "Tag 标签", path: "/components/information-display/tag", component: "Tag" },
+      {
+        label: "Table 表格",
+        path: "/components/information-display/table",
+        component: "Table",
+      },
+      {
+        label: "Tag 标签",
+        path: "/components/information-display/tag",
+        component: "Tag",
+      },
       {
         label: "Tooltip 工具提示",
         path: "/components/information-display/tooltip",
@@ -76,7 +101,11 @@ export const nav: NavSection[] = [
         path: "/components/information-collect/form-field",
         component: "FormField",
       },
-      { label: "Input 输入框", path: "/components/information-collect/input", component: "Input" },
+      {
+        label: "Input 输入框",
+        path: "/components/information-collect/input",
+        component: "Input",
+      },
       {
         label: "NumberInput 数字输入",
         path: "/components/information-collect/number-input",
@@ -92,8 +121,31 @@ export const nav: NavSection[] = [
         path: "/components/information-collect/scroll-picker",
         component: "ScrollPicker",
       },
-      { label: "Select 选择器", path: "/components/information-collect/select", component: "Select" },
-      { label: "Slider 滑块", path: "/components/information-collect/slider", component: "Slider" },
+      {
+        label: "Select 选择器",
+        path: "/components/information-collect/select",
+        component: "Select",
+      },
+      {
+        label: "MultiSelect 多选",
+        path: "/components/information-collect/multi-select",
+        component: "MultiSelect",
+      },
+      {
+        label: "Rate 评分",
+        path: "/components/information-collect/rate",
+        component: "Rate",
+      },
+      {
+        label: "InputGroup 输入组",
+        path: "/components/information-collect/input-group",
+        component: "InputGroup",
+      },
+      {
+        label: "Slider 滑块",
+        path: "/components/information-collect/slider",
+        component: "Slider",
+      },
       {
         label: "Textarea 多行输入",
         path: "/components/information-collect/textarea",
@@ -104,29 +156,66 @@ export const nav: NavSection[] = [
         path: "/components/information-collect/time-picker",
         component: "TimePickerField",
       },
-      { label: "Upload 上传", path: "/components/information-collect/upload", component: "Upload" },
+      {
+        label: "Upload 上传",
+        path: "/components/information-collect/upload",
+        component: "Upload",
+      },
     ],
   },
   {
     section: "基础输入",
     items: [
-      { label: "Button 按钮", path: "/components/basic-input/button", component: "Button" },
-      { label: "Link 链接", path: "/components/basic-input/link", component: "Link" },
+      {
+        label: "Button 按钮",
+        path: "/components/basic-input/button",
+        component: "Button",
+      },
+      {
+        label: "ButtonGroup 按钮组",
+        path: "/components/basic-input/button-group",
+        component: "ButtonGroup",
+      },
+      {
+        label: "Link 链接",
+        path: "/components/basic-input/link",
+        component: "Link",
+      },
       {
         label: "Segmentator 分段器",
         path: "/components/basic-input/segmentator",
         component: "SegmentatorGroup",
       },
-      { label: "Switch 开关", path: "/components/basic-input/switch", component: "Switch" },
+      {
+        label: "Switch 开关",
+        path: "/components/basic-input/switch",
+        component: "Switch",
+      },
     ],
   },
   {
     section: "响应与反馈",
     items: [
-      { label: "Alert 提示", path: "/components/feedback/alert", component: "Alert" },
-      { label: "Feedback 反馈", path: "/components/feedback/feedback", component: "Feedback" },
-      { label: "Loading 加载", path: "/components/feedback/loading", component: "Loading" },
-      { label: "Progress 进度", path: "/components/feedback/progress", component: "Progress" },
+      {
+        label: "Alert 提示",
+        path: "/components/feedback/alert",
+        component: "Alert",
+      },
+      {
+        label: "Feedback 反馈",
+        path: "/components/feedback/feedback",
+        component: "Feedback",
+      },
+      {
+        label: "Loading 加载",
+        path: "/components/feedback/loading",
+        component: "Loading",
+      },
+      {
+        label: "Progress 进度",
+        path: "/components/feedback/progress",
+        component: "Progress",
+      },
     ],
   },
   {
@@ -138,7 +227,11 @@ export const nav: NavSection[] = [
         path: "/components/system-composition/typeface",
         component: "Typeface",
       },
-      { label: "Scroll 滚动条", path: "/components/system-composition/scroll", component: "Scroll" },
+      {
+        label: "Scroll 滚动条",
+        path: "/components/system-composition/scroll",
+        component: "Scroll",
+      },
       {
         label: "Typography 排版",
         path: "/components/system-composition/typography",
@@ -149,14 +242,26 @@ export const nav: NavSection[] = [
   {
     section: "结构导航",
     items: [
-      { label: "Anchor 锚点", path: "/components/structure-navigation/anchor", component: "Anchor" },
+      {
+        label: "Anchor 锚点",
+        path: "/components/structure-navigation/anchor",
+        component: "Anchor",
+      },
       {
         label: "Breadcrumb 面包屑",
         path: "/components/structure-navigation/breadcrumb",
         component: "Breadcrumb",
       },
-      { label: "Card 卡片", path: "/components/structure-navigation/card", component: "Card" },
-      { label: "List 列表", path: "/components/structure-navigation/list", component: "List" },
+      {
+        label: "Card 卡片",
+        path: "/components/structure-navigation/card",
+        component: "Card",
+      },
+      {
+        label: "List 列表",
+        path: "/components/structure-navigation/list",
+        component: "List",
+      },
       {
         label: "Navigation 导航",
         path: "/components/structure-navigation/navigation",
@@ -172,8 +277,16 @@ export const nav: NavSection[] = [
         path: "/components/structure-navigation/pagination",
         component: "Pagination",
       },
-      { label: "Steps 步骤条", path: "/components/structure-navigation/steps", component: "Steps" },
-      { label: "Tab 标签页", path: "/components/structure-navigation/tab", component: "Tab" },
+      {
+        label: "Steps 步骤条",
+        path: "/components/structure-navigation/steps",
+        component: "Steps",
+      },
+      {
+        label: "Tab 标签页",
+        path: "/components/structure-navigation/tab",
+        component: "Tab",
+      },
     ],
   },
 ];

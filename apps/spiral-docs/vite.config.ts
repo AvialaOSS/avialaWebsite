@@ -1,6 +1,12 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { createRequire } from "node:module";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  writeFileSync,
+} from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import mdx from "@mdx-js/rollup";
@@ -22,7 +28,9 @@ function docsBaseRedirectPlugin(docsBasePath: string): Plugin {
       return false;
     }
 
-    const query = req.url?.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+    const query = req.url?.includes("?")
+      ? req.url.slice(req.url.indexOf("?"))
+      : "";
     res.writeHead(301, { Location: `${redirectTarget}${query}` });
     res.end();
     return true;
@@ -59,7 +67,10 @@ function docsPkgResolvePlugin(pkgRoot: string): Plugin {
       } catch {
         // Older token packages omit exports added in later minors (e.g. tab-effects.css).
         // Stub empty CSS so one docs SPA source tree can build against every covered pin.
-        if (source.startsWith("@aviala-design/tokens/") && source.endsWith(".css")) {
+        if (
+          source.startsWith("@aviala-design/tokens/") &&
+          source.endsWith(".css")
+        ) {
           return `${EMPTY_CSS_PREFIX}${source}`;
         }
         return null;
@@ -212,7 +223,10 @@ function localSpiralResolvePlugin(local: LocalSpiralPaths): Plugin {
   };
   const useSrc = preferLocalSrc();
 
-  function resolvePackageEntry(pkgDir: string, kind: "spiral" | "icons" | "tokens") {
+  function resolvePackageEntry(
+    pkgDir: string,
+    kind: "spiral" | "icons" | "tokens",
+  ) {
     if (kind === "spiral") return local.spiralEntry;
 
     const distJs = path.join(pkgDir, "dist/index.js");
@@ -294,6 +308,39 @@ function writeLocalSpiralTailwindSources(local: LocalSpiralPaths | null) {
   const outDir = path.join(dirname, "src/.generated");
   const outFile = path.join(outDir, "local-spiral-sources.css");
   mkdirSync(outDir, { recursive: true });
+  // Source-mode Spiral checkouts may still ship effects as separate sheets.
+  // Published packages keep their own aggregate styles.css entry unchanged.
+  const effectsFile = path.join(outDir, "local-spiral-effects.css");
+  const semanticDir = local ? path.join(local.tokens, "src/semantic") : null;
+  const effects =
+    local?.useTokensVitePlugin && semanticDir
+      ? readdirSync(semanticDir)
+          .filter(
+            (name) =>
+              /-(effects|extras)\.css$/.test(name) &&
+              name !== "focus-effects.css",
+          )
+          .sort(
+            (a, b) =>
+              Number(a.endsWith("-extras.css")) -
+                Number(b.endsWith("-extras.css")) || a.localeCompare(b),
+          )
+      : [];
+  writeFileSync(
+    effectsFile,
+    effects.length
+      ? // CSS import resolvers can bypass Vite's package resolver and select npm
+        // dist. Relative filesystem paths keep effects on the same local checkout.
+        effects
+          .map((name) => {
+            const relative = path
+              .relative(outDir, path.join(semanticDir!, name))
+              .replace(/\\/g, "/");
+            return `@import "${relative}";`;
+          })
+          .join("\n") + "\n"
+      : "/* Local standalone component effects: off. */\n",
+  );
   if (!local) {
     writeFileSync(outFile, "/* local Spiral Tailwind @source: off */\n");
     return;
@@ -308,14 +355,17 @@ function writeLocalSpiralTailwindSources(local: LocalSpiralPaths | null) {
 
 export default defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, dirname, "");
-  const docsVersion = env.VITE_DOCS_VERSION || process.env.VITE_DOCS_VERSION || "";
+  const docsVersion =
+    env.VITE_DOCS_VERSION || process.env.VITE_DOCS_VERSION || "";
   const docsBasePath =
     env.VITE_DOCS_BASENAME ||
     process.env.VITE_DOCS_BASENAME ||
     (docsVersion ? `/docs/v/${docsVersion}` : "/docs");
   const outDir =
     process.env.DOCS_OUT_DIR ||
-    (docsVersion ? path.join(siteStaticRoot, "v", docsVersion) : siteStaticRoot);
+    (docsVersion
+      ? path.join(siteStaticRoot, "v", docsVersion)
+      : siteStaticRoot);
   const pkgRoot = process.env.DOCS_PKG_ROOT;
   const emptyOutDir = process.env.DOCS_EMPTY_OUT_DIR !== "0";
   const localSpiral = resolveLocalSpiral();
@@ -403,7 +453,7 @@ export default defineConfig(async ({ mode }) => {
         output: {
           entryFileNames: "assets/spiral-docs.js",
           chunkFileNames: "assets/[name].js",
-          assetFileNames: (assetInfo) => {
+          assetFileNames: (assetInfo: { name?: string }) => {
             if (assetInfo.name && assetInfo.name.endsWith(".css")) {
               return "assets/spiral-docs.css";
             }

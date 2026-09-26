@@ -5,8 +5,13 @@ import {
   type IconMode,
   type IconThickness,
 } from "@aviala-design/icons";
-import { Button, type ButtonMode, type ButtonSize } from "@aviala-design/spiral";
+import {
+  Button,
+  type ButtonMode,
+  type ButtonSize,
+} from "@aviala-design/spiral";
 import { createElement } from "react";
+import { usesComponentButtonModes } from "../../lib/spiral-version-features";
 
 import type { KnobDef, KnobValues } from "../../components/DemoKnobs";
 import {
@@ -53,17 +58,24 @@ const ICON_LEVEL_OPTIONS = [
 function iconSlotKnobs(
   side: "left" | "right",
   showDefault: boolean,
-  iconDefault: string
+  iconDefault: string,
 ): KnobDef[] {
   const showName = side === "left" ? "showLeftIcon" : "showRightIcon";
   const iconName = side === "left" ? "leftIconName" : "rightIconName";
-  const thicknessName = side === "left" ? "leftIconThickness" : "rightIconThickness";
+  const thicknessName =
+    side === "left" ? "leftIconThickness" : "rightIconThickness";
   const modeName = side === "left" ? "leftIconMode" : "rightIconMode";
-  const biggerSizeName = side === "left" ? "leftIconBiggerSize" : "rightIconBiggerSize";
+  const biggerSizeName =
+    side === "left" ? "leftIconBiggerSize" : "rightIconBiggerSize";
   const levelName = side === "left" ? "leftIconLevel" : "rightIconLevel";
 
   return [
-    { kind: "boolean", name: showName, label: "visible", defaultValue: showDefault },
+    {
+      kind: "boolean",
+      name: showName,
+      label: "visible",
+      defaultValue: showDefault,
+    },
     { kind: "icon", name: iconName, label: "icon", defaultValue: iconDefault },
     {
       kind: "select",
@@ -79,7 +91,12 @@ function iconSlotKnobs(
       options: [...ICON_MODE_OPTIONS],
       defaultValue: DEFAULT_ICON_MODE,
     },
-    { kind: "boolean", name: biggerSizeName, label: "biggerSize", defaultValue: true },
+    {
+      kind: "boolean",
+      name: biggerSizeName,
+      label: "biggerSize",
+      defaultValue: true,
+    },
     {
       kind: "select",
       name: levelName,
@@ -93,20 +110,24 @@ function iconSlotKnobs(
 function applyIconSlotOverride(
   state: ButtonDebugState,
   value: KnobValues,
-  side: "left" | "right"
+  side: "left" | "right",
 ): ButtonDebugState {
   const showName = side === "left" ? "showLeftIcon" : "showRightIcon";
   const iconName = side === "left" ? "leftIconName" : "rightIconName";
-  const thicknessName = side === "left" ? "leftIconThickness" : "rightIconThickness";
+  const thicknessName =
+    side === "left" ? "leftIconThickness" : "rightIconThickness";
   const modeName = side === "left" ? "leftIconMode" : "rightIconMode";
-  const biggerSizeName = side === "left" ? "leftIconBiggerSize" : "rightIconBiggerSize";
+  const biggerSizeName =
+    side === "left" ? "leftIconBiggerSize" : "rightIconBiggerSize";
   const levelName = side === "left" ? "leftIconLevel" : "rightIconLevel";
 
   return {
     ...state,
     [showName]: Boolean(value[showName]),
     [iconName]: resolveIconName(String(value[iconName] ?? DEFAULT_ICON_NAME)),
-    [thicknessName]: String(value[thicknessName] ?? DEFAULT_ICON_THICKNESS) as IconThickness,
+    [thicknessName]: String(
+      value[thicknessName] ?? DEFAULT_ICON_THICKNESS,
+    ) as IconThickness,
     [modeName]: String(value[modeName] ?? DEFAULT_ICON_MODE) as IconMode,
     [biggerSizeName]: Boolean(value[biggerSizeName] ?? true),
     [levelName]: String(value[levelName] ?? "text") as IconLevel,
@@ -119,7 +140,7 @@ function renderSlotIcon(
   thickness: IconThickness,
   mode: IconMode,
   biggerSize: boolean,
-  level: IconLevel
+  level: IconLevel,
 ) {
   if (!visible) return undefined;
 
@@ -173,9 +194,9 @@ export const buttonEntry: DebugComponentEntry<ButtonDebugState> = {
           label: "mode",
           options: [
             "primary",
-            "second",
-            "default",
-            "defaultCustom",
+            ...(usesComponentButtonModes
+              ? ["secondary", "tertiary", "tertiaryCustom"]
+              : ["second", "default", "defaultCustom"]),
             "outline",
             "outlineCustom",
             "noBackground",
@@ -191,11 +212,36 @@ export const buttonEntry: DebugComponentEntry<ButtonDebugState> = {
           options: ["tiny", "small", "regular", "big"],
           defaultValue: "regular",
         },
-        { kind: "boolean", name: "allRound", label: "allRound", defaultValue: false },
-        { kind: "boolean", name: "loading", label: "loading", defaultValue: false },
-        { kind: "boolean", name: "disabled", label: "disabled", defaultValue: false },
-        { kind: "boolean", name: "iconOnly", label: "iconOnly", defaultValue: false },
-        { kind: "string", name: "label", label: "children", defaultValue: "Text" },
+        {
+          kind: "boolean",
+          name: "allRound",
+          label: "allRound",
+          defaultValue: false,
+        },
+        {
+          kind: "boolean",
+          name: "loading",
+          label: "loading",
+          defaultValue: false,
+        },
+        {
+          kind: "boolean",
+          name: "disabled",
+          label: "disabled",
+          defaultValue: false,
+        },
+        {
+          kind: "boolean",
+          name: "iconOnly",
+          label: "iconOnly",
+          defaultValue: false,
+        },
+        {
+          kind: "string",
+          name: "label",
+          label: "children",
+          defaultValue: "Text",
+        },
       ],
       applyOverride: (state, value: KnobValues) => ({
         ...state,
@@ -213,7 +259,8 @@ export const buttonEntry: DebugComponentEntry<ButtonDebugState> = {
       label: "Surface",
       parent: "button",
       knobs: [],
-      description: "Background fill layer — visible for modes with a surface (not noBackground*).",
+      description:
+        "Background fill layer — visible for modes with a surface (not noBackground*).",
       applyOverride: (state) => state,
     },
     {
@@ -223,7 +270,8 @@ export const buttonEntry: DebugComponentEntry<ButtonDebugState> = {
       knobs: iconSlotKnobs("left", true, DEFAULT_ICON_NAME),
       description:
         "Leading icon slot. Preserves level and biggerSize when set on the icon; otherwise Button applies them from button size.",
-      applyOverride: (state, value) => applyIconSlotOverride(state, value, "left"),
+      applyOverride: (state, value) =>
+        applyIconSlotOverride(state, value, "left"),
     },
     {
       debugId: "button.label",
@@ -240,7 +288,8 @@ export const buttonEntry: DebugComponentEntry<ButtonDebugState> = {
       knobs: iconSlotKnobs("right", false, DEFAULT_ICON_NAME),
       description:
         "Trailing icon slot. Hidden when iconOnly is true. Preserves level and biggerSize when set on the icon; otherwise Button applies them from button size.",
-      applyOverride: (state, value) => applyIconSlotOverride(state, value, "right"),
+      applyOverride: (state, value) =>
+        applyIconSlotOverride(state, value, "right"),
     },
   ],
   renderPreview: (state) => {
@@ -261,7 +310,7 @@ export const buttonEntry: DebugComponentEntry<ButtonDebugState> = {
           state.leftIconThickness,
           state.leftIconMode,
           state.leftIconBiggerSize,
-          state.leftIconLevel
+          state.leftIconLevel,
         )}
         rightIcon={renderSlotIcon(
           showRight,
@@ -269,7 +318,7 @@ export const buttonEntry: DebugComponentEntry<ButtonDebugState> = {
           state.rightIconThickness,
           state.rightIconMode,
           state.rightIconBiggerSize,
-          state.rightIconLevel
+          state.rightIconLevel,
         )}
         aria-label={state.iconOnly ? state.label : undefined}
       >

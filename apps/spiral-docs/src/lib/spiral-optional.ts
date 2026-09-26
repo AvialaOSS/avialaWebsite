@@ -32,7 +32,7 @@ type LocaleProviderProps = PropsWithChildren<{
 const Passthrough = ({ children }: PropsWithChildren) =>
   createElement(Fragment, null, children);
 
-const spiral = Spiral as typeof Spiral & {
+const spiral = Spiral as unknown as {
   ConfigProvider?: ComponentType<ConfigProviderProps>;
   LocaleProvider?: ComponentType<LocaleProviderProps>;
   zhCN?: LocaleLike;

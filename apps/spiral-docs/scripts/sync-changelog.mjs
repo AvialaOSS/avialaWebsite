@@ -1,11 +1,31 @@
-import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  writeFileSync,
+} from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { findSpiralPackage, readSpiralVersion } from "./spiral-package.mjs";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-const target = path.resolve(dirname, "../src/generated/component-changelogs.json");
+const target = path.resolve(
+  dirname,
+  "../src/generated/component-changelogs.json",
+);
 const repoRoot = path.resolve(dirname, "../../..");
+const spiralRoot = path.resolve(
+  repoRoot,
+  process.env.DOCS_SPIRAL_ROOT?.trim() || "../developer-kit",
+);
+const useLocalSpiral =
+  !process.env.DOCS_PKG_ROOT &&
+  Boolean(
+    process.env.DOCS_SPIRAL_ROOT?.trim() ||
+    ["1", "true", "yes"].includes(process.env.DOCS_SPIRAL_LOCAL),
+  );
 
 const SECTION_ALIASES = {
   added: "Added",
@@ -67,18 +87,20 @@ function resolveRegistry() {
   // Prefer sibling Spiral when present (local monorepo / dual-checkout),
   // matching sync-props.mjs so unpublished component changelogs appear in docs.
   const siblingJson = path.resolve(
-    repoRoot,
-    "../developer-kit/packages/ui/dist/component-changelogs.json",
+    spiralRoot,
+    "packages/ui/dist/component-changelogs.json",
   );
-  if (existsSync(siblingJson)) {
+  if (useLocalSpiral && existsSync(siblingJson)) {
     console.log("Synced component changelogs from sibling Spiral dist JSON");
     return JSON.parse(readFileSync(siblingJson, "utf8"));
   }
 
-  const siblingMd = path.resolve(repoRoot, "../developer-kit/packages/ui/changelogs");
-  const fromMd = loadFromMarkdownDir(siblingMd);
+  const siblingMd = path.resolve(spiralRoot, "packages/ui/changelogs");
+  const fromMd = useLocalSpiral ? loadFromMarkdownDir(siblingMd) : null;
   if (fromMd) {
-    console.log("Synced component changelogs from sibling Spiral changelogs/*.md");
+    console.log(
+      "Synced component changelogs from sibling Spiral changelogs/*.md",
+    );
     return fromMd;
   }
 
@@ -107,4 +129,6 @@ function resolveRegistry() {
 const registry = resolveRegistry();
 mkdirSync(path.dirname(target), { recursive: true });
 writeFileSync(target, `${JSON.stringify(registry, null, 2)}\n`);
-console.log(`Wrote ${Object.keys(registry).length} component changelogs → ${target}`);
+console.log(
+  `Wrote ${Object.keys(registry).length} component changelogs → ${target}`,
+);

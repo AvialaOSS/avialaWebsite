@@ -21,7 +21,14 @@ import {
   Typography,
   type FeedbackType,
 } from "@aviala-design/spiral";
-import { useCallback, useEffect, useMemo, useRef, useState, startTransition } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  startTransition,
+} from "react";
 
 import { DocPageHeader } from "../../components/TableOfContents";
 import {
@@ -111,7 +118,7 @@ function CategoryAccordion({
                   className={cn(
                     "docs-icons-tile",
                     selected && "is-selected",
-                    copied && "is-copied"
+                    copied && "is-copied",
                   )}
                 >
                   <Icon
@@ -121,7 +128,9 @@ function CategoryAccordion({
                     mode="default"
                     className="text-foreground"
                   />
-                  <span className="docs-icons-tile-label">{iconShortLabel(entry)}</span>
+                  <span className="docs-icons-tile-label">
+                    {iconShortLabel(entry)}
+                  </span>
                   {copied ? (
                     <span className="docs-icons-tile-badge" aria-live="polite">
                       已复制
@@ -167,32 +176,57 @@ function PreviewPanel({
     <aside className="docs-icons-preview">
       <Stack gap="block">
         <div>
-          <Typography level="caption" as="p" className="text-[var(--muted-foreground)]">
+          <Typography
+            level="caption"
+            as="p"
+            className="text-[var(--muted-foreground)]"
+          >
             预览
           </Typography>
           <Typography level="headline2" as="h2" className="mt-1">
             {entry.name}
           </Typography>
-          <Typography level="caption" as="p" className="font-mono text-[var(--muted-foreground)]">
+          <Typography
+            level="caption"
+            as="p"
+            className="font-mono text-[var(--muted-foreground)]"
+          >
             {entry.iconName}
           </Typography>
         </div>
 
         <div ref={stageRef} className="docs-icons-preview-stage">
-          <Icon icon={entry.component} size={64} thickness={thickness} mode={mode} />
+          <Icon
+            icon={entry.component}
+            size={64}
+            thickness={thickness}
+            mode={mode}
+          />
         </div>
 
         <div className="docs-icons-preview-actions">
-          <Button mode="default" size="regular" onClick={() => onCopySvg(stageRef.current)}>
+          <Button
+            mode="default"
+            size="regular"
+            onClick={() => onCopySvg(stageRef.current)}
+          >
             {svgCopied ? "已复制 SVG" : "复制 SVG"}
           </Button>
-          <Button mode="default" size="regular" onClick={() => onDownloadSvg(stageRef.current)}>
+          <Button
+            mode="default"
+            size="regular"
+            onClick={() => onDownloadSvg(stageRef.current)}
+          >
             下载 SVG
           </Button>
         </div>
 
         <div>
-          <Typography level="text" as="p" className="mb-2 text-[var(--muted-foreground)]">
+          <Typography
+            level="text"
+            as="p"
+            className="mb-2 text-[var(--muted-foreground)]"
+          >
             预览粗细
           </Typography>
           <SegmentatorGroup
@@ -213,7 +247,11 @@ function PreviewPanel({
         </div>
 
         <div>
-          <Typography level="text" as="p" className="mb-2 text-[var(--muted-foreground)]">
+          <Typography
+            level="text"
+            as="p"
+            className="mb-2 text-[var(--muted-foreground)]"
+          >
             模式
           </Typography>
           <SegmentatorGroup
@@ -222,7 +260,11 @@ function PreviewPanel({
             onValueChange={(value) => onModeChange(value as IconMode)}
           >
             {ICON_MODES.map((value) => (
-              <SegmentatorItem key={value} value={value} disabled={!entry.modes.includes(value)}>
+              <SegmentatorItem
+                key={value}
+                value={value}
+                disabled={!entry.modes.includes(value)}
+              >
                 {value}
               </SegmentatorItem>
             ))}
@@ -231,7 +273,11 @@ function PreviewPanel({
 
         <div>
           <div className="mb-2 flex items-center justify-between gap-2">
-            <Typography level="text" as="p" className="text-[var(--muted-foreground)]">
+            <Typography
+              level="text"
+              as="p"
+              className="text-[var(--muted-foreground)]"
+            >
               导入代码
             </Typography>
             <Button mode="second" size="small" onClick={onCopy}>
@@ -247,7 +293,9 @@ function PreviewPanel({
 
 export function IconsDocPage() {
   const [search, setSearch] = useState("");
-  const [thicknessFilter, setThicknessFilter] = useState<IconThickness | "all">("all");
+  const [thicknessFilter, setThicknessFilter] = useState<IconThickness | "all">(
+    "all",
+  );
   const [selected, setSelected] = useState<IconCatalogEntry>(iconCatalog[0]!);
   const [thickness, setThickness] = useState<IconThickness>("Regular");
   const [mode, setMode] = useState<IconMode>("default");
@@ -265,30 +313,37 @@ export function IconsDocPage() {
     return () => window.cancelAnimationFrame(frame);
   }, []);
 
-  const showToast = useCallback((message: string, type: FeedbackType = "success") => {
-    setToast({ message, type, key: Date.now() });
-    window.setTimeout(() => setToast(null), 2000);
-  }, []);
+  const showToast = useCallback(
+    (message: string, type: FeedbackType = "success") => {
+      setToast({ message, type, key: Date.now() });
+      window.setTimeout(() => setToast(null), 2000);
+    },
+    [],
+  );
 
   const categories = useMemo(
     () => groupIconsByCategory(iconCatalog, search, thicknessFilter),
-    [search, thicknessFilter]
+    [search, thicknessFilter],
   );
   const totalVisible = useMemo(
     () => categories.reduce((sum, group) => sum + group.icons.length, 0),
-    [categories]
+    [categories],
   );
   const searching = search.trim().length > 0;
 
   const copySnippet = useCallback(
-    async (entry: IconCatalogEntry, copyThickness: IconThickness, copyMode: IconMode) => {
+    async (
+      entry: IconCatalogEntry,
+      copyThickness: IconThickness,
+      copyMode: IconMode,
+    ) => {
       const snippet = buildImportSnippet(entry, copyThickness, copyMode);
       await navigator.clipboard.writeText(snippet);
       setCopiedName(entry.name);
       showToast(`已复制 ${entry.name}`);
       window.setTimeout(() => setCopiedName(undefined), 1500);
     },
-    [showToast]
+    [showToast],
   );
 
   const selectIcon = useCallback(
@@ -297,7 +352,9 @@ export function IconsDocPage() {
       let nextMode = mode;
 
       if (!entry.thicknesses.includes(nextThickness)) {
-        nextThickness = entry.thicknesses.includes("Regular") ? "Regular" : entry.thicknesses[0]!;
+        nextThickness = entry.thicknesses.includes("Regular")
+          ? "Regular"
+          : entry.thicknesses[0]!;
       }
       if (!entry.modes.includes(nextMode)) {
         nextMode = entry.modes[0] ?? "default";
@@ -307,7 +364,7 @@ export function IconsDocPage() {
       setThickness(nextThickness);
       setMode(nextMode);
     },
-    [mode, thickness]
+    [mode, thickness],
   );
 
   const copyFromPanel = useCallback(async () => {
@@ -328,7 +385,7 @@ export function IconsDocPage() {
       showToast("已复制 SVG");
       window.setTimeout(() => setSvgCopied(false), 1500);
     },
-    [showToast]
+    [showToast],
   );
 
   const downloadSvgFromPanel = useCallback(
@@ -342,7 +399,7 @@ export function IconsDocPage() {
       downloadSvgFile(markup, filename);
       showToast(`已下载 ${filename}`);
     },
-    [mode, selected, showToast, thickness]
+    [mode, selected, showToast, thickness],
   );
 
   return (
@@ -352,6 +409,15 @@ export function IconsDocPage() {
         description={`浏览 ${iconCatalog.length} 个 Aviala 图标，按分类搜索、复制导入代码，或复制/下载纯 SVG。`}
       />
 
+      <div className="docs-prose">
+        <Typography level="text" as="p">
+          Icons 2.5.0 新增 <code>lineHeightAlign="both"</code>
+          ：外包裹层的宽和高均采用所选 Typography
+          等级的行高，内部图形尺寸保持独立。 Spiral 3.1 的 Button{" "}
+          <code>iconOnly</code>{" "}
+          已使用该布局；需要仅垂直对齐正文时保留原有对齐模式。
+        </Typography>
+      </div>
       <div className="docs-icons-layout">
         <Stack gap="block">
           <div className="docs-icons-toolbar">
@@ -364,12 +430,18 @@ export function IconsDocPage() {
             />
 
             <div className="docs-icons-filters">
-              <Typography level="caption" as="span" className="text-[var(--muted-foreground)]">
+              <Typography
+                level="caption"
+                as="span"
+                className="text-[var(--muted-foreground)]"
+              >
                 筛选粗细
               </Typography>
               <SegmentatorGroup
                 value={thicknessFilter}
-                onValueChange={(value) => setThicknessFilter(value as IconThickness | "all")}
+                onValueChange={(value) =>
+                  setThicknessFilter(value as IconThickness | "all")
+                }
               >
                 <SegmentatorItem value="all">全部</SegmentatorItem>
                 {ICON_THICKNESSES.map((value) => (
@@ -380,7 +452,11 @@ export function IconsDocPage() {
               </SegmentatorGroup>
             </div>
 
-            <Typography level="caption" as="p" className="text-[var(--muted-foreground)]">
+            <Typography
+              level="caption"
+              as="p"
+              className="text-[var(--muted-foreground)]"
+            >
               {searching || thicknessFilter !== "all"
                 ? `${totalVisible} 个匹配图标`
                 : `${categories.length} 个分类 · ${iconCatalog.length} 个图标`}
@@ -391,13 +467,21 @@ export function IconsDocPage() {
 
           {categories.length === 0 ? (
             <div className="docs-icons-empty">
-              <Typography level="text" as="p" className="text-[var(--muted-foreground)]">
+              <Typography
+                level="text"
+                as="p"
+                className="text-[var(--muted-foreground)]"
+              >
                 没有匹配的图标，请调整搜索或筛选条件。
               </Typography>
             </div>
           ) : !catalogReady ? (
             <div className="docs-icons-empty" aria-busy="true">
-              <Typography level="text" as="p" className="text-[var(--muted-foreground)]">
+              <Typography
+                level="text"
+                as="p"
+                className="text-[var(--muted-foreground)]"
+              >
                 正在加载图标目录…
               </Typography>
             </div>
