@@ -1,4 +1,247 @@
 {
+  "InputGroup": {
+    "displayName": "InputGroup",
+    "description": "",
+    "props": [
+      {
+        "name": "orientation",
+        "type": "\"horizontal\" | \"vertical\"",
+        "values": [
+          "horizontal",
+          "vertical"
+        ],
+        "defaultValue": "horizontal",
+        "required": false,
+        "description": ""
+      }
+    ],
+    "parts": [
+      {
+        "displayName": "InputGroupItem",
+        "description": "Figma InputGroupInput: optional prefix and an independently styled input.",
+        "props": []
+      }
+    ]
+  },
+  "ButtonGroup": {
+    "displayName": "ButtonGroup",
+    "description": "Figma Button Group (530:57323): horizontal actions and optional caption.",
+    "props": [
+      {
+        "name": "description",
+        "type": "ReactNode",
+        "required": false,
+        "description": "Optional Figma Text Slot; omitted by default."
+      }
+    ]
+  },
+  "MultiSelect": {
+    "displayName": "MultiSelect",
+    "description": "Select's Tag content variant. Popover keeps multiple choices open.",
+    "props": [
+      {
+        "name": "options",
+        "type": "readonly MultiSelectOption[]",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "value",
+        "type": "readonly string[]",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "defaultValue",
+        "type": "readonly string[]",
+        "defaultValue": "[]",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "onValueChange",
+        "type": "(value: string[]) => void",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "defaultValue": "Select",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "defaultValue": "false",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "size",
+        "type": "\"regular\" | \"big\"",
+        "values": [
+          "regular",
+          "big"
+        ],
+        "defaultValue": "regular",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "allRound",
+        "type": "boolean",
+        "defaultValue": "false",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "error",
+        "type": "boolean",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "description": ""
+      }
+    ]
+  },
+  "Rate": {
+    "displayName": "Rate",
+    "description": "Figma Rate (516:55613), with keyboard and optional half-step selection.",
+    "props": [
+      {
+        "name": "value",
+        "type": "number",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "defaultValue",
+        "type": "number",
+        "defaultValue": "0",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "onValueChange",
+        "type": "(value: number) => void",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "count",
+        "type": "number",
+        "defaultValue": "5",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "allowHalf",
+        "type": "boolean",
+        "defaultValue": "false",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "allowClear",
+        "type": "boolean",
+        "defaultValue": "true",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "defaultValue": "false",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "readOnly",
+        "type": "boolean",
+        "defaultValue": "false",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "size",
+        "type": "\"default\" | \"small\" | \"big\"",
+        "values": [
+          "default",
+          "small",
+          "big"
+        ],
+        "defaultValue": "default",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "type",
+        "type": "\"star\" | \"like\"",
+        "values": [
+          "star",
+          "like"
+        ],
+        "defaultValue": "star",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": false,
+        "description": ""
+      }
+    ],
+    "parts": [
+      {
+        "displayName": "RateIcon",
+        "description": "Figma Rateicon (518:55703): independent background and masked foreground.",
+        "props": [
+          {
+            "name": "size",
+            "type": "\"default\" | \"small\" | \"big\"",
+            "values": [
+              "default",
+              "small",
+              "big"
+            ],
+            "defaultValue": "default",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "type",
+            "type": "\"star\" | \"like\"",
+            "values": [
+              "star",
+              "like"
+            ],
+            "defaultValue": "star",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "status",
+            "type": "\"empty\" | \"half\" | \"fill\"",
+            "values": [
+              "empty",
+              "half",
+              "fill"
+            ],
+            "defaultValue": "empty",
+            "required": false,
+            "description": ""
+          }
+        ]
+      }
+    ]
+  },
   "Button": {
     "displayName": "Button",
     "description": "",
@@ -18,10 +261,13 @@
       },
       {
         "name": "mode",
-        "type": "\"default\" | \"primary\" | \"second\" | \"defaultCustom\" | \"noBackground\" | \"noBackgroundCustom\" | \"outline\" | \"outlineCustom\" | \"destructive\"",
+        "type": "\"default\" | \"primary\" | \"secondary\" | \"tertiary\" | \"tertiaryCustom\" | \"second\" | \"defaultCustom\" | \"noBackground\" | \"noBackgroundCustom\" | \"outline\" | \"outlineCustom\" | \"destructive\"",
         "values": [
           "default",
           "primary",
+          "secondary",
+          "tertiary",
+          "tertiaryCustom",
           "second",
           "defaultCustom",
           "noBackground",
@@ -57,12 +303,12 @@
       },
       {
         "name": "variant",
-        "type": "\"default\" | \"outline\" | \"destructive\" | \"secondary\" | \"ghost\" | \"link\"",
+        "type": "\"default\" | \"secondary\" | \"outline\" | \"destructive\" | \"ghost\" | \"link\"",
         "values": [
           "default",
+          "secondary",
           "outline",
           "destructive",
-          "secondary",
           "ghost",
           "link"
         ],
@@ -164,9 +410,112 @@
       }
     ]
   },
+  "NumberInput": {
+    "displayName": "NumberInput",
+    "description": "",
+    "props": [
+      {
+        "name": "size",
+        "type": "\"regular\" | \"big\"",
+        "values": [
+          "regular",
+          "big"
+        ],
+        "defaultValue": "regular",
+        "required": false,
+        "description": "Figma `Size`"
+      },
+      {
+        "name": "allRound",
+        "type": "boolean",
+        "defaultValue": "false",
+        "required": false,
+        "description": "Figma `All-Round`"
+      },
+      {
+        "name": "inputStyle",
+        "type": "\"default\" | \"monospaced\"",
+        "values": [
+          "default",
+          "monospaced"
+        ],
+        "defaultValue": "default",
+        "required": false,
+        "description": "Figma `Style` — Default vs Monospaced (tabular / light numeric)"
+      },
+      {
+        "name": "leftIcon",
+        "type": "ReactNode",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "rightIcon",
+        "type": "ReactNode",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "leftBadge",
+        "type": "ReactNode",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "rightBadge",
+        "type": "ReactNode",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "showControls",
+        "type": "boolean",
+        "defaultValue": "true",
+        "required": false,
+        "description": "Figma `showNumberControlButton` — vertical steppers"
+      },
+      {
+        "name": "fullWidth",
+        "type": "boolean",
+        "defaultValue": "true",
+        "required": false,
+        "description": "When false, input sizes to content"
+      },
+      {
+        "name": "error",
+        "type": "boolean",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "value",
+        "type": "string | number",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "defaultValue",
+        "type": "string | number",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "onChange",
+        "type": "(event: ChangeEvent<HTMLInputElement, Element>) => void",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "onValueChange",
+        "type": "(value: number) => void",
+        "required": false,
+        "description": "Fires with the parsed number (or `null` when empty / invalid)"
+      }
+    ]
+  },
   "Select": {
     "displayName": "Select",
-    "description": "Radix Select closes on `window` blur (e.g. focusing DevTools). Suppress only\nblur-initiated closes; pointer-down (outside click, item select, trigger toggle)\nand Escape must still dismiss on the first interaction.",
+    "description": "",
     "props": [
       {
         "name": "value",
@@ -294,12 +643,12 @@
           },
           {
             "name": "layout",
-            "type": "\"title\" | \"default\" | \"people\" | \"checked\"",
+            "type": "\"title\" | \"checked\" | \"default\" | \"people\"",
             "values": [
               "title",
+              "checked",
               "default",
-              "people",
-              "checked"
+              "people"
             ],
             "defaultValue": "default",
             "required": false,
@@ -547,12 +896,12 @@
           },
           {
             "name": "layout",
-            "type": "\"title\" | \"default\" | \"people\" | \"checked\"",
+            "type": "\"title\" | \"checked\" | \"default\" | \"people\"",
             "values": [
               "title",
+              "checked",
               "default",
-              "people",
-              "checked"
+              "people"
             ],
             "defaultValue": "default",
             "required": false,
@@ -822,6 +1171,31 @@
         "type": "(vars: Record<string, string>) => void",
         "required": false,
         "description": ""
+      },
+      {
+        "name": "project",
+        "type": "TokenProject",
+        "required": false,
+        "description": "Canonical project; legacy palette controls do not rewrite its token values."
+      },
+      {
+        "name": "projectCssOptions",
+        "type": "ProjectCssOptions",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "projectTarget",
+        "type": "HTMLElement",
+        "required": false,
+        "description": "Explicit container for a local project theme. Defaults to the document root."
+      },
+      {
+        "name": "defaultEffects",
+        "type": "boolean",
+        "defaultValue": "true",
+        "required": false,
+        "description": ""
       }
     ]
   },
@@ -918,6 +1292,12 @@
         "defaultValue": "default",
         "required": false,
         "description": ""
+      },
+      {
+        "name": "title",
+        "type": "ReactNode",
+        "required": true,
+        "description": "Primary line — bold on default size"
       },
       {
         "name": "description",
@@ -1041,6 +1421,12 @@
         "defaultValue": "default",
         "required": false,
         "description": ""
+      },
+      {
+        "name": "title",
+        "type": "ReactNode",
+        "required": true,
+        "description": "Primary line — bold on default size"
       },
       {
         "name": "description",
@@ -1315,13 +1701,13 @@
             "name": "timeValue",
             "type": "DatePickerTimeValue",
             "required": false,
-            "description": ""
+            "description": "Explicit time overrides the selected Date's hours and minutes."
           },
           {
             "name": "defaultTimeValue",
             "type": "DatePickerTimeValue",
             "required": false,
-            "description": ""
+            "description": "Use a separate initial time; otherwise inherit it from the selected Date."
           },
           {
             "name": "onTimeChange",
@@ -1496,6 +1882,13 @@
         "description": ""
       },
       {
+        "name": "showSeconds",
+        "type": "boolean",
+        "defaultValue": "false",
+        "required": false,
+        "description": ""
+      },
+      {
         "name": "contentClassName",
         "type": "string",
         "required": false,
@@ -1509,6 +1902,12 @@
       },
       {
         "name": "value",
+        "type": "TimePickerValue",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "defaultValue",
         "type": "TimePickerValue",
         "required": false,
         "description": ""
@@ -1543,6 +1942,13 @@
         "displayName": "TimePicker",
         "description": "",
         "props": [
+          {
+            "name": "showSeconds",
+            "type": "boolean",
+            "defaultValue": "false",
+            "required": false,
+            "description": "Show seconds; omitted seconds start at zero. Defaults to false."
+          },
           {
             "name": "value",
             "type": "TimePickerValue",
@@ -1697,19 +2103,26 @@
         "props": [
           {
             "name": "value",
-            "type": "TimePickerWheelsValue",
+            "type": "TimePickerValue",
             "required": true,
             "description": ""
           },
           {
             "name": "onChange",
-            "type": "(value: TimePickerWheelsValue) => void",
+            "type": "(value: TimePickerValue) => void",
             "required": true,
             "description": ""
           },
           {
             "name": "className",
             "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "showSeconds",
+            "type": "boolean",
+            "defaultValue": "false",
             "required": false,
             "description": ""
           }
@@ -2392,11 +2805,11 @@
           },
           {
             "name": "layout",
-            "type": "\"title\" | \"custom\" | \"default\"",
+            "type": "\"title\" | \"default\" | \"custom\"",
             "values": [
               "title",
-              "custom",
-              "default"
+              "default",
+              "custom"
             ],
             "defaultValue": "default",
             "required": false,
@@ -2509,6 +2922,12 @@
             "type": "string",
             "required": false,
             "description": ""
+          },
+          {
+            "name": "groupTitle",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional group header above each column's options — omitted by default"
           }
         ]
       }
@@ -2647,6 +3066,18 @@
           {
             "name": "placeholder",
             "type": "string",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "leadingIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "trailingIcon",
+            "type": "ReactNode",
             "required": false,
             "description": ""
           }
@@ -2791,6 +3222,12 @@
             "defaultValue": "false",
             "required": false,
             "description": ""
+          },
+          {
+            "name": "trailingIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional decorative icon after the color preview."
           }
         ]
       },
@@ -3204,7 +3641,24 @@
   "List": {
     "displayName": "List",
     "description": "Figma Structure Navigation → List root",
-    "props": [],
+    "props": [
+      {
+        "name": "title",
+        "type": "ReactNode",
+        "required": false,
+        "description": "Optional section title above the list card"
+      },
+      {
+        "name": "appearance",
+        "type": "\"default\" | \"deep\"",
+        "values": [
+          "default",
+          "deep"
+        ],
+        "required": false,
+        "description": ""
+      }
+    ],
     "parts": [
       {
         "displayName": "ListTitle",
@@ -3214,18 +3668,39 @@
       {
         "displayName": "ListGroup",
         "description": "Figma List card container — rounded white surface for items",
-        "props": []
+        "props": [
+          {
+            "name": "appearance",
+            "type": "\"default\" | \"deep\"",
+            "values": [
+              "default",
+              "deep"
+            ],
+            "required": false,
+            "description": ""
+          }
+        ]
       },
       {
         "displayName": "ListItem",
         "description": "Figma Structure Navigation → List item",
         "props": [
           {
-            "name": "leading",
-            "type": "\"shaped\" | \"default\" | \"none\"",
+            "name": "appearance",
+            "type": "\"default\" | \"deep\"",
             "values": [
-              "shaped",
               "default",
+              "deep"
+            ],
+            "required": false,
+            "description": "Inherits the containing ListGroup appearance when omitted."
+          },
+          {
+            "name": "leading",
+            "type": "\"default\" | \"shaped\" | \"none\"",
+            "values": [
+              "default",
+              "shaped",
               "none"
             ],
             "defaultValue": "shaped",
@@ -3253,7 +3728,6 @@
           {
             "name": "actionLabel",
             "type": "ReactNode",
-            "defaultValue": "Text",
             "required": false,
             "description": "Primary trailing button label"
           },
@@ -3344,6 +3818,16 @@
         "displayName": "ListItemGroup",
         "description": "Convenience wrapper — titled list section (Figma List title + card)",
         "props": [
+          {
+            "name": "appearance",
+            "type": "\"default\" | \"deep\"",
+            "values": [
+              "default",
+              "deep"
+            ],
+            "required": false,
+            "description": ""
+          },
           {
             "name": "label",
             "type": "ReactNode",
@@ -3736,6 +4220,12 @@
             "defaultValue": "false",
             "required": false,
             "description": ""
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional secondary caption, matching the Figma Text+Caption slot."
           }
         ]
       }
@@ -3787,7 +4277,7 @@
             "type": "boolean",
             "defaultValue": "false",
             "required": false,
-            "description": "Strip surface padding — consumer controls inner spacing."
+            "description": "Strip surface and slot padding — consumer controls inner spacing."
           },
           {
             "name": "appearance",
@@ -3799,7 +4289,7 @@
             ],
             "defaultValue": "default",
             "required": false,
-            "description": "Visual skin of the surface:\n- `default` — light bordered panel (select-menu aligned), text typography, stroked caret.\n- `tooltip` — shared inverted tooltip skin (dark, caption text by default, borderless, solid caret).\n- `primary` — brand primary surface with white text, borderless, solid caret."
+            "description": "Visual skin of the surface:\n- `default` — neutral panel and caret using Popover component tokens.\n- `tooltip` — shared inverted tooltip skin (Text typography, borderless, solid caret).\n- `primary` — theme surface and foreground using Popover component tokens."
           },
           {
             "name": "level",
@@ -3809,9 +4299,14 @@
               "text"
             ],
             "required": false,
-            "description": "Typography level for the surface copy.\nDefaults to `caption` for `appearance=\"tooltip\"`, otherwise `text`."
+            "description": "Typography level for the surface copy.\nDefaults to `text`, matching the shared Tooltip surface."
           }
         ]
+      },
+      {
+        "displayName": "PopoverIcon",
+        "description": "Decorative icon placed in the Popover content slot.",
+        "props": []
       },
       {
         "displayName": "PopoverAnchor",
@@ -4290,9 +4785,21 @@
               "caption",
               "text"
             ],
-            "defaultValue": "caption",
+            "defaultValue": "text",
             "required": false,
-            "description": "Typography level for the surface copy.\nFigma default is `caption`; pass `text` for body-sized tooltip copy."
+            "description": "Typography level for the surface copy.\nFigma default is `text`; pass `caption` for explicitly compact copy."
+          },
+          {
+            "name": "leadingIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "trailingIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
           }
         ]
       }
@@ -4300,7 +4807,7 @@
   },
   "ResponsiveTooltip": {
     "displayName": "ResponsiveTooltip",
-    "description": "Tooltip with a mobile-friendly trigger.\n\nRadix Tooltip is hover/focus only and deliberately ignores touch, so it has\nno trigger on phones. `ResponsiveTooltip` renders the SAME content through the\nright primitive for the device:\n- Desktop (`pointer: fine`): Radix Tooltip — opens on hover and keyboard focus.\n- Touch (`pointer: coarse`): Radix Popover with `appearance=\"tooltip\"` — opens on\n  **long-press** (short tap still reaches the trigger’s own `onClick`), dismisses\n  on outside tap / Escape, and keeps the tooltip visual skin (dark surface,\n  caption text, solid caret) so it looks identical to desktop.\n\nThe consumer API and the look are unchanged between devices; only the trigger\ngesture differs. Animations are handled by the respective effect CSS\n(tooltip-effects / popover-effects), so direction-aware scale-in/out works on\nboth branches.",
+    "description": "Tooltip with a mobile-friendly trigger.\n\nRadix Tooltip is hover/focus only and deliberately ignores touch, so it has\nno trigger on phones. `ResponsiveTooltip` renders the SAME content through the\nright primitive for the device:\n- Desktop (`pointer: fine`): Radix Tooltip — opens on hover and keyboard focus.\n- Touch (`pointer: coarse`): Radix Popover with `appearance=\"tooltip\"` — opens on\n  **long-press** (short tap still reaches the trigger’s own `onClick`), dismisses\n  on outside tap / Escape, and keeps the tooltip visual skin (dark surface,\n  Text typography, solid caret) so it looks identical to desktop.\n\nThe consumer API and the look are unchanged between devices; only the trigger\ngesture differs. Animations are handled by the respective effect CSS\n(tooltip-effects / popover-effects), so direction-aware scale-in/out works on\nboth branches.",
     "props": [
       {
         "name": "content",
@@ -4367,9 +4874,9 @@
           "caption",
           "text"
         ],
-        "defaultValue": "caption",
+        "defaultValue": "text",
         "required": false,
-        "description": "Typography level for the content surface (default `caption`)."
+        "description": "Typography level for the content surface (default `text`)."
       },
       {
         "name": "delayDuration",
@@ -4433,6 +4940,13 @@
         "description": ""
       },
       {
+        "name": "lineHeightFix",
+        "type": "boolean | LoadingAlignment",
+        "defaultValue": "true",
+        "required": false,
+        "description": "true = heightOnly; false = off. `both` aligns width and height."
+      },
+      {
         "name": "mode",
         "type": "\"theme\" | \"themeText\" | \"black\" | \"white\" | \"inherit\"",
         "values": [
@@ -4444,14 +4958,7 @@
         ],
         "defaultValue": "theme",
         "required": false,
-        "description": ""
-      },
-      {
-        "name": "lineHeightFix",
-        "type": "boolean",
-        "defaultValue": "true",
-        "required": false,
-        "description": ""
+        "description": "Ring color source; applied through the inline conic gradient, not a class."
       },
       {
         "name": "label",
@@ -5138,6 +5645,12 @@
             "type": "ReactNode",
             "required": false,
             "description": ""
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional caption in the default-size variant; small remains single-line."
           }
         ]
       },
@@ -5204,6 +5717,44 @@
         "description": "Optional breadcrumb above the title"
       },
       {
+        "name": "title",
+        "type": "ReactNode",
+        "required": false,
+        "description": "Primary title line"
+      },
+      {
+        "name": "titleLevel",
+        "type": "\"title\" | \"display\" | \"headline1\" | \"headline2\" | \"subtitle\" | \"text\" | \"caption\"",
+        "values": [
+          "title",
+          "display",
+          "headline1",
+          "headline2",
+          "subtitle",
+          "text",
+          "caption"
+        ],
+        "defaultValue": "text",
+        "required": false,
+        "description": "Shared typography scale; does not change the document heading hierarchy."
+      },
+      {
+        "name": "titleAs",
+        "type": "\"span\" | \"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\"",
+        "values": [
+          "span",
+          "h1",
+          "h2",
+          "h3",
+          "h4",
+          "h5",
+          "h6"
+        ],
+        "defaultValue": "span",
+        "required": false,
+        "description": "Semantic title element, independent from its visual size."
+      },
+      {
         "name": "description",
         "type": "ReactNode",
         "required": false,
@@ -5254,6 +5805,12 @@
             "description": ""
           },
           {
+            "name": "title",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
             "name": "description",
             "type": "ReactNode",
             "required": false,
@@ -5296,7 +5853,7 @@
             "name": "index",
             "type": "number",
             "required": false,
-            "description": "Step number shown for default / inProgress / waiting"
+            "description": "Step number shown for default / inProgress"
           }
         ]
       }
@@ -5419,6 +5976,18 @@
             "description": ""
           },
           {
+            "name": "heading",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional Title-level row above the existing title and description."
+          },
+          {
+            "name": "title",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
             "name": "description",
             "type": "ReactNode",
             "required": false,
@@ -5427,7 +5996,6 @@
           {
             "name": "actionLabel",
             "type": "ReactNode",
-            "defaultValue": "Text",
             "required": false,
             "description": ""
           },
@@ -5468,6 +6036,30 @@
         "description": "",
         "props": [
           {
+            "name": "heading",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional Title-level row above the existing title and description."
+          },
+          {
+            "name": "title",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional supporting title; omitted by the Figma Card composite."
+          },
+          {
+            "name": "description",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
+            "name": "icon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
+          {
             "name": "slotType",
             "type": "\"select\" | \"switch\" | \"action\"",
             "values": [
@@ -5482,7 +6074,6 @@
           {
             "name": "actionLabel",
             "type": "ReactNode",
-            "defaultValue": "Text",
             "required": false,
             "description": ""
           },
@@ -5550,6 +6141,18 @@
         "displayName": "TableHead",
         "description": "",
         "props": [
+          {
+            "name": "leftIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": "Optional leading/trailing icon slots in the default header variant."
+          },
+          {
+            "name": "rightIcon",
+            "type": "ReactNode",
+            "required": false,
+            "description": ""
+          },
           {
             "name": "actions",
             "type": "ReactNode",
@@ -5635,133 +6238,6 @@
             "description": ""
           }
         ]
-      }
-    ]
-  },
-  "NumberInput": {
-    "displayName": "NumberInput",
-    "description": "Numeric input with optional steppers. Shares the Input shell (size, allRound, icons, error).",
-    "props": [
-      {
-        "name": "size",
-        "type": "enum",
-        "defaultValue": "regular",
-        "required": false,
-        "description": "Figma `Size` — regular / big"
-      },
-      {
-        "name": "allRound",
-        "type": "boolean",
-        "defaultValue": "false",
-        "required": false,
-        "description": "Figma `All-Round`"
-      },
-      {
-        "name": "inputStyle",
-        "type": "enum",
-        "defaultValue": "default",
-        "required": false,
-        "description": "Figma `Style` — Default vs Monospaced (tabular / light numeric)"
-      },
-      {
-        "name": "showControls",
-        "type": "boolean",
-        "defaultValue": "true",
-        "required": false,
-        "description": "Figma `showNumberControlButton` — vertical stepper buttons"
-      },
-      {
-        "name": "fullWidth",
-        "type": "boolean",
-        "defaultValue": "true",
-        "required": false,
-        "description": "When false, input sizes to content"
-      },
-      {
-        "name": "leftIcon",
-        "type": "ReactNode",
-        "required": false,
-        "description": ""
-      },
-      {
-        "name": "rightIcon",
-        "type": "ReactNode",
-        "required": false,
-        "description": ""
-      },
-      {
-        "name": "leftBadge",
-        "type": "ReactNode",
-        "required": false,
-        "description": "Badge area — left slot inside BaseInput"
-      },
-      {
-        "name": "rightBadge",
-        "type": "ReactNode",
-        "required": false,
-        "description": "Badge area — right slot inside BaseInput"
-      },
-      {
-        "name": "error",
-        "type": "boolean",
-        "defaultValue": "false",
-        "required": false,
-        "description": ""
-      },
-      {
-        "name": "value",
-        "type": "number | string | \"\"",
-        "required": false,
-        "description": "Controlled value"
-      },
-      {
-        "name": "defaultValue",
-        "type": "number | string",
-        "required": false,
-        "description": "Uncontrolled initial value"
-      },
-      {
-        "name": "step",
-        "type": "number",
-        "defaultValue": "1",
-        "required": false,
-        "description": "Increment / decrement step for steppers and keyboard"
-      },
-      {
-        "name": "min",
-        "type": "number",
-        "required": false,
-        "description": "Minimum allowed value"
-      },
-      {
-        "name": "max",
-        "type": "number",
-        "required": false,
-        "description": "Maximum allowed value"
-      },
-      {
-        "name": "onChange",
-        "type": "(event: ChangeEvent<HTMLInputElement>) => void",
-        "required": false,
-        "description": "Native change handler"
-      },
-      {
-        "name": "onValueChange",
-        "type": "(value: number | null) => void",
-        "required": false,
-        "description": "Fires with the parsed number (or `null` when empty / invalid)"
-      },
-      {
-        "name": "disabled",
-        "type": "boolean",
-        "required": false,
-        "description": ""
-      },
-      {
-        "name": "placeholder",
-        "type": "string",
-        "required": false,
-        "description": ""
       }
     ]
   }

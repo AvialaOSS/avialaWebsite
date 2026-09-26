@@ -1,7 +1,7 @@
 {
   "name": "@aviala-design/spiral",
   "repositoryUrl": "https://github.com/AvialaOSS/developer-kit",
-  "fetchedAt": "2026-08-31T10:25:19.942Z",
+  "fetchedAt": "2026-09-26T17:30:56.848Z",
   "versions": {
     "0.0.2": {
       "publishedAt": "2026-07-08T16:56:05.325Z"
@@ -62,6 +62,15 @@
     },
     "3.0.0": {
       "publishedAt": "2026-08-31T10:06:51.305Z"
+    },
+    "3.0.1": {
+      "publishedAt": "2026-09-12T20:00:41.753Z"
+    },
+    "3.0.2": {
+      "publishedAt": "2026-09-13T07:57:51.836Z"
+    },
+    "3.1.0": {
+      "publishedAt": "2026-09-26T15:45:00.589Z"
     }
   }
 }
