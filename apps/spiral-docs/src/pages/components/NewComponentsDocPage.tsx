@@ -38,7 +38,15 @@ export function NewComponentsDocPage({
   component: keyof typeof examples;
 }) {
   const entry = examples[component];
-  const scope = Spiral as unknown as Record<string, unknown>;
+  // Keep namespace interop exports (especially `default`) out of the evaluator's
+  // function parameters. Optional lookup also supports older documentation builds.
+  const exports = Spiral as unknown as Record<string, unknown>;
+  const scope = Object.fromEntries(
+    [
+      "Rate", "RateIcon", "MultiSelect", "ButtonGroup", "Button",
+      "InputGroup", "InputGroupItem", "InputGroupAddon", "Input",
+    ].map((name) => [name, exports[name]])
+  );
   if (!scope[component])
     return (
       <>
