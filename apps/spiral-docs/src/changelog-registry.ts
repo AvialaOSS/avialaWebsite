@@ -1,6 +1,7 @@
 import registry from "./generated/component-changelogs.json";
 import npmReleases from "./generated/npm-releases.json";
 import { flattenNavItems } from "./nav";
+import { isSemverGreater } from "./versions-registry";
 
 export type ChangelogSections = Record<string, string[]>;
 
@@ -26,6 +27,25 @@ export type AggregatedRelease = {
 export const SPIRAL_PACKAGE_NAME = "@aviala-design/spiral";
 
 const SECTION_ORDER = ["Added", "Changed", "Fixed", "Deprecated", "Removed"] as const;
+
+// Package-only releases have no component changelog entries to aggregate.
+const PACKAGE_RELEASE_CHANGES: Record<string, AggregatedChange[]> = {
+  "3.1.1": [
+    {
+      component: "Icons 图标",
+      path: "/components/system-composition/icons",
+      sections: {
+        Added: [
+          "Icons 2.6.0 新增 Android、Discord、Google、Shazam、压缩文件夹、退出全屏、定位关闭、多窗口、航班到达及航班出发，共 10 个图标。",
+        ],
+        Changed: [
+          "同步 Figma 图标库，更新已有图标的形状并补充字重与填充变体，图标库现包含 364 个图标、2034 个变体。",
+          "Spiral 升级图标依赖至 @aviala-design/icons 2.6.0；组件 API 保持不变，Tokens 继续使用 2.7.0。",
+        ],
+      },
+    },
+  ],
+};
 
 function compareSemverDesc(a: string, b: string): number {
   if (a === "Unreleased") return -1;
@@ -81,8 +101,8 @@ export function getComponentChangelog(
   return releases && releases.length > 0 ? releases : undefined;
 }
 
-/** Flatten all component entries into version → components (newest first). */
-export function getAggregatedReleases(): AggregatedRelease[] {
+/** Combine component and package changes available at the selected docs version. */
+export function getAggregatedReleases(docsVersion: string): AggregatedRelease[] {
   const byVersion = new Map<string, AggregatedChange[]>();
 
   for (const [component, releases] of Object.entries(
@@ -97,6 +117,11 @@ export function getAggregatedReleases(): AggregatedRelease[] {
       });
       byVersion.set(release.version, list);
     }
+  }
+
+  for (const [version, changes] of Object.entries(PACKAGE_RELEASE_CHANGES)) {
+    if (isSemverGreater(version, docsVersion)) continue;
+    byVersion.set(version, [...(byVersion.get(version) ?? []), ...changes]);
   }
 
   return [...byVersion.entries()]

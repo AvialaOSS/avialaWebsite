@@ -31,6 +31,8 @@ import {
 } from "react";
 
 import { DocPageHeader } from "../../components/TableOfContents";
+import { useDocsVersion } from "../../components/DocsVersionProvider";
+import { getDocsVersionEntry, isSemverGreater } from "../../versions-registry";
 import {
   buildImportSnippet,
   buildSvgFilename,
@@ -292,6 +294,9 @@ function PreviewPanel({
 }
 
 export function IconsDocPage() {
+  const { version } = useDocsVersion();
+  const iconsVersion = getDocsVersionEntry(version)?.icons;
+  const includesIcons260 = iconsVersion != null && !isSemverGreater("2.6.0", iconsVersion);
   const [search, setSearch] = useState("");
   const [thicknessFilter, setThicknessFilter] = useState<IconThickness | "all">(
     "all",
@@ -410,6 +415,18 @@ export function IconsDocPage() {
       />
 
       <div className="docs-prose">
+        {includesIcons260 ? (
+          <Typography level="text" as="p">
+            Icons 2.6.0 同步 Figma 图标库，包含 364 个图标、2034 个字重与填充变体，
+            更新已有图标的形状并补充变体。新增 10 个图标：
+            <code>BrandAndroid</code>、<code>BrandDiscord</code>、
+            <code>BrandGoogle</code>、<code>BrandShazamAsAnIcon</code>、
+            <code>FilesFolderZip</code>、<code>GeneralFullScreenOff</code>、
+            <code>GeneralPositionSlash</code>、<code>GeneralSystemMutiWindows</code>、
+            <code>TravelPlaneArrive</code>、<code>TravelPlaneDeparture</code>。
+            可在下方搜索名称，查看支持的字重与填充模式并复制用法。
+          </Typography>
+        ) : null}
         <Typography level="text" as="p">
           Icons 2.5.0 新增 <code>lineHeightAlign="both"</code>
           ：外包裹层的宽和高均采用所选 Typography
