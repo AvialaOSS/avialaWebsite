@@ -15,7 +15,8 @@
     "2.9.0",
     "3.0.0",
     "3.0.2",
-    "3.1.0"
+    "3.1.0",
+    "3.1.1"
   ],
   "default": "3.1.0",
   "versions": {
@@ -1122,6 +1123,167 @@
         },
         "Upload": {
           "rev": "3.1.0"
+        }
+      }
+    },
+    "3.1.1": {
+      "spiral": "3.1.1",
+      "tokens": "2.7.0",
+      "icons": "2.6.0",
+      "status": "draft",
+      "components": {
+        "Button": {
+          "inherits": "3.1.0"
+        },
+        "Popover": {
+          "inherits": "3.1.0"
+        },
+        "Tooltip": {
+          "inherits": "3.1.0"
+        },
+        "Pagination": {
+          "inherits": "3.1.0"
+        },
+        "Navigation": {
+          "inherits": "3.1.0"
+        },
+        "SegmentatorGroup": {
+          "inherits": "3.1.0"
+        },
+        "CascaderField": {
+          "inherits": "3.1.0"
+        },
+        "Modal": {
+          "inherits": "3.1.0"
+        },
+        "Drawer": {
+          "inherits": "3.1.0"
+        },
+        "DatePickerField": {
+          "inherits": "3.1.0"
+        },
+        "Typeface": {
+          "inherits": "3.1.0"
+        },
+        "Checkbox": {
+          "inherits": "3.1.0"
+        },
+        "Slider": {
+          "inherits": "3.1.0"
+        },
+        "ColorPicker": {
+          "inherits": "3.1.0"
+        },
+        "Tab": {
+          "inherits": "3.1.0"
+        },
+        "List": {
+          "inherits": "3.1.0"
+        },
+        "ScrollPicker": {
+          "inherits": "3.1.0"
+        },
+        "TimePickerField": {
+          "inherits": "3.1.0"
+        },
+        "Progress": {
+          "inherits": "3.1.0"
+        },
+        "Table": {
+          "inherits": "3.1.0"
+        },
+        "FormField": {
+          "inherits": "3.1.0"
+        },
+        "Switch": {
+          "inherits": "3.1.0"
+        },
+        "Video": {
+          "inherits": "3.1.0"
+        },
+        "Card": {
+          "inherits": "3.1.0"
+        },
+        "Form": {
+          "inherits": "3.1.0"
+        },
+        "Select": {
+          "inherits": "3.1.0"
+        },
+        "Alert": {
+          "inherits": "3.1.0"
+        },
+        "Anchor": {
+          "inherits": "3.1.0"
+        },
+        "Avatar": {
+          "inherits": "3.1.0"
+        },
+        "Badge": {
+          "inherits": "3.1.0"
+        },
+        "Breadcrumb": {
+          "inherits": "3.1.0"
+        },
+        "ButtonGroup": {
+          "inherits": "3.1.0"
+        },
+        "Cascader": {
+          "inherits": "3.1.0"
+        },
+        "Feedback": {
+          "inherits": "3.1.0"
+        },
+        "Fieldset": {
+          "inherits": "3.1.0"
+        },
+        "Input": {
+          "inherits": "3.1.0"
+        },
+        "InputGroup": {
+          "inherits": "3.1.0"
+        },
+        "Link": {
+          "inherits": "3.1.0"
+        },
+        "Loading": {
+          "inherits": "3.1.0"
+        },
+        "MultiSelect": {
+          "inherits": "3.1.0"
+        },
+        "NumberInput": {
+          "inherits": "3.1.0"
+        },
+        "Pagehead": {
+          "inherits": "3.1.0"
+        },
+        "RadioGroup": {
+          "inherits": "3.1.0"
+        },
+        "Rate": {
+          "inherits": "3.1.0"
+        },
+        "RateIcon": {
+          "inherits": "3.1.0"
+        },
+        "Scroll": {
+          "inherits": "3.1.0"
+        },
+        "Steps": {
+          "inherits": "3.1.0"
+        },
+        "Tag": {
+          "inherits": "3.1.0"
+        },
+        "Textarea": {
+          "inherits": "3.1.0"
+        },
+        "ThemeProvider": {
+          "inherits": "3.1.0"
+        },
+        "Upload": {
+          "inherits": "3.1.0"
         }
       }
     }
