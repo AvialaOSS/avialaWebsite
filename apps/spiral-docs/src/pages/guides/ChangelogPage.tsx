@@ -2,6 +2,7 @@ import { Button, Select, SelectContent, SelectItem, SelectItemGroup, SelectTrigg
 import { useState } from "react";
 import { DocsLink } from "../../components/DocsLink";
 import { DocPageHeader } from "../../components/TableOfContents";
+import { useDocsVersion } from "../../components/DocsVersionProvider";
 import {
   getAggregatedReleases,
   getSpiralInstallCommand,
@@ -97,13 +98,14 @@ function ChangelogReleaseHeader({
 }
 
 export function ChangelogPage() {
-  const releases = getAggregatedReleases();
+  const { version } = useDocsVersion();
+  const releases = getAggregatedReleases(version);
 
   return (
     <>
       <DocPageHeader
         title="更新记录"
-        description="按 @aviala-design/spiral 版本汇总的组件变更（来自各组件独立 changelog）"
+        description="按 @aviala-design/spiral 版本汇总的组件与依赖包更新"
       />
       <div className="docs-prose docs-changelog-overview">
         {releases.length === 0 ? (

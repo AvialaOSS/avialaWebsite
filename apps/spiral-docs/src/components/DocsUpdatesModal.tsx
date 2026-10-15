@@ -17,6 +17,7 @@ import {
 } from "../changelog-registry";
 import { getNavItemByPath } from "../nav";
 import { DocsLink } from "./DocsLink";
+import { useDocsVersion } from "./DocsVersionProvider";
 
 type DocsUpdatesModalProps = {
   open: boolean;
@@ -112,9 +113,10 @@ function AggregatedReleaseList({ releases }: { releases: AggregatedRelease[] }) 
 
 export function DocsUpdatesModal({ open, onOpenChange }: DocsUpdatesModalProps) {
   const { pathname } = useLocation();
+  const { version } = useDocsVersion();
   const component = getNavItemByPath(pathname)?.component;
   const componentReleases = component ? getComponentChangelog(component) : undefined;
-  const aggregated = component ? null : getAggregatedReleases();
+  const aggregated = component ? null : getAggregatedReleases(version);
 
   useEffect(() => {
     if (open) onOpenChange(false);
@@ -126,7 +128,7 @@ export function DocsUpdatesModal({ open, onOpenChange }: DocsUpdatesModalProps) 
         <ModalHeaderText
           title="更新记录"
           description={
-            component ? `${component} 的版本变更。` : "按 Spiral 版本汇总的组件变更。"
+            component ? `${component} 的版本变更。` : "按 Spiral 版本汇总的组件与依赖包更新。"
           }
         />
         <ModalBody className="docs-updates-modal__body">
